@@ -1,3 +1,4 @@
+#include <type_traits>
 //integrals
 //derivatives
 //limits
@@ -17,3 +18,16 @@ solve an equation
 */
 
 //for calc, see if possible to apply to equations directly
+
+int bool_to_sgn(bool value){
+  return value ? 1 : -1;
+}
+
+bool sgn_to_bool(int value){
+  return value > 0 ? 1 : 0;
+}
+
+template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, void>::type>
+int sgn(T value){
+  return (T() < value) - (value < T());
+}
