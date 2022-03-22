@@ -29,5 +29,18 @@ bool sgn_to_bool(int value){
 
 template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, void>::type>
 int sgn(T value){
-  return (T() < value) - (value < T());
+  return (T(0) < value) - (value < T(0));
+}
+
+#define waitUntil(condition) while(delay(10),!(condition))
+
+template <typename T1, typename T2, typename T3>
+inline const bool in_range(T1 value, T2 min, T3 max){
+  return ((min <= value && value <= max) || (max <= value && value <= min));
+}
+
+// gets the sign of a value (0, 1 or -1)
+template <typename T>
+int sgn(T value){
+  return (T(0) < value) - (value < T(0));
 }
