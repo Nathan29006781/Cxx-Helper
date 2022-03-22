@@ -6,7 +6,6 @@
 //gitignore executables, .bin, and main.cpp
 
 int main(){
-  std::cout << std::boolalpha << in_range('\0', -5.4, u_long(3.25)) << std::endl;
-  //
+  std::cout << std::boolalpha << in_range(0.0, -5.4, 4.25) << std::endl;
   return 0;
 }

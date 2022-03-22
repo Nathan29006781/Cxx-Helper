@@ -34,12 +34,25 @@ int sgn(T value){
 
 #define waitUntil(condition) while(delay(10),!(condition))
 
-template <typename T1, typename T2, typename T3>
-inline const bool in_range(T1 value, T2 min, T3 max){
-  return ((min <= value && value <= max) || (max <= value && value <= min));
+/**
+ * @brief checks whether a value is in range
+ * 
+ * @param value value to be checked
+ * @param minimum range minimum value
+ * @param maximum range maximum value
+ * @return whether value is between minimum and maximum. will work even if maximum < minimum
+ */
+template <typename T>
+inline bool in_range(T value, T minimum, T maximum){
+  return (minimum <= value && value <= maximum) || (maximum <= value && value <= minimum);
 }
 
-// gets the sign of a value (0, 1 or -1)
+/**
+ * @brief Gets the sign of a value (0, 1 or -1)
+ * 
+ * @param value 
+ * @return template <typename T> 
+ */
 template <typename T>
 int sgn(T value){
   return (T(0) < value) - (value < T(0));
