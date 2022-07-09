@@ -19,16 +19,16 @@ solve an equation
 
 //for calc, see if possible to apply to equations directly
 
-int bool_to_sgn(bool value){
+constexpr int bool_to_sgn(bool value){
   return value ? 1 : -1;
 }
 
-bool sgn_to_bool(int value){
+constexpr bool sgn_to_bool(int value){
   return value > 0 ? 1 : 0;
 }
 
-template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, void>::type>
-int sgn(T value){
+template <typename T, typename = typename std::enable_if_t<std::is_arithmetic_v<T>, void>>
+constexpr int sgn(T value){
   return (T(0) < value) - (value < T(0));
 }
 
@@ -43,17 +43,6 @@ int sgn(T value){
  * @return whether value is between minimum and maximum. will work even if maximum < minimum
  */
 template <typename T>
-inline bool in_range(T value, T minimum, T maximum){
+inline constexpr bool in_range(T value, T minimum, T maximum){
   return (minimum <= value && value <= maximum) || (maximum <= value && value <= minimum);
-}
-
-/**
- * @brief Gets the sign of a value (0, 1 or -1)
- * 
- * @param value 
- * @return template <typename T> 
- */
-template <typename T>
-int sgn(T value){
-  return (T(0) < value) - (value < T(0));
 }

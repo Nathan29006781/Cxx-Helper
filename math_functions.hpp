@@ -1,5 +1,3 @@
-//which function called current function
-//value struct
 //func scale
 //maybe equation support here? if not, then math.hpp
 
@@ -25,10 +23,10 @@ struct BinArthmOp{
     result = std::function([this](){return this->operation(this->first_arg(), this->second_arg());});
   }
 
-  // BinArthmOp(std::function<T(T, T)> operation, std::function<T()> first_arg, std::function<T()> second_arg):
-  // operation(operation), first_arg(first_arg), second_arg(second_arg){
-  //   result = std::function([this](){return this->operation(this->first_arg(), this->second_arg());});
-  // }
+  BinArthmOp(std::function<T(T, T)> operation, std::function<T()> first_arg, std::function<T()> second_arg):
+  operation(operation), first_arg(first_arg), second_arg(second_arg){
+    result = std::function([this](){return this->operation(this->first_arg(), this->second_arg());});
+  }
 
   BinArthmOp(std::function<T(const T&, const T&)> operation, const T& first_arg, const T& second_arg):
   operation(operation), first_arg([&first_arg](){return first_arg;}), second_arg([&second_arg](){return second_arg;}){

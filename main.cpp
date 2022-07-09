@@ -1,15 +1,13 @@
-#include <ios>
-#include <iostream>
+#include "headers.hpp"
 #include "math.hpp"
-#include "functions.hpp"
-#include <cmath>
+#include "math_functions.hpp"
+#include "geometry.hpp"
 
 //gitignore executables, .bin, and main.cpp
 
 int main(){
-  BinArthmOp<int> op (std::multiplies<int>(), 10, 2);
+  BinArthmOp<double> op (std::multiplies<double>(), 12, 3);
 
-  // std::function<int(int, int)> t = std::plus<int>();
-  std::cout << std::boolalpha << op() << std::endl;
-  return 0;
+  std::cout << std::boolalpha << hypotenuse(1,2.0/2) << std::endl;
+    return 0;
 }
