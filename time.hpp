@@ -1,3 +1,4 @@
+#pragma once
 #include "headers.hpp"
 
 #define TIME_FUNC_DECLARE(unit)\
@@ -10,6 +11,3 @@
 #undef TIME_FUNC_DECLARE
 
 void delay(double millis);
-
-#pragma once
-#include "time.cpp"

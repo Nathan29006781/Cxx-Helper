@@ -1,9 +1,8 @@
+#pragma once
+#include "headers.hpp"
+
 //func scale
 //maybe equation support here? if not, then math.hpp
-
-#include <functional>
-#include <unordered_map>
-#include <string>
 
 //create arithmetic constraint
 template <typename T>

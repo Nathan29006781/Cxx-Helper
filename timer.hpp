@@ -1,3 +1,4 @@
+#pragma once
 #include "headers.hpp"
 
 enum class timing_units{

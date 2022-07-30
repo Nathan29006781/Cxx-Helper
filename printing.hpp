@@ -1,3 +1,4 @@
+#pragma once
 #include "headers.hpp"
 #include "time.hpp"
 #include "timer.hpp"

@@ -1,3 +1,4 @@
+#pragma once
 #include "headers.hpp"
 
 //value struct - create my own function class
