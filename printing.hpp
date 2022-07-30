@@ -1,4 +1,5 @@
 #include "headers.hpp"
+#include "time.hpp"
 #include "timer.hpp"
 
 struct Point;

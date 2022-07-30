@@ -1,13 +1,14 @@
 #include "headers.hpp"
+#include "geometry.hpp"
 #include "math.hpp"
 #include "math_functions.hpp"
-#include "geometry.hpp"
+#include "time.hpp"
+#include "timer.hpp"
 
 //gitignore executables, .bin, and main.cpp
 
 int main(){
-  BinArthmOp<double> op (std::multiplies<double>(), 12, 3);
+  prog_begin();
 
-  std::cout << std::boolalpha << hypotenuse(1,2.0/2) << std::endl;
-    return 0;
+  return 0;
 }

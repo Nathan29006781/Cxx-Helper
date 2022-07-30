@@ -1,13 +1,5 @@
 #include "headers.hpp"
 
-std::uint64_t micros(){
-  return 5448430;
-}
-
-std::uint32_t millis(){
-  return 5327923;
-}
-
 enum class timing_units{
   sec = 1000000,
   millis = 1000,

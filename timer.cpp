@@ -1,4 +1,5 @@
 #include "timer.hpp"
+#include "time.hpp"
 
 Timer::Timer(std::string name, bool play, timing_units timing_unit):
 name(name), timing_unit(timing_unit){
