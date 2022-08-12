@@ -65,6 +65,8 @@
     "functional": "cpp",
     "iterator": "cpp",
     "utility": "cpp",
-    "__memory": "cpp"
+    "__memory": "cpp",
+    "random": "cpp",
+    "numeric": "cpp",
   }
 }

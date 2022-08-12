@@ -4,7 +4,6 @@
 //point struct
 //vectors (math)
 //matrices
-//n-dimension hypotenuse
 
 template <typename T, typename = typename std::enable_if_t<std::is_arithmetic_v<T>, void>>
 constexpr long double hypotenuse(T value){
