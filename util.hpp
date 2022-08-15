@@ -1,3 +1,4 @@
+#pragma once
 #include "headers.hpp"
 
 constexpr int bool_to_sgn(bool value){
@@ -30,4 +31,3 @@ template <typename T>
 inline constexpr bool in_range(T value, T minimum, T maximum){
   return ((minimum <= value && value <= maximum) || (maximum <= value && value <= minimum));
 }
-

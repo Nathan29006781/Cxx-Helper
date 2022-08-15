@@ -4,6 +4,10 @@
 //func scale
 //maybe equation support here? if not, then math.hpp
 
+constexpr double weighted_avg(double first, double second, double first_scale){
+  return first*first_scale + second * (1-first_scale);
+}
+
 //create arithmetic constraint
 template <typename T>
 struct BinArthmOp{
