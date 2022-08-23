@@ -3,6 +3,9 @@
 #include "time.hpp"
 #include "timer.hpp"
 
+#define OUT(expression) << '\'' <<  #expression << "\' = " << expression
+#define OUTPUT(...) std::cout OUT(__VA_ARGS__) << std::endl;
+
 struct Point;
 struct Position;
 struct Vector;

@@ -12,6 +12,12 @@
 //bignum
 //special enums
 
+typedef long double real;
+typedef real rational;
+typedef long long integer;
+typedef unsigned long long whole;
+typedef whole natural;
+
 //Enum Definitions
   template <typename E, typename = typename std::enable_if_t<std::is_enum_v<E>, void>>
   constexpr E next_enum_value(E enum_value){

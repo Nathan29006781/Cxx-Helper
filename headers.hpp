@@ -3,6 +3,7 @@
 #include <bitset>
 #include <chrono>
 #include <cmath>
+#include <concepts>
 #include <cstdio>
 #include <functional>
 #include <iostream>
