@@ -71,6 +71,7 @@
     "forward_list": "cpp",
     "__functional_03": "cpp",
     "memory_resource": "cpp",
-    "__undef_macros": "cpp"
+    "__undef_macros": "cpp",
+    "version": "cpp"
   }
 }

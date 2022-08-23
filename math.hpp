@@ -1,6 +1,8 @@
 #pragma once
 #include "headers.hpp"
 #include "types.hpp"
+#include "util.hpp"
+#include "printing.hpp"
 
 //integrals
 //derivatives
@@ -49,4 +51,17 @@ constexpr natural fibonacci(N n){
 template <Natural N>
 constexpr natural triangular(N n){
   return (n*(n+1))/2;
+}
+
+constexpr long double sqrt_const(long double number)
+{
+  long double guess = number/2.0;
+  long double prev_guess = number;
+
+	while(guess != prev_guess){
+    prev_guess = guess;
+    guess = (guess+number/guess)/2;
+  }
+
+  return guess;
 }
