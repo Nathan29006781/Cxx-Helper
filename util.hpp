@@ -5,13 +5,14 @@ constexpr int bool_to_sgn(bool value){
   return value ? 1 : -1;
 }
 
-constexpr bool sgn_to_bool(int value){
-  return value > 0 ? 1 : 0;
+template <Arithmetic T>
+constexpr bool sgn_to_bool(T value){
+  return value > 0 ? true : false;
 }
 
-template <typename T, typename = typename std::enable_if_t<std::is_arithmetic_v<T>, void>>
+template <Arithmetic T>
 constexpr int sgn(T value){
-  return (T(0) < value) - (value < T(0));
+  return (value == 0) ? 0 : ((value > 0) ? 1 : -1);
 }
 
 #define loop_to(from, to) for(int loop_counter = from, loop_counter_b = to; loop_counter < to; loop_counter++, loop_counter_b--)
@@ -29,6 +30,6 @@ constexpr int sgn(T value){
  * @return whether value is between minimum and maximum. will work even if maximum < minimum
  */
 template <typename T>
-inline constexpr bool in_range(T value, T minimum, T maximum){
+constexpr bool in_range(T value, T minimum, T maximum){
   return ((minimum <= value && value <= maximum) || (maximum <= value && value <= minimum));
 }

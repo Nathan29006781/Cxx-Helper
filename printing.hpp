@@ -2,9 +2,9 @@
 #include "headers.hpp"
 #include "time.hpp"
 #include "timer.hpp"
+#include "types.hpp"
 
-#define OUT(expression) << '\'' <<  #expression << "\' = " << expression
-#define OUTPUT(...) std::cout OUT(__VA_ARGS__) << std::endl;
+#define OUTPUT(...)  std::cout << '\'' << #__VA_ARGS__ << "\' = " << __VA_ARGS__; //Use only for outputting one thing at a time 
 
 struct Point;
 struct Position;
@@ -54,8 +54,8 @@ std::string get_term_colour(term_colours colour);
 void newline(int count = 1);
 
 //Convert Args
-  /*General case*/ template <typename T, typename = typename std::enable_if_t<!std::is_arithmetic_v<T>, void>> std::string convert_all_args(const std::string& fmt, const T& arg); //Forces double / int overload instead
-  /*For arithmetic types*/ template <typename T, typename = typename std::enable_if_t<std::is_arithmetic_v<T>, void>> std::string convert_all_args(const std::string& fmt, T arg); //Not const T& because that duplicates against the non-arithmetic template overload
+  /*General case*/ template <typename T> requires (!Arithmetic<T>) std::string convert_all_args(const std::string& fmt, const T& arg); //Forces double / int overload instead
+  /*For arithmetic types*/ template <typename T> requires Arithmetic<T> std::string convert_all_args(const std::string& fmt, T arg); //Not const T& because that duplicates against the non-arithmetic template overload
   /*Vectors (C++)*/ template <typename _Tp> std::string convert_all_args(const std::string& fmt, const std::vector<_Tp>& arg);
   /*Arrays (C++)*/ template <typename _Tp, std::size_t _Nm> std::string convert_all_args(const std::string& fmt, const std::array<_Tp, _Nm>& arg);
   /*Arrays (C)*/ template <typename _Tp, std::size_t _Nm> std::string convert_all_args(const std::string& fmt, const _Tp (&arg) [_Nm]);
@@ -134,22 +134,22 @@ void newline(int count = 1);
   int printf2(const char* fmt, Params... args);
 
 //Convert Args Definitions
-  template <typename T, typename> //Forces double / int overload instead
+  template <typename T> requires (!Arithmetic<T>) //T is conceptually restricted to non-arithmetic types
   std::string convert_all_args(const std::string& fmt, const T& arg){
     char buffer[n_printf_max];
     snprintf(buffer, n_printf_max, fmt.c_str(), arg);
-    return buffer;
+    return buffer; //returns local buffer by copy to prevent memory leaks or dangling reference
   }
-  template <typename T, typename>
+  template <typename T> requires Arithmetic<T> //T is conceptually restricted to arithmetic types
   std::string convert_all_args(const std::string& fmt, T arg){ //Not const T& because that duplicates against the non-arithmetic template overload
     const char* format = fmt.c_str();
     std::string fmt_safe = "   " + fmt;
     char buffer[n_printf_max];
     char end[3] = {static_cast<char>(tolower(*(fmt.end() - 1))), static_cast<char>(*(fmt.end() - 2)), static_cast<char>(*(fmt.end() - 3))};
 
-    if(end[1] == 'L') snprintf(buffer, n_printf_max, format, static_cast<long double>(arg));
-    else if(end[0] == 'f' || end[0] == 'e' || end[0] == 'g' || end[0] == 'a') snprintf(buffer, n_printf_max, format, static_cast<double>(arg));
-    else if(end[0] == 'd' || end[0] == 'i'){
+    if(end[1] == 'L') snprintf(buffer, n_printf_max, format, static_cast<long double>(arg)); //%large floating
+    else if(end[0] == 'f' || end[0] == 'e' || end[0] == 'g' || end[0] == 'a') snprintf(buffer, n_printf_max, format, static_cast<double>(arg)); //floating
+    else if(end[0] == 'd' || end[0] == 'i'){ //ints
       if(end[2] == 'h') snprintf(buffer, n_printf_max, format, static_cast<signed char>(arg));
       else if(end[2] == 'l') snprintf(buffer, n_printf_max, format, static_cast<long long int>(arg));
       else if(end[1] == 'h') snprintf(buffer, n_printf_max, format, static_cast<short int>(arg));
@@ -157,7 +157,7 @@ void newline(int count = 1);
       else if(end[1] == 'j') snprintf(buffer, n_printf_max, format, static_cast<intmax_t>(arg));
       else snprintf(buffer, n_printf_max, format, static_cast<int>(arg));
     }
-    else if(end[0] == 'u' || end[0] == 'o' || end[0] == 'x'){
+    else if(end[0] == 'u' || end[0] == 'o' || end[0] == 'x'){ //unsigned, octal, hex
       if(end[2] == 'h') snprintf(buffer, n_printf_max, format, static_cast<unsigned char>(arg));
       else if(end[2] == 'l') snprintf(buffer, n_printf_max, format, static_cast<unsigned long long int>(arg));
       else if(end[1] == 'h') snprintf(buffer, n_printf_max, format, static_cast<unsigned short int>(arg));
@@ -165,7 +165,7 @@ void newline(int count = 1);
       else if(end[1] == 'j') snprintf(buffer, n_printf_max, format, static_cast<uintmax_t>(arg));
       else snprintf(buffer, n_printf_max, format, static_cast<unsigned int>(arg));
     }
-    else if(end[0] == 'c'){
+    else if(end[0] == 'c'){ //characters (are treated as ints)
       if(end[1] == 'l') snprintf(buffer, n_printf_max, format, static_cast<wint_t>(arg));
       else snprintf(buffer, n_printf_max, format, static_cast<int>(arg));
     }

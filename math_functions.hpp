@@ -9,7 +9,7 @@ constexpr double weighted_avg(double first, double second, double first_scale){
   return first*first_scale + second * (1-first_scale);
 }
 
-template <typename arg_type, typename result_type, typename = typename std::enable_if_t<std::is_convertible_v<arg_type, integer>, void>>
+template <Integer arg_type, typename result_type>
 constexpr result_type sum(std::function<result_type(arg_type)> func, integer start = 1, integer end = std::numeric_limits<arg_type>::max()){
   // case needed if going to infinity
 
@@ -19,7 +19,7 @@ constexpr result_type sum(std::function<result_type(arg_type)> func, integer sta
   return sum;
 }
 
-template <typename arg_type, typename result_type, typename = typename std::enable_if_t<std::is_convertible_v<arg_type, integer>, void>>
+template <Integer arg_type, typename result_type>
 constexpr result_type prod(std::function<result_type(arg_type)> func, integer start = 1, integer end = std::numeric_limits<arg_type>::max()){
   // case needed if going to infinity
 

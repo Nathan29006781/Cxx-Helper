@@ -1,16 +1,15 @@
 #pragma once
 #include "headers.hpp"
+#include "types.hpp"
 
-//point struct
-//vectors (math)
 //matrices
 
-template <typename T, typename = typename std::enable_if_t<std::is_arithmetic_v<T>, void>>
+template <Arithmetic T>
 constexpr long double hypotenuse(T value){
-  return value;
+  return std::abs(value);
 }
 
-template <typename T, typename... Ts, typename = typename std::enable_if_t<std::is_arithmetic_v<T>&&(std::is_arithmetic_v<Ts>&&...), void>>
+template <Arithmetic T, Arithmetic... Ts>
 constexpr long double hypotenuse(T value, Ts... values){
   return std::hypot(value, hypotenuse(values...));
 }

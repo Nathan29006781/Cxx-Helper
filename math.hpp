@@ -7,6 +7,7 @@
 //limits
 //series sum/prod
 //algebra
+//vectors
 //integer exponentiation
 //constexpr sqrt
 //common math sequences: triangular numbers, perfect squares, fibonnaci, matrices
@@ -40,11 +41,12 @@ solve an equation
 //for calc, see if possible to apply to equations directly
 
 //Good upto 70th number
-constexpr natural fibonacci(natural n){
+template <Natural N>
+constexpr natural fibonacci(N n){
   return round((pow(constants::phi<>, n) - pow(1-constants::phi<>, n)) / (2*constants::phi<>-1));
 }
 
-template <typename N, typename = typename std::enable_if_t<std::is_integral_v<N> && !std::is_signed_v<N> && !std::is_floating_point_v<N>, void>>
-constexpr natural triangular(natural n){
+template <Natural N>
+constexpr natural triangular(N n){
   return (n*(n+1))/2;
 }
