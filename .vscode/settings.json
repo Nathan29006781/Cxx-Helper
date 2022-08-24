@@ -74,6 +74,7 @@
     "__undef_macros": "cpp",
     "version": "cpp",
     "numbers": "cpp",
-    "iomanip": "cpp"
+    "iomanip": "cpp",
+    "*.tpp": "cpp"
   }
 }
