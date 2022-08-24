@@ -72,6 +72,8 @@
     "__functional_03": "cpp",
     "memory_resource": "cpp",
     "__undef_macros": "cpp",
-    "version": "cpp"
+    "version": "cpp",
+    "numbers": "cpp",
+    "iomanip": "cpp"
   }
 }
