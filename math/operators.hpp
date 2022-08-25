@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../headers.hpp"
+#include "../header.hpp"
 #include "../types.hpp"
 #include "../util.hpp"
 
@@ -9,7 +9,7 @@ constexpr result_type sum(std::function<result_type(arg_type)> func, integer sta
   // case needed if going to infinity
 
   result_type sum = 0;
-  loop_to(start, end+1) {sum += func(loop_counter); printf("idx:%d, val:%Lf, sum:%Lf\n", loop_counter, func(loop_counter), sum);}
+  loop_to(start, end+1) {sum += func(loop_counter); printf("idx:%lld, val:%Lf, sum:%Lf\n", loop_counter, func(loop_counter), sum);}
 
   return sum;
 }

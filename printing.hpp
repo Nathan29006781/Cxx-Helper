@@ -1,5 +1,5 @@
 #pragma once
-#include "headers.hpp"
+#include "header.hpp"
 #include "time.hpp"
 #include "timer.hpp"
 #include "types.hpp"
@@ -325,14 +325,20 @@ void newline(int count = 1);
     return whitespace + timestamp + str;
   }
   template <typename... Params>
-  int printf2(term_colours colour, int time_type, const char* fmt, Params... args){
-    return printf("%s\n", sprintf2_format(colour, time_type, fmt, args...).c_str());
+  std::string printf2(term_colours colour, int time_type, const char* fmt, Params... args){
+    std::string str = sprintf2_format(colour, time_type, fmt, args...);
+    printf("%s\n", str.c_str());
+    return str;
   }
   template <typename... Params>
-  int printf2(term_colours colour, std::string fmt, Params... args){
-    return printf("%s\n", sprintf2_format(colour, default_time_fmt, fmt, args...).c_str());
+  std::string printf2(term_colours colour, std::string fmt, Params... args){
+    std::string str = sprintf2_format(colour, default_time_fmt, fmt, args...);
+    printf("%s\n", str.c_str());
+    return str;
   }
   template <typename... Params>
-  int printf2(const char* fmt, Params... args){
-    return printf("%s\n", sprintf2(fmt, args...).c_str());
+  std::string printf2(const char* fmt, Params... args){
+    std::string str = sprintf2(fmt, args...);
+    printf("%s\n", str.c_str());
+    return str;
   }
