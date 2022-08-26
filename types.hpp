@@ -26,6 +26,9 @@ template <typename T> concept Natural = Whole<T>; //No reason to have a type tha
 template <typename T> concept Arithmetic = std::integral<T> || std::floating_point<T>;
 template <typename E> concept Enum = std::is_enum_v<E>;
 
+#define REAL_TEMPLATE(return_type, class_name, ...) template <std::floating_point R> __VA_ARGS__ constexpr return_type class_name<R>::
+#define REAL_TEMPLATE_OTHER template <std::floating_point X>
+
 //Enum Definitions
   template <Enum E>
   constexpr E next_enum_value(E enum_value){

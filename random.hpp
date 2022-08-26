@@ -13,7 +13,7 @@ inline I random_int(I min = 0, I max = std::numeric_limits<I>::max()){
   return distrib(g);
 }
 
-template <Real R = real> requires (!std::integral<R>)
+template <std::floating_point R = real>
 inline R random_real(R min = 0, R max = 1.0){
   std::uniform_real_distribution<R> distrib(0, max - min);
   std::mt19937 g = random_engine();

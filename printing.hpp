@@ -6,9 +6,9 @@
 
 #define OUTPUT(...)  std::cout << '\'' << #__VA_ARGS__ << "\' = " << __VA_ARGS__ << std::endl; //Use only for outputting one thing at a time 
 
-struct Point;
-struct Position;
-struct Vector;
+template <std::floating_point R> struct Point;
+template <std::floating_point R> struct Position;
+template <std::floating_point R> struct Vector;
 
 /**
  * -1: no timestamp
@@ -63,9 +63,9 @@ void newline(int count = 1);
   /*Bitsets*/ template <size_t _Nb> std::string convert_all_args(const std::string& fmt, const std::bitset<_Nb>& arg);
   /*Tuples*/ template <typename... Args> std::string convert_all_args(const std::string& fmt, const std::tuple<Args...>& arg);
   /*Strings*/ std::string convert_all_args(const std::string& fmt, const std::string& arg);
-  /*Positions*/ std::string convert_all_args(const std::string& fmt, const Position& arg);
-  /*Points*/ std::string convert_all_args(const std::string& fmt, const Point& arg);
-  /*Vectors (Geometry)*/ std::string convert_all_args(const std::string& fmt, const Vector& arg);
+  /*Positions*/ template <std::floating_point R> std::string convert_all_args(const std::string& fmt, const Position<R>& arg);
+  /*Points*/ template <std::floating_point R> std::string convert_all_args(const std::string& fmt, const Point<R>& arg);
+  /*Vectors (Geometry)*/ template <std::floating_point R> std::string convert_all_args(const std::string& fmt, const Vector<R>& arg);
 
 // Printing
 
@@ -112,7 +112,7 @@ void newline(int count = 1);
   * @param args printf args
   */
   template <typename... Params>
-  int printf2(term_colours colour, int time_type, const char* fmt, Params... args);
+  std::string printf2(term_colours colour, int time_type, const char* fmt, Params... args);
 
   /**
   * @brief printf that handles all datatypes and automatically newlines. Can print coloured
@@ -122,7 +122,7 @@ void newline(int count = 1);
   * @param args printf args
   */
   template <typename... Params>
-  int printf2(term_colours colour, std::string fmt, Params... args);
+  std::string printf2(term_colours colour, std::string fmt, Params... args);
 
   /**
   * @brief printf that handles all datatypes and automatically newlines.
@@ -131,7 +131,7 @@ void newline(int count = 1);
   * @param args printf args
   */
   template <typename... Params>
-  int printf2(const char* fmt, Params... args);
+  std::string printf2(const char* fmt, Params... args);
 
 //Convert Args Definitions
   template <typename T> requires (!Arithmetic<T>) //T is conceptually restricted to non-arithmetic types

@@ -1,46 +1,56 @@
 #pragma once
+#include "../../header.hpp"
+#include "../../types.hpp"
 
-struct Point;
-struct Position;
+template <std::floating_point R> struct Point;
+template <std::floating_point R> struct Position;
 
+template <std::floating_point R>
 struct Vector{
-  private:
-    double x, y, magnitude, angle;
+  // private:
+    std::complex<R> point;
+    constexpr Vector(std::complex<R> point);
 
   public:
     //Constructors
-      constexpr Vector();
-      constexpr explicit Vector(Point p1);
-      constexpr explicit Vector(Point p1, Point p2); //Can't use default argument with previous because that makes it -p2
+      constexpr Vector(R x = R(), R y = R());
+      constexpr explicit Vector(Point<R> p1);
+      constexpr explicit Vector(Point<R> p1, Point<R> p2); //Can't use default argument with previous because that makes it -p1
+      REAL_TEMPLATE_OTHER constexpr Vector(Vector<X> other); //For Vectors of different underlying floating type
+    //Polar Construction Helper
+      static constexpr Vector polar(R magnitude, R angle);
 
+    //Modifying Methods
+      constexpr Vector& set_cartesian(R x, R y);
+      constexpr Vector& set_cartesian(Point<R> point);
+      constexpr Vector& set_cartesian(Point<R> p2, Point<R> p1);
+      constexpr Vector& set_polar(R magnitude, R angle);
+    
     //Methods
-      constexpr Vector& set_cartesian(Point point);
-      constexpr Vector& set_cartesian(Point p2, Point p1);
-      constexpr Vector& set_cartesian(double x, double y);
-      constexpr Vector& set_polar(double magnitude, double angle);
       constexpr Vector& invert();
-      constexpr Vector& rotate(double angle);
-      static constexpr Vector make_cartesian(Point point);
-      static constexpr Vector make_cartesian(Point p2, Point p1);
-      static constexpr Vector make_cartesian(double x, double y);
-      static constexpr Vector make_polar(double magnitude, double angle);
-
-    //Operators
-      friend constexpr Vector operator* (double, const Vector&);
-      friend constexpr Vector operator/ (double, const Vector&);
-      constexpr Vector operator* (double) const;
-      constexpr Vector operator/ (double) const;
-      constexpr bool operator== (const Vector& p2) const;
-      constexpr bool operator!= (const Vector& p2) const;
-      constexpr Vector operator+ (const Vector& p2) const;
-      constexpr Vector operator- (const Vector& p2) const;
-      constexpr Vector& operator*= (double scalar);
-      constexpr Vector& operator/= (double scalar);
-      constexpr double operator* (const Vector& p2) const; //Dot product
+      constexpr Vector& rotate(R angle);
 
     //Getters
-      constexpr double get_x() const;
-      constexpr double get_y() const;
-      constexpr double get_magnitude() const;
-      constexpr double get_angle() const;
+      constexpr R x() const;
+      constexpr R y() const;
+      constexpr R magnitude() const;
+      constexpr R angle() const;
+
+    //Setters
+      constexpr void x(R x);
+      constexpr void y(R y);
+      constexpr void magnitude(R magnitude);
+      constexpr void angle(R angle);
+
+    //Operators w/ Scalars
+      constexpr Vector& operator*=(R scalar);
+      constexpr Vector& operator/=(R scalar);
+      REAL_TEMPLATE_OTHER constexpr Vector operator*(const X& scalar);
+      REAL_TEMPLATE_OTHER constexpr Vector operator/(const X& scalar);
+
+
+      // constexpr bool operator== (const Vector& p2) const;
+      // constexpr bool operator!= (const Vector& p2) const;
+
+      //Binary ops are defined outside class for symmetry
 };

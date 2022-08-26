@@ -16,9 +16,9 @@ constexpr long double hypotenuse(T value, Ts... values){
 
 
 
-struct Point;
-struct Position;
-struct Vector;
+template <std::floating_point R> struct Point;
+template <std::floating_point R> struct Position;
+template <std::floating_point R> struct Vector;
 
 #include "point.hpp"
 #include "position.hpp"

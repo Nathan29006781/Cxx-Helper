@@ -1,112 +1,67 @@
-constexpr Vector::Vector(): x(0.0), y(0.0), magnitude(0.0), angle(0.0) {};
+#include "../../types.hpp"
 
-constexpr Vector::Vector(Point p1):
-x(0.0), y(0.0), magnitude(0.0), angle(0.0){ //Initializing to 0, becuase constexpr needs to see the initialization
-  set_cartesian(p1);
-}
+//Constructors
+  REAL_TEMPLATE(, Vector) Vector(std::complex<R> point): point(point) {};
+  REAL_TEMPLATE(, Vector) Vector(R x, R y): point(std::complex<R>(x, y)) {};
+  REAL_TEMPLATE(, Vector) Vector(Point<R> p1) {set_cartesian(p1);}
+  REAL_TEMPLATE(, Vector) Vector(Point<R> p1, Point<R> p2) {set_cartesian(p2-p1);}
 
-constexpr Vector::Vector(Point p1, Point p2):
-x(0.0), y(0.0), magnitude(0.0), angle(0.0){ //Initializing to 0, becuase constexpr needs to see the initialization
-  set_cartesian(p2-p1);
-}
+//Polar construction helper
+  REAL_TEMPLATE(Vector<R>, Vector) polar(R magnitude, R angle){
+    Vector<R> vector;
+    return vector.set_polar(magnitude, angle);
+  }
 
+//Modifying Methods
+  REAL_TEMPLATE(Vector<R>&, Vector) set_cartesian(R x, R y){
+    point.real(x);
+    point.imag(y);
+    return *this;
+  }
 
-constexpr Vector& Vector::set_cartesian(Point point){
-  return set_cartesian(point.x, point.y);
-}
+  REAL_TEMPLATE(Vector<R>&, Vector) set_cartesian(Point<R> point){
+    return set_cartesian(point.x, point.y);
+  }
 
-constexpr Vector& Vector::set_cartesian(Point p2, Point p1){
-  return set_cartesian(p2-p1);
-}
+  REAL_TEMPLATE(Vector<R>&, Vector) set_cartesian(Point<R> p2, Point<R> p1){
+    return set_cartesian(p2-p1);
+  }
 
-constexpr Vector& Vector::set_cartesian(double x, double y){
-  this->x = x;
-  this->y = y;
-  magnitude = sqrt(pow(x, 2) + pow(y, 2));
-  angle = atan2(y, x);
-  return *this;
-}
+  REAL_TEMPLATE(Vector<R>&, Vector) set_polar(R magnitude, R angle){
+    point = std::polar(magnitude, angle);
+    return *this;
+  }
 
-constexpr Vector& Vector::set_polar(double magnitude, double angle){
-  this->magnitude = magnitude;
-  this->angle = angle;
-  x = magnitude * cos(angle);
-  y = magnitude * sin(angle);
-  return *this;
-}
+  //Methods
+  REAL_TEMPLATE(Vector<R>&, Vector) invert() {return set_cartesian(y(), x());}
+  REAL_TEMPLATE(Vector<R>&, Vector) rotate(R angle) {return set_polar(magnitude(), this->angle() + angle);}
 
-constexpr Vector& Vector::invert(){
-  return set_cartesian(y, x);
-}
+//Getters
+  REAL_TEMPLATE(R, Vector) x() const {return point.real();}
+  REAL_TEMPLATE(R, Vector) y() const {return point.imag();}
+  REAL_TEMPLATE(R, Vector) magnitude() const {return std::abs(point);}
+  REAL_TEMPLATE(R, Vector) angle() const {return std::arg(point);}
 
-constexpr Vector& Vector::rotate(double angle){
-  return set_polar(magnitude, this->angle + angle);
-}
+//Setters
+  REAL_TEMPLATE(void, Vector) x(R x) {point.real(x);}
+  REAL_TEMPLATE(void, Vector) y(R y) {point.imag(y);}
+  REAL_TEMPLATE(void, Vector) magnitude(R magnitude) {set_polar(magnitude, angle());}
+  REAL_TEMPLATE(void, Vector) angle(R angle) {set_polar(magnitude(), angle);}
 
-constexpr Vector Vector::make_cartesian(Point point){
-  return make_cartesian(point.x, point.y);
-}
-
-constexpr Vector Vector::make_cartesian(Point p1, Point p2){
-  return make_cartesian(p2-p1);
-}
-
-constexpr Vector Vector::make_cartesian(double x, double y){
-  Vector vector;
-  vector.set_cartesian(x, y);
-  return vector;
-}
-
-constexpr Vector Vector::make_polar(double magnitude, double angle){
-  Vector vector;
-  vector.set_polar(magnitude, angle);
-  return vector;
-}
-
-constexpr double Vector::get_x() const{
-  return x;
-}
-constexpr double Vector::get_y() const{
-  return y;
-}
-constexpr double Vector::get_magnitude() const{
-  return magnitude;
-}
-constexpr double Vector::get_angle() const{
-  return angle;
-}
+//Operators
+  REAL_TEMPLATE(Vector<R>&, Vector) operator*=(R scalar) {point *= scalar; return *this;}
+  REAL_TEMPLATE(Vector<R>&, Vector) operator/=(R scalar) {point /= scalar; return *this;}
+  REAL_TEMPLATE(Vector<R>, Vector, REAL_TEMPLATE_OTHER) operator*(const X& rhs) {return point * static_cast<R>(rhs);}
+  REAL_TEMPLATE(Vector<R>, Vector, REAL_TEMPLATE_OTHER) operator/(const X& rhs) {return point / static_cast<R>(rhs);}
 
 
-constexpr Vector Vector::operator* (double scalar) const{
-  return make_polar(magnitude * scalar, angle);
-}
-constexpr Vector operator* (double scalar, const Vector& vector){
-  return vector*scalar;
-}
-constexpr Vector Vector::operator/ (double scalar) const{
-  return *this * (1 / scalar);
-}
-constexpr Vector operator/ (double scalar, const Vector& vector){
-  return Vector::make_polar(vector.magnitude / scalar, vector.angle);
-}
-constexpr bool Vector::operator== (const Vector& p2) const{
-  return (x == p2.x) && (y == p2.y) && (magnitude == p2.magnitude) && (angle == p2.angle);
-}
-constexpr bool Vector::operator!= (const Vector& p2) const{
-  return !(*this == p2);
-}
-constexpr Vector Vector::operator+ (const Vector& p2) const{
-  return make_polar(x + p2.x, y + p2.y);
-}
-constexpr Vector Vector::operator- (const Vector& p2) const{
-  return make_polar(x - p2.x, y - p2.y);
-}
-constexpr Vector& Vector::operator*= (double scalar){
-  return set_polar(magnitude * scalar, angle);
-}
-constexpr Vector& Vector::operator/= (double scalar){
-  return set_polar(magnitude / scalar, angle);
-}
-constexpr double Vector::operator* (const Vector& p2) const{
-  return x*p2.x+y*p2.y;
-}
+  // REAL_TEMPLATE constexpr_2 Vector<R> operator*(const X& lhs, const Vector<R>& rhs) {return rhs.point * static_cast<R>(lhs);}
+
+  // REAL_TEMPLATE constexpr Vector<R> operator* (R scalar, const Vector<R>& vector) {return vector*scalar;}
+  // REAL_TEMPLATE(Vector<R>, Vector) operator* (R scalar) const {return point*scalar;}
+  // REAL_TEMPLATE(Vector<R>, Vector) operator/ (R scalar) const {return point / scalar;}
+  // REAL_TEMPLATE(bool, Vector) operator== (const Vector<R>& p2) const {return point == p2.point;}
+  // REAL_TEMPLATE(bool, Vector) operator!= (const Vector<R>& p2) const {return point != p2.point;}
+  // REAL_TEMPLATE(Vector<R>, Vector) operator+ (const Vector<R>& p2) const {return point + p2.point;}
+  // REAL_TEMPLATE(Vector<R>, Vector) operator- (const Vector<R>& p2) const {return point - p2.point;}
+  // REAL_TEMPLATE(R, Vector) operator* (const Vector<R>& p2) const {return point * p2.point;}

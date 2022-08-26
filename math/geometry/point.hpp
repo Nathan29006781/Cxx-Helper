@@ -1,31 +1,33 @@
 #pragma once
+#include "../../header.hpp"
 
-struct Position;
-struct Vector;
+template <std::floating_point R> struct Position;
+template <std::floating_point R> struct Vector;
 
+template <std::floating_point R>
 struct Point{
   double x, y;
   
   //Constructors
-    constexpr Point();
-    constexpr explicit Point(Vector vector);
-    constexpr Point(Position position);
-    constexpr Point(double x, double y);
+    constexpr Point<R>();
+    constexpr explicit Point<R>(Vector<R> vector);
+    constexpr Point<R>(Position<R> position);
+    constexpr Point<R>(double x, double y);
 
   //Methods
-    constexpr Point& invert();
+    constexpr Point<R>& invert();
   
   //Operators
-    friend constexpr Point operator* (const Point&, double);
-    friend constexpr Point operator* (double, const Point&);
-    friend constexpr Point operator/ (const Point&, double);
-    friend constexpr Point operator/ (double, const Point&);
-    constexpr bool operator== (const Point& p2) const;
-    constexpr bool operator!= (const Point& p2) const;
-    constexpr Point operator+ (const Point& p2) const;
-    constexpr Point operator- (const Point& p2) const;
-    constexpr Position operator+ (const Position& p2) const;
-    constexpr Position operator- (const Position& p2) const;
-    constexpr Point& operator*= (double scalar);
-    constexpr Point& operator/= (double scalar);
+    friend constexpr Point<R> operator* (const Point<R>&, double);
+    friend constexpr Point<R> operator* (double, const Point<R>&);
+    friend constexpr Point<R> operator/ (const Point<R>&, double);
+    friend constexpr Point<R> operator/ (double, const Point<R>&);
+    constexpr bool operator== (const Point<R>& p2) const;
+    constexpr bool operator!= (const Point<R>& p2) const;
+    constexpr Point<R> operator+ (const Point<R>& p2) const;
+    constexpr Point<R> operator- (const Point<R>& p2) const;
+    constexpr Position<R> operator+ (const Position<R>& p2) const;
+    constexpr Position<R> operator- (const Position<R>& p2) const;
+    constexpr Point<R>& operator*= (double scalar);
+    constexpr Point<R>& operator/= (double scalar);
 };

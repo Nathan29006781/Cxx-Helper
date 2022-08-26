@@ -11,7 +11,7 @@ constexpr bool sgn_to_bool(T value){
 }
 
 template <Arithmetic T>
-constexpr int sgn(T value){
+constexpr int sgn(T value){ //use copysign
   return (value == 0) ? 0 : ((value > 0) ? 1 : -1);
 }
 
