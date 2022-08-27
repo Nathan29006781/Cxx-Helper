@@ -4,7 +4,7 @@
 #include "timer.hpp"
 #include "types.hpp"
 
-#define OUTPUT(...)  std::cout << '\'' << #__VA_ARGS__ << "\' = " << __VA_ARGS__ << std::endl; //Use only for outputting one thing at a time 
+#define OUTPUT(...)  std::cout << '\'' << #__VA_ARGS__ << "\' = " << (__VA_ARGS__) << std::endl; //Use only for outputting one thing at a time 
 
 template <std::floating_point R> struct Point;
 template <std::floating_point R> struct Position;

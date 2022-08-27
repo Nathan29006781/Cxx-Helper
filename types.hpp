@@ -28,6 +28,7 @@ template <typename E> concept Enum = std::is_enum_v<E>;
 
 #define REAL_TEMPLATE(return_type, class_name, ...) template <std::floating_point R> __VA_ARGS__ constexpr return_type class_name<R>::
 #define REAL_TEMPLATE_OTHER template <std::floating_point X>
+#define COMMON_REAL std::common_type_t<R, X>
 
 //Enum Definitions
   template <Enum E>

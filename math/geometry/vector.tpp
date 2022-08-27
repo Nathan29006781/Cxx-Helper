@@ -5,6 +5,7 @@
   REAL_TEMPLATE(, Vector) Vector(R x, R y): point(std::complex<R>(x, y)) {};
   REAL_TEMPLATE(, Vector) Vector(Point<R> p1) {set_cartesian(p1);}
   REAL_TEMPLATE(, Vector) Vector(Point<R> p1, Point<R> p2) {set_cartesian(p2-p1);}
+  REAL_TEMPLATE(, Vector, REAL_TEMPLATE_OTHER) Vector(Vector<X> other) {set_cartesian(static_cast<R>(other.x()), static_cast<R>(other.y()));}
 
 //Polar construction helper
   REAL_TEMPLATE(Vector<R>, Vector) polar(R magnitude, R angle){
@@ -32,9 +33,10 @@
     return *this;
   }
 
-  //Methods
+//Methods
   REAL_TEMPLATE(Vector<R>&, Vector) invert() {return set_cartesian(y(), x());}
   REAL_TEMPLATE(Vector<R>&, Vector) rotate(R angle) {return set_polar(magnitude(), this->angle() + angle);}
+  REAL_TEMPLATE(bool, Vector) is_zero_vector() {return x() == 0 && y() == 0;}
 
 //Getters
   REAL_TEMPLATE(R, Vector) x() const {return point.real();}
@@ -48,20 +50,26 @@
   REAL_TEMPLATE(void, Vector) magnitude(R magnitude) {set_polar(magnitude, angle());}
   REAL_TEMPLATE(void, Vector) angle(R angle) {set_polar(magnitude(), angle);}
 
-//Operators
+//Scalar Operators
   REAL_TEMPLATE(Vector<R>&, Vector) operator*=(R scalar) {point *= scalar; return *this;}
   REAL_TEMPLATE(Vector<R>&, Vector) operator/=(R scalar) {point /= scalar; return *this;}
-  REAL_TEMPLATE(Vector<R>, Vector, REAL_TEMPLATE_OTHER) operator*(const X& rhs) {return point * static_cast<R>(rhs);}
-  REAL_TEMPLATE(Vector<R>, Vector, REAL_TEMPLATE_OTHER) operator/(const X& rhs) {return point / static_cast<R>(rhs);}
+  REAL_TEMPLATE(Vector<R>, Vector, template <Arithmetic X>) operator*(const X& rhs) const {return point * static_cast<R>(rhs);}
+  REAL_TEMPLATE(Vector<R>, Vector, template <Arithmetic X>) operator/(const X& rhs) const {return point / static_cast<R>(rhs);}
 
+  //scalar * vector (implemented out of class)
+  template <Arithmetic X, std::floating_point R> constexpr Vector<R> operator*(const X& lhs, const Vector<R>& rhs) {return rhs * lhs;}
 
-  // REAL_TEMPLATE constexpr_2 Vector<R> operator*(const X& lhs, const Vector<R>& rhs) {return rhs.point * static_cast<R>(lhs);}
+//Vector Operators
+  REAL_TEMPLATE(Vector<R>&, Vector, REAL_TEMPLATE_OTHER) operator+=(const Vector<X>& vector) {point += vector.point; return *this;}
+  REAL_TEMPLATE(Vector<R>&, Vector, REAL_TEMPLATE_OTHER) operator-=(const Vector<X>& vector) {point -= vector.point; return *this;}
+  REAL_TEMPLATE(Vector<R>, Vector, REAL_TEMPLATE_OTHER) operator+(const Vector<X>& vector) const {return point + std::complex<R>(vector.point);}
+  REAL_TEMPLATE(Vector<R>, Vector, REAL_TEMPLATE_OTHER) operator-(const Vector<X>& vector) const {return point - std::complex<R>(vector.point);}
+  REAL_TEMPLATE(COMMON_REAL, Vector, REAL_TEMPLATE_OTHER) operator*(const Vector<X>& vector) const {return x()*vector.x() + y()*vector.y();}
+  
+//Boolean Operators
+  REAL_TEMPLATE(bool, Vector, REAL_TEMPLATE_OTHER) operator== (const Vector<X>& vector) const {return point == std::complex<R>(vector.point);}
+  REAL_TEMPLATE(bool, Vector, REAL_TEMPLATE_OTHER) operator!= (const Vector<X>& vector) const {return point != std::complex<R>(vector.point);}
 
-  // REAL_TEMPLATE constexpr Vector<R> operator* (R scalar, const Vector<R>& vector) {return vector*scalar;}
-  // REAL_TEMPLATE(Vector<R>, Vector) operator* (R scalar) const {return point*scalar;}
-  // REAL_TEMPLATE(Vector<R>, Vector) operator/ (R scalar) const {return point / scalar;}
-  // REAL_TEMPLATE(bool, Vector) operator== (const Vector<R>& p2) const {return point == p2.point;}
-  // REAL_TEMPLATE(bool, Vector) operator!= (const Vector<R>& p2) const {return point != p2.point;}
-  // REAL_TEMPLATE(Vector<R>, Vector) operator+ (const Vector<R>& p2) const {return point + p2.point;}
-  // REAL_TEMPLATE(Vector<R>, Vector) operator- (const Vector<R>& p2) const {return point - p2.point;}
-  // REAL_TEMPLATE(R, Vector) operator* (const Vector<R>& p2) const {return point * p2.point;}
+  template<typename charT, typename traits, std::floating_point R> std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const Vector<R>& vector){
+    return os << vector.point;
+  }

@@ -29,6 +29,7 @@ struct Vector{
     //Methods
       constexpr Vector& invert();
       constexpr Vector& rotate(R angle);
+      constexpr bool is_zero_vector();
 
     //Getters
       constexpr R x() const;
@@ -42,15 +43,23 @@ struct Vector{
       constexpr void magnitude(R magnitude);
       constexpr void angle(R angle);
 
-    //Operators w/ Scalars
+    //Scalar Operators
       constexpr Vector& operator*=(R scalar);
       constexpr Vector& operator/=(R scalar);
-      REAL_TEMPLATE_OTHER constexpr Vector operator*(const X& scalar);
-      REAL_TEMPLATE_OTHER constexpr Vector operator/(const X& scalar);
+      template <Arithmetic X> constexpr Vector operator*(const X& scalar) const;
+      template <Arithmetic X> constexpr Vector operator/(const X& scalar) const;
+      //scalar * vector (implemented out of class)
 
+    //Vector Operators
+      REAL_TEMPLATE_OTHER constexpr Vector& operator+=(const Vector<X>& vector);
+      REAL_TEMPLATE_OTHER constexpr Vector& operator-=(const Vector<X>& vector);
+      REAL_TEMPLATE_OTHER constexpr Vector operator+(const Vector<X>& vector) const;
+      REAL_TEMPLATE_OTHER constexpr Vector operator-(const Vector<X>& vector) const;
+      REAL_TEMPLATE_OTHER constexpr COMMON_REAL operator*(const Vector<X>& vector) const; //Dot product
 
-      // constexpr bool operator== (const Vector& p2) const;
-      // constexpr bool operator!= (const Vector& p2) const;
+    //Boolean Operators
+      REAL_TEMPLATE_OTHER constexpr bool operator== (const Vector<X>& vector) const;
+      REAL_TEMPLATE_OTHER constexpr bool operator!= (const Vector<X>& vector) const;
 
-      //Binary ops are defined outside class for symmetry
+    //ostream operator (implemented out of class)
 };
