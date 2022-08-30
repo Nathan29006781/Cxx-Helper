@@ -4,7 +4,9 @@
 #include "timer.hpp"
 #include "types.hpp"
 
-#define OUTPUT(...)  std::cout << '\'' << #__VA_ARGS__ << "\' = " << (__VA_ARGS__) << std::endl; //Use only for outputting one thing at a time 
+#define STRINGIFY(...) #__VA_ARGS__
+#define OUTPUT(out...)  std::cout << '\'' << STRINGIFY(out) << "\' = " << (out) << '\n';
+//Use OUTPUT only for outputting one thing at a time (it is variadic to allow commas in input)
 
 template <std::floating_point R> struct Point;
 template <std::floating_point R> struct Position;

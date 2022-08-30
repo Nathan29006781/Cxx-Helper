@@ -9,6 +9,7 @@
       "args": [
         "--std",
         "c++20",
+        // "-pedantic",
         "${workspaceFolder}/*.cpp",
         "-o",
         "${workspaceFolder}/main"

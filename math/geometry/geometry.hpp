@@ -4,14 +4,14 @@
 
 //matrices
 
-template <Arithmetic T>
-constexpr long double hypotenuse(T value){
-  return std::abs(value);
-}
+// template <Arithmetic T>
+// constexpr long double hypotenuse(T value){
+//   return std::abs(value);
+// }
 
-template <Arithmetic T, Arithmetic... Ts>
-constexpr long double hypotenuse(T value, Ts... values){
-  return std::hypot(value, hypotenuse(values...));
+template <Arithmetic... Ts>
+constexpr auto hypotenuse(Ts... values){
+  return sqrt(((values*values) + ...));
 }
 
 
@@ -22,8 +22,8 @@ template <std::floating_point R> struct Vector;
 
 #include "point.hpp"
 #include "position.hpp"
-#include "vector.hpp"
+#include "../linear_algebra/vector.hpp"
 
 #include "point.tpp"
 #include "position.tpp"
-#include "vector.tpp"
+#include "../linear_algebra/vector.tpp"
