@@ -32,6 +32,11 @@ constexpr natural fibonacci(N n){
 }
 
 template <Natural N>
+constexpr natural factorial(N n){
+  return round(std::tgamma(n+1));
+}
+
+template <Natural N>
 constexpr natural triangular(N n){
   return (n*(n+1))/2;
 }

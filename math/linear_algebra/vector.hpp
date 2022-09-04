@@ -32,9 +32,8 @@ struct Vector{
     //Methods
       constexpr bool is_zero_vector() const;
       constexpr bool is_unit_vector() const;
-      constexpr Vector unit_vector() const;
+      constexpr Vector normalize() const;
       template <std::floating_point X> constexpr COMMON_REAL(R) angle(const Vector<X>& vector) const;
-      // angle between two vectors
 
 
     //Getters

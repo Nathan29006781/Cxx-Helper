@@ -11,19 +11,19 @@ enum class timing_units{
   microseconds = micros,
 };
 
-class Timer{
+class Timer_old{
   //'time' is the time counted by the timer until the last call of pause()
-  uint64_t last_reset_time, time, last_play_time;
-  const std::string name;
+  uint64_t time, last_play_time;
   bool paused; //state of timer
+  
+  const std::string name;
   const timing_units timing_unit;
   uint64_t get_time_in_timing_unit(); //returns time in either millis micros
 
   static uint64_t convert_time(uint64_t time, timing_units from, timing_units to);
 
 public:
-  explicit Timer(std::string name, bool play = true, timing_units timing_unit = timing_units::millis);
-  uint64_t get_last_reset_time();
+  explicit Timer_old(std::string name, bool play = true, timing_units timing_unit = timing_units::millis);
   void reset(bool play = true);
   uint64_t get_time();
   uint64_t get_time(timing_units timing_unit);

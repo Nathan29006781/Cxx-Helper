@@ -1,16 +1,12 @@
 #include "timer.hpp"
 #include "time.hpp"
 
-Timer::Timer(std::string name, bool play, timing_units timing_unit):
+Timer_old::Timer_old(std::string name, bool play, timing_units timing_unit):
 name(name), timing_unit(timing_unit){
   reset(play);
 }
 
-uint64_t Timer::get_last_reset_time(){
-  return last_reset_time;
-}
-
-void Timer::reset(bool play){
+void Timer_old::reset(bool play){
   time = 0;
   if(play){
     paused = true;
@@ -19,16 +15,16 @@ void Timer::reset(bool play){
   else paused = true;
 }
 
-uint64_t Timer::get_time(timing_units timing_unit){
+uint64_t Timer_old::get_time(timing_units timing_unit){
   return convert_time(get_time(), this->timing_unit, timing_unit);
 }
 
-uint64_t Timer::get_time(){
+uint64_t Timer_old::get_time(){
   if (paused) return time;
   else return get_time_in_timing_unit() - last_play_time + time;
 }
 
-void Timer::play(){
+void Timer_old::play(){
   if (paused){
     last_play_time = get_time_in_timing_unit();
     paused = false;
@@ -36,7 +32,7 @@ void Timer::play(){
   // else data_obj->print("Timer \"%s\" is already playing.", name);
 }
 
-void Timer::pause(){
+void Timer_old::pause(){
   if (!paused){
     time += get_time_in_timing_unit() - last_play_time;
     paused = true;
@@ -44,27 +40,28 @@ void Timer::pause(){
   // else data_obj->print("Timer \"%s\" is already paused.", name);
 }
 
-void Timer::print(){
+void Timer_old::print(){
   // data_obj->print("%s's current time is: %lld", name, get_time());
 }
 
-void Timer::print_fancy(std::string str, int long_names, bool unit_conversion){
+void Timer_old::print_fancy(std::string str, int long_names, bool unit_conversion){
   // data_obj->print("%s's current time is: %s | %s", name, to_string(get_time(), timing_unit, long_names, unit_conversion));
 }
 
-uint64_t Timer::convert_time(uint64_t time, timing_units from, timing_units to){
+uint64_t Timer_old::convert_time(uint64_t time, timing_units from, timing_units to){
   return time * static_cast<uint64_t>(from) / static_cast<uint64_t>(to);
 }
 
-uint64_t Timer::get_time_in_timing_unit(){
-  return convert_time(micros(), timing_units::micros, timing_unit);
+uint64_t Timer_old::get_time_in_timing_unit(){
+  // return convert_time(micros(), timing_units::micros, timing_unit);
+  return 0;
 }
 
-bool Timer::playing(){
+bool Timer_old::playing(){
   return !paused;
 }
 
-std::string Timer::to_string(std::uint64_t time, timing_units unit, int long_names, bool unit_conversion){
+std::string Timer_old::to_string(std::uint64_t time, timing_units unit, int long_names, bool unit_conversion){
   std::string millis;
   std::string micros;
   std::string sec;

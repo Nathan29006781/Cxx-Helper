@@ -21,7 +21,7 @@ template <std::floating_point R> struct Vector;
  * 4: 1 sec 500 millis
  * 5: 1 second 500 milliseconds
  */
-constexpr int default_time_fmt = 3;
+constexpr int default_time_fmt = PRINT_TYPE;
 constexpr int n_printf_max = 50;
 
 //feel free to suggest shorter names for term_colours
@@ -298,12 +298,12 @@ void newline(int count = 1);
     str.erase(str.begin(), str.begin() + white_count);
 
     if(time_type == -1) timestamp = "";
-    else if(time_type == 0) timestamp = sprintf2("%-9s| ", Timer::to_string(millis(), timing_units::millis, 0, 0));
-    else if(time_type == 1) timestamp = sprintf2("%-12s| ", Timer::to_string(millis(), timing_units::millis, 1, 0));
-    else if(time_type == 2) timestamp = sprintf2("%-18s| ", Timer::to_string(millis(), timing_units::millis, 2, 0));
-    else if(time_type == 3) timestamp = sprintf2("%-15s| ", Timer::to_string(millis(), timing_units::millis, 0, 1));
-    else if(time_type == 4) timestamp = sprintf2("%-21s| ", Timer::to_string(millis(), timing_units::millis, 1, 1));
-    else if(time_type == 5) timestamp = sprintf2("%-30s| ", Timer::to_string(millis(), timing_units::millis, 2, 1));
+    else if(time_type == 0) timestamp = sprintf2("%-9s| ", Timer_old::to_string(millis(), timing_units::millis, 0, 0));
+    else if(time_type == 1) timestamp = sprintf2("%-12s| ", Timer_old::to_string(millis(), timing_units::millis, 1, 0));
+    else if(time_type == 2) timestamp = sprintf2("%-18s| ", Timer_old::to_string(millis(), timing_units::millis, 2, 0));
+    else if(time_type == 3) timestamp = sprintf2("%-15s| ", Timer_old::to_string(millis(), timing_units::millis, 0, 1));
+    else if(time_type == 4) timestamp = sprintf2("%-21s| ", Timer_old::to_string(millis(), timing_units::millis, 1, 1));
+    else if(time_type == 5) timestamp = sprintf2("%-30s| ", Timer_old::to_string(millis(), timing_units::millis, 2, 1));
 
     return whitespace + timestamp + get_term_colour(colour) + str + get_term_colour(term_colours::NONE);
   }
@@ -317,12 +317,12 @@ void newline(int count = 1);
     str.erase(str.begin(), str.begin() + white_count);
 
     if(time_type == -1) timestamp = "";
-    else if(time_type == 0) timestamp = sprintf2("%-9s| ", Timer::to_string(millis(), timing_units::millis, 0, 0));
-    else if(time_type == 1) timestamp = sprintf2("%-12s| ", Timer::to_string(millis(), timing_units::millis, 1, 0));
-    else if(time_type == 2) timestamp = sprintf2("%-18s| ", Timer::to_string(millis(), timing_units::millis, 2, 0));
-    else if(time_type == 3) timestamp = sprintf2("%-15s| ", Timer::to_string(millis(), timing_units::millis, 0, 1));
-    else if(time_type == 4) timestamp = sprintf2("%-21s| ", Timer::to_string(millis(), timing_units::millis, 1, 1));
-    else if(time_type == 5) timestamp = sprintf2("%-30s| ", Timer::to_string(millis(), timing_units::millis, 2, 1));
+    else if(time_type == 0) timestamp = sprintf2("%-9s| ", Timer_old::to_string(millis(), timing_units::millis, 0, 0));
+    else if(time_type == 1) timestamp = sprintf2("%-12s| ", Timer_old::to_string(millis(), timing_units::millis, 1, 0));
+    else if(time_type == 2) timestamp = sprintf2("%-18s| ", Timer_old::to_string(millis(), timing_units::millis, 2, 0));
+    else if(time_type == 3) timestamp = sprintf2("%-15s| ", Timer_old::to_string(millis(), timing_units::millis, 0, 1));
+    else if(time_type == 4) timestamp = sprintf2("%-21s| ", Timer_old::to_string(millis(), timing_units::millis, 1, 1));
+    else if(time_type == 5) timestamp = sprintf2("%-30s| ", Timer_old::to_string(millis(), timing_units::millis, 2, 1));
 
     return whitespace + timestamp + str;
   }

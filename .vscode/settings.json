@@ -75,6 +75,8 @@
     "version": "cpp",
     "numbers": "cpp",
     "iomanip": "cpp",
-    "*.tpp": "cpp"
+    "*.tpp": "cpp",
+    "__availability": "cpp",
+    "thread": "cpp"
   }
 }

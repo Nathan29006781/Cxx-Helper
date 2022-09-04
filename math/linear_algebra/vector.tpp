@@ -42,7 +42,7 @@
 //Methods
   REAL_TEMPLATE(bool, Vector) is_zero_vector() const {return magnitude_square() == 0;}
   REAL_TEMPLATE(bool, Vector) is_unit_vector() const {return magnitude_square() == 1;}
-  REAL_TEMPLATE(Vector<R>, Vector) unit_vector() const {return (*this) / magnitude();}
+  REAL_TEMPLATE(Vector<R>, Vector) normalize() const {return (*this) / magnitude();}
   REAL_TEMPLATE(COMMON_REAL(R), Vector, template <std::floating_point X>) angle(const Vector<X>& vector) const {return std::acos(((*this)*vector) / std::sqrt(this->magnitude_square()*vector.magnitude_square()));}
 
 

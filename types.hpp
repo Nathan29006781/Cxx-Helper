@@ -25,6 +25,9 @@ template <typename T> concept Whole = std::convertible_to<T, whole> && std::sign
 template <typename T> concept Natural = Whole<T>; //No reason to have a type that excludes 0
 template <typename T> concept Arithmetic = std::integral<T> || std::floating_point<T>;
 template <typename E> concept Enum = std::is_enum_v<E> && requires { E::ENUM_TERMINATOR; };
+template <typename D> concept Duration = std::chrono::__is_duration<D>::value;
+
+
 
 #define COMMON_REAL(types...) std::common_type_t<types, X>
 #define REAL_TEMPLATE(return_type, class_name, additional_template...) template <std::floating_point R> additional_template constexpr return_type class_name<R>::
