@@ -8,6 +8,7 @@
 #include <concepts>
 #include <cstdio>
 #include <functional>
+#include <iomanip>
 #include <iostream>
 #include <numbers>
 #include <random>

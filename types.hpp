@@ -26,6 +26,7 @@ template <typename T> concept Natural = Whole<T>; //No reason to have a type tha
 template <typename T> concept Arithmetic = std::integral<T> || std::floating_point<T>;
 template <typename E> concept Enum = std::is_enum_v<E> && requires { E::ENUM_TERMINATOR; };
 template <typename D> concept Duration = std::chrono::__is_duration<D>::value;
+// concept Container (vector, array, c array)
 
 
 

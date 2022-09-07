@@ -21,7 +21,14 @@ template <std::floating_point R> struct Vector;
  * 4: 1 sec 500 millis
  * 5: 1 second 500 milliseconds
  */
+
+#ifdef PRINT_TYPE
 constexpr int default_time_fmt = PRINT_TYPE;
+#else
+constexpr int default_time_fmt = -1;
+#endif
+
+
 constexpr int n_printf_max = 50;
 
 //feel free to suggest shorter names for term_colours
@@ -56,8 +63,8 @@ std::string get_term_colour(term_colours colour);
 void newline(int count = 1);
 
 //Convert Args
-  /*General case*/ template <typename T> requires (!Arithmetic<T>) std::string convert_all_args(const std::string& fmt, const T& arg); //Forces double / int overload instead
-  /*For arithmetic types*/ template <typename T> requires Arithmetic<T> std::string convert_all_args(const std::string& fmt, T arg); //Not const T& because that duplicates against the non-arithmetic template overload
+  /*General case*/ template <typename T> std::string convert_all_args(const std::string& fmt, const T& arg); //Forces double / int overload instead
+  /*For arithmetic types*/ template <Arithmetic T> std::string convert_all_args(const std::string& fmt, T arg); //Not const T& because that duplicates against the non-arithmetic template overload
   /*Vectors (C++)*/ template <typename _Tp> std::string convert_all_args(const std::string& fmt, const std::vector<_Tp>& arg);
   /*Arrays (C++)*/ template <typename _Tp, std::size_t _Nm> std::string convert_all_args(const std::string& fmt, const std::array<_Tp, _Nm>& arg);
   /*Arrays (C)*/ template <typename _Tp, std::size_t _Nm> std::string convert_all_args(const std::string& fmt, const _Tp (&arg) [_Nm]);
@@ -136,13 +143,13 @@ void newline(int count = 1);
   std::string printf2(const char* fmt, Params... args);
 
 //Convert Args Definitions
-  template <typename T> requires (!Arithmetic<T>) //T is conceptually restricted to non-arithmetic types
+  template <typename T>
   std::string convert_all_args(const std::string& fmt, const T& arg){
     char buffer[n_printf_max];
     snprintf(buffer, n_printf_max, fmt.c_str(), arg);
     return buffer; //returns local buffer by copy to prevent memory leaks or dangling reference
   }
-  template <typename T> requires Arithmetic<T> //T is conceptually restricted to arithmetic types
+  template <Arithmetic T> //T is conceptually restricted to arithmetic types
   std::string convert_all_args(const std::string& fmt, T arg){ //Not const T& because that duplicates against the non-arithmetic template overload
     const char* format = fmt.c_str();
     std::string fmt_safe = "   " + fmt;

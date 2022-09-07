@@ -14,7 +14,8 @@
 
 //gitignore executables, .bin, and main.cpp
 
-//look at making the tpp not standalone (no includes) they can only be used in a copy-paste context
+//remove all .cpp files
+//include only .tpp via common include files like header.hpp
 
 
 //switch pragma once to include guards
@@ -32,17 +33,16 @@
 //update duke of ed
 //template arg type for weighted_avg, fibonnaci...
 
-
 int main(){
-  // std::cout << sum(std::function([](natural a){return 1.0L/(a*a);}), 1, 100000000) << std::endl;
-  // std::cout << pow(constants::pi<>, 2)/6;
-  // std::cout << 1./std::numeric_limits<natural>::max();
-
   //test the vector methods (set_cartesian, invert...)
   //generalize vector for n dimensions (instead make vector a special case of nx1 matrix)
 
   // compose an NxM matrix from M Vector<N>'s
   // specify Vector<2>, Vector<3>, Vector<7>
+  std::cout << std::setprecision(30);
+  OUTPUT(constants::gauss<>);
+  OUTPUT(0);
+
 
   return 0;
 }

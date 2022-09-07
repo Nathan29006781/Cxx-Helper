@@ -18,7 +18,7 @@ std::string convert_all_args(const std::string& fmt, const Point<R>& arg){
 
 template <std::floating_point R>
 std::string convert_all_args(const std::string& fmt, const Vector<R>& arg){
-  return '(' + convert_all_args(fmt, arg.get_x()) + ", " + convert_all_args(fmt, arg.get_y()) + ")";
+  return '(' + convert_all_args(fmt, arg.x()) + ", " + convert_all_args(fmt, arg.y()) + ")";
 }
 
 //Template Recursion Base case
