@@ -1,7 +1,6 @@
 #pragma once
 #include <algorithm>
 #include <bit>
-#include <bitset>
 #include <chrono>
 #include <cmath>
 #include <complex>
@@ -12,10 +11,11 @@
 #include <iostream>
 #include <numbers>
 #include <random>
+#include <ranges>
 #include <thread>
 #include <type_traits>
-#include <unordered_map>
 #include <string>
+#include "container_includes.hpp"
 
 #ifdef NO_PRINTF
 #define printf(...)

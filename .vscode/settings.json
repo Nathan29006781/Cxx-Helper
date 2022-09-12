@@ -77,6 +77,9 @@
     "iomanip": "cpp",
     "*.tpp": "cpp",
     "__availability": "cpp",
-    "thread": "cpp"
+    "thread": "cpp",
+    "ranges": "cpp",
+    "deque": "cpp",
+    "list": "cpp"
   }
 }

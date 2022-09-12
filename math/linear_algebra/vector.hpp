@@ -2,7 +2,6 @@
 #include "../../header.hpp"
 #include "../../types.hpp"
 
-template <std::floating_point R> struct Point;
 template <std::floating_point R> struct Position;
 
 template <std::floating_point R>
@@ -14,15 +13,11 @@ struct Vector{
   public:
     //Constructors
       constexpr Vector(R x = R(), R y = R());
-      constexpr explicit Vector(Point<R> p1);
-      constexpr explicit Vector(Point<R> p1, Point<R> p2); //Can't use default argument with previous because that makes it -p1
       template <std::floating_point X> constexpr Vector(Vector<X> other); //For Vectors of different underlying floating type
       //Polar Construction Helper defined outside class
 
     //Modifying Methods
       constexpr Vector& set_cartesian(R x, R y);
-      constexpr Vector& set_cartesian(Point<R> point);
-      constexpr Vector& set_cartesian(Point<R> p2, Point<R> p1);
       constexpr Vector& set_polar(R magnitude, R angle);
       constexpr Vector& invert();
       constexpr Vector& rotate(R angle);
@@ -33,7 +28,7 @@ struct Vector{
       constexpr bool is_zero_vector() const;
       constexpr bool is_unit_vector() const;
       constexpr Vector normalize() const;
-      template <std::floating_point X> constexpr COMMON_REAL(R) angle(const Vector<X>& vector) const;
+      template <std::floating_point X> constexpr COMMON_REAL(R) angle(const Vector<X>& other) const;
 
 
     //Getters
@@ -41,7 +36,7 @@ struct Vector{
       constexpr R y() const;
       constexpr R magnitude() const;
       constexpr R angle() const;
-      constexpr R magnitude_square() const;
+      constexpr R square() const;
 
 
     //Setters
@@ -58,15 +53,19 @@ struct Vector{
       //scalar * vector (implemented out of class)
 
     //Vector Operators
-      template <std::floating_point X> constexpr Vector& operator+=(const Vector<X>& vector);
-      template <std::floating_point X> constexpr Vector& operator-=(const Vector<X>& vector);
-      template <std::floating_point X> constexpr Vector operator+(const Vector<X>& vector) const;
-      template <std::floating_point X> constexpr Vector operator-(const Vector<X>& vector) const;
-      template <std::floating_point X> constexpr COMMON_REAL(R) operator*(const Vector<X>& vector) const; //Dot product
+      template <std::floating_point X> constexpr Vector& operator+=(const Vector<X>& other);
+      template <std::floating_point X> constexpr Vector& operator-=(const Vector<X>& other);
+      template <std::floating_point X> constexpr Vector operator+(const Vector<X>& other) const;
+      template <std::floating_point X> constexpr Vector operator-(const Vector<X>& other) const;
+      template <std::floating_point X> constexpr COMMON_REAL(R) operator*(const Vector<X>& other) const; //Dot product
 
     //Boolean Operators
-      template <std::floating_point X> constexpr bool operator==(const Vector<X>& vector) const;
-      template <std::floating_point X> constexpr bool operator!= (const Vector<X>& vector) const;
+      template <std::floating_point X> constexpr bool operator==(const Vector<X>& other) const;
+      template <std::floating_point X> constexpr bool operator!= (const Vector<X>& other) const;
+
+    //Unary Operators
+      constexpr Vector operator+() const;
+      constexpr Vector operator-() const;
 
     //ostream operator
       template<typename charT, typename traits, std::floating_point T> friend

@@ -27,6 +27,7 @@ class Timer: private Timer_base{
   public:
     Timer();
     explicit Timer(bool play);
+    explicit Timer(const char* name);
     explicit Timer(std::string name, bool play = true);
     
     void play();
@@ -36,6 +37,7 @@ class Timer: private Timer_base{
     bool is_playing() const;
     bool is_paused() const;
     value_type time() const;
+    std::string get_name() const;
 
     static value_type time_since(timestamp start);
     static value_type now();

@@ -8,21 +8,20 @@ void delay(long long millis){Timer<>::delay(millis);};
 //Constructors
 template <Duration D>
 Timer<D>::Timer():
-name("timer"), init_time(clock::now()), pause_time(clock::now()){
-  reset(true);
-};
+Timer(true) {std::cout << "default" << std::endl;};
 
 template <Duration D>
 Timer<D>::Timer(bool play):
-name("timer"), init_time(clock::now()), pause_time(clock::now()){
-  reset(play);
-};
+Timer("timer") {std::cout << "bool" << std::endl;};
+
+template <Duration D>
+Timer<D>::Timer(const char* name):
+Timer(std::string(name)) {std::cout << "char" << std::endl;};
 
 template <Duration D>
 Timer<D>::Timer(std::string name, bool play):
-name(name), init_time(clock::now()), pause_time(clock::now()){
-  reset(play);
-};
+name(name), init_time(clock::now()), pause_time(clock::now()) {reset(play); std::cout << "str" << std::endl;};
+
 
 
 //Actions
@@ -59,6 +58,11 @@ template <Duration D>
 typename Timer<D>::value_type Timer<D>::time() const{
   if(is_playing()) return time_since(init_time);
   else return time_since(init_time)-time_since(pause_time);
+}
+
+template <Duration D>
+typename std::string Timer<D>::get_name() const{
+  return name;
 }
 
 
