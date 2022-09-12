@@ -20,6 +20,7 @@ template <std::floating_point R> struct Point;
 template <std::floating_point R> struct Position;
 template <std::floating_point R> struct Vector;
 
+#include "angles.hpp"
 #include "point.hpp"
 #include "position.hpp"
 #include "../linear_algebra/vector.hpp"
