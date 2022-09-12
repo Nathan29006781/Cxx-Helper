@@ -1,0 +1,13 @@
+*.json
+*.txt
+*.cmake
+*.bin
+*.log
+*.ts
+*.make
+*.tcl
+*.marks
+*.check_cache
+
+*.o
+*.exe

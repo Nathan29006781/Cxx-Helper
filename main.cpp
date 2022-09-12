@@ -18,10 +18,6 @@
 //remove all .cpp files
 //include only .tpp via common include files like header.hpp
 
-//make sure anything that accepts string and bool has an overload for const char* that calls string. 
-
-//string_literal struct type
-
 //switch pragma once to include guards
 //namespace everything
 //make ifdefs for all modifying macros (PRINT_TYPE, NO_PRINTF...)
@@ -37,13 +33,18 @@
 
 //update duke of ed
 
+struct radians{
 
-std::forward_list<double> v;
 
-using namespace std::string_literals;
+};
+
+struct degrees{
+
+
+};
+
 
 int main(){
-  //test the vector methods (set_cartesian, invert...)
   //generalize vector for n dimensions (instead make vector a special case of nx1 matrix)
   // compose an NxM matrix from M Vector<N>'s
   // specify Vector<2>, Vector<3>, Vector<7>
