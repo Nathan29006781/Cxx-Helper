@@ -1,26 +1,26 @@
 #pragma once
 #include "../../header.hpp"
 #include "../../types.hpp"
+#include "../geometry/angles.hpp"
+#include "../../printing.hpp"
 
-template <std::floating_point R> struct Position;
+template <std::floating_point real> struct Position;
 
-template <std::floating_point R>
-struct Vector{
+class Vector{
   private:
-    std::complex<R> point;
-    constexpr explicit Vector(std::complex<R> point);
+    std::complex<real> point;
+    constexpr explicit Vector(std::complex<real> point);
 
   public:
     //Constructors
-      constexpr Vector(R x = R(), R y = R());
-      template <std::floating_point X> constexpr Vector(Vector<X> other); //For Vectors of different underlying floating type
+      constexpr Vector(real x = 0, real y = 0);
       //Polar Construction Helper defined outside class
 
     //Modifying Methods
-      constexpr Vector& set_cartesian(R x, R y);
-      constexpr Vector& set_polar(R magnitude, R angle);
+      constexpr Vector& set_cartesian(real x, real y);
+      constexpr Vector& set_polar(real magnitude, Angle angle);
       constexpr Vector& invert();
-      constexpr Vector& rotate(R angle);
+      constexpr Vector& rotate(Angle angle);
       constexpr Vector& flip_x();
       constexpr Vector& flip_y();
     
@@ -28,46 +28,51 @@ struct Vector{
       constexpr bool is_zero_vector() const;
       constexpr bool is_unit_vector() const;
       constexpr Vector normalize() const;
-      template <std::floating_point X> constexpr COMMON_REAL(R) angle(const Vector<X>& other) const;
-
+      constexpr Angle angle(const Vector& other) const;
 
     //Getters
-      constexpr R x() const;
-      constexpr R y() const;
-      constexpr R magnitude() const;
-      constexpr R angle() const;
-      constexpr R square() const;
-
+      constexpr real x() const;
+      constexpr real y() const;
+      constexpr real magnitude() const;
+      constexpr Angle angle() const;
+      constexpr real square() const;
 
     //Setters
-      constexpr void x(R x);
-      constexpr void y(R y);
-      constexpr void magnitude(R magnitude);
-      constexpr void angle(R angle);
+      constexpr void x(real x);
+      constexpr void y(real y);
+      constexpr void magnitude(real magnitude);
+      constexpr void angle(Angle angle);
 
     //Scalar Operators
-      constexpr Vector& operator*=(R scalar);
-      constexpr Vector& operator/=(R scalar);
-      template <Arithmetic X> constexpr Vector operator*(const X& scalar) const;
-      template <Arithmetic X> constexpr Vector operator/(const X& scalar) const;
+      constexpr Vector& operator*=(real scalar);
+      constexpr Vector& operator/=(real scalar);
+      constexpr Vector operator*(real scalar) const;
+      constexpr Vector operator/(real scalar) const;
       //scalar * vector (implemented out of class)
 
     //Vector Operators
-      template <std::floating_point X> constexpr Vector& operator+=(const Vector<X>& other);
-      template <std::floating_point X> constexpr Vector& operator-=(const Vector<X>& other);
-      template <std::floating_point X> constexpr Vector operator+(const Vector<X>& other) const;
-      template <std::floating_point X> constexpr Vector operator-(const Vector<X>& other) const;
-      template <std::floating_point X> constexpr COMMON_REAL(R) operator*(const Vector<X>& other) const; //Dot product
+      constexpr Vector& operator+=(const Vector& other);
+      constexpr Vector& operator-=(const Vector& other);
+      constexpr Vector operator+(const Vector& other) const;
+      constexpr Vector operator-(const Vector& other) const;
+      constexpr real operator*(const Vector& other) const; //Dot product
 
     //Boolean Operators
-      template <std::floating_point X> constexpr bool operator==(const Vector<X>& other) const;
-      template <std::floating_point X> constexpr bool operator!= (const Vector<X>& other) const;
+      constexpr bool operator==(const Vector& other) const;
+      constexpr bool operator!= (const Vector& other) const;
 
     //Unary Operators
       constexpr Vector operator+() const;
       constexpr Vector operator-() const;
 
     //ostream operator
-      template<typename charT, typename traits, std::floating_point T> friend
-      std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const Vector<T>& vector);
+      template<typename charT, typename traits> friend
+      std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const Vector& vector);
 };
+
+inline std::string convert_all_args(const std::string& fmt, const Vector& arg){
+  std::stringstream ss;
+  ss << arg;
+  // OUTPUT(ss.str());
+  return '(' + convert_all_args(fmt, arg.x()) + ", " + convert_all_args(fmt, arg.y()) + ")";
+}

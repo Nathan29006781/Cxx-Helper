@@ -11,16 +11,6 @@ std::string convert_all_args(const std::string& fmt, const Position<R>& arg){
   return '(' + convert_all_args(fmt, arg.x) + ", " + convert_all_args(fmt, arg.y) + ", " + convert_all_args(fmt, arg.angle) + ")";
 }
 
-template <std::floating_point R>
-std::string convert_all_args(const std::string& fmt, const Point<R>& arg){
-  return '(' + convert_all_args(fmt, arg.x) + ", " + convert_all_args(fmt, arg.y) + ")";
-}
-
-template <std::floating_point R>
-std::string convert_all_args(const std::string& fmt, const Vector<R>& arg){
-  return '(' + convert_all_args(fmt, arg.x()) + ", " + convert_all_args(fmt, arg.y()) + ")";
-}
-
 //Template Recursion Base case
 std::string sprintf2(const std::string& fmt){
   return fmt;

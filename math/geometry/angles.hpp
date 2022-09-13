@@ -23,7 +23,7 @@ class Angle{
     real _angle;
     angle_mode _mode;
 
-    constexpr explicit Angle(real angle, angle_mode mode): _angle(angle), _mode(mode) {_angle *= angle_switch(1, constants::pi<>/180.0, constants::tau<>)};
+    constexpr Angle(real angle, angle_mode mode): _angle(angle), _mode(mode) {_angle *= angle_switch(1, constants::pi<>/180.0, constants::tau<>)};
 
   public:
     inline constexpr friend Angle radians(real angle);
@@ -61,6 +61,7 @@ class Angle{
     static inline Angle asinh(real arg) {return ::radians(std::asinh(arg));};
     static inline Angle acosh(real arg) {return ::radians(std::acosh(arg));};
     static inline Angle atanh(real arg) {return ::radians(std::atanh(arg));};
+    template <std::floating_point R> static inline Angle arg(std::complex<R> complex) {return ::radians(std::arg(complex));};
 
   //Reference angle functions
     inline constexpr Angle closest_equivalent(const Angle& reference) const {return *this + ::radians(closest_multiple((reference - *this).rad(), constants::tau<>));}

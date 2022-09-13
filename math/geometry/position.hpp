@@ -1,8 +1,7 @@
 #pragma once
 #include "../../header.hpp"
 
-template <std::floating_point R> struct Point;
-template <std::floating_point R> struct Vector;
+class Vector;
 
 template <std::floating_point R>
 struct Position{
@@ -10,9 +9,7 @@ struct Position{
 
   //Constructors
     constexpr Position<R>();
-    constexpr explicit Position<R>(Vector<R> vector);
-    constexpr Position<R>(Point<R> point);
-    constexpr Position<R>(Point<R> point, double angle);
+    constexpr explicit Position<R>(Vector vector);
     constexpr Position<R>(double x, double y);
     constexpr Position<R>(double x, double y, double angle);
 
@@ -27,8 +24,6 @@ struct Position{
     constexpr bool operator!= (const Position<R>& p2) const;
     constexpr Position<R> operator+ (const Position<R>& p2) const;
     constexpr Position<R> operator- (const Position<R>& p2) const;
-    constexpr Position<R> operator+ (const Point<R>& p2) const;
-    constexpr Position<R> operator- (const Point<R>& p2) const;
     constexpr Position<R>& operator*= (double scalar);
     constexpr Position<R>& operator/= (double scalar);
 };

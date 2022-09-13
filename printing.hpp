@@ -8,9 +8,8 @@
 #define OUTPUT(out...)  std::cout << '\'' << STRINGIFY(out) << "\' = " << (out) << '\n';
 //Use OUTPUT only for outputting one thing at a time (it is variadic to allow commas in input)
 
-template <std::floating_point R> struct Point;
 template <std::floating_point R> struct Position;
-template <std::floating_point R> struct Vector;
+class Vector;
 
 /**
  * -1: no timestamp
@@ -73,8 +72,6 @@ void newline(int count = 1);
   /*Tuples*/ template <typename... Args> std::string convert_all_args(const std::string& fmt, const std::tuple<Args...>& arg);
   /*Strings*/ std::string convert_all_args(const std::string& fmt, const std::string& arg);
   /*Positions*/ template <std::floating_point R> std::string convert_all_args(const std::string& fmt, const Position<R>& arg);
-  /*Points*/ template <std::floating_point R> std::string convert_all_args(const std::string& fmt, const Point<R>& arg);
-  /*Vectors (Geometry)*/ template <std::floating_point R> std::string convert_all_args(const std::string& fmt, const Vector<R>& arg);
 
 // Printing
 
