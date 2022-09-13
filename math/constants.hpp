@@ -16,6 +16,7 @@ namespace constants{
   template<std::floating_point T = real> constexpr T sqrt3             = std::numbers::sqrt3_v<T>;
   template<std::floating_point T = real> constexpr T inv_sqrt3         = std::numbers::inv_sqrt3_v<T>;
   template<std::floating_point T = real> constexpr T pi                = std::numbers::pi_v<T>;
+  template<std::floating_point T = real> constexpr T tau               = 2*std::numbers::pi_v<T>;
   template<std::floating_point T = real> constexpr T inv_pi            = std::numbers::inv_pi_v<T>;
   template<std::floating_point T = real> constexpr T sqrtpi            = 1.77245385090551602729816748334114518;
   template<std::floating_point T = real> constexpr T inv_sqrtpi        = std::numbers::inv_sqrtpi_v<T>;

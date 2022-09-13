@@ -13,8 +13,6 @@
 #include "types.hpp"
 #include "util.hpp"
 
-//gitignore executables, .bin, and main.cpp
-
 //!remove all .cpp files
 //include only .tpp via common include files like header.hpp
 
@@ -38,9 +36,6 @@ int main(){
   //generalize vector for n dimensions (instead make vector a special case of nx1 matrix)
   // compose an NxM matrix from M Vector<N>'s
   // specify Vector<2>, Vector<3>, Vector<7>
-
-  auto angle = 30_deg;
-  std::cout << 1_rad - angle << std::endl;
 
   return 0;
 }

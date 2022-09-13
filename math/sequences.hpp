@@ -28,12 +28,12 @@ solve an equation
 //Good upto 70th number
 template <Natural N>
 constexpr natural fibonacci(N n){
-  return std::nearbyint((pow(constants::phi<>, n) - pow(1-constants::phi<>, n)) / (2*constants::phi<>-1));
+  return std::round((pow(constants::phi<>, n) - pow(1-constants::phi<>, n)) / (2*constants::phi<>-1));
 }
 
 template <Natural N>
 constexpr natural factorial(N n){
-  return std::nearbyint(std::tgamma(n+1));
+  return std::round(std::tgamma(n+1));
 }
 
 template <Natural N>

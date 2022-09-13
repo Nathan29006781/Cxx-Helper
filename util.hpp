@@ -1,19 +1,13 @@
 #pragma once
 #include "header.hpp"
 
-constexpr int bool_to_sgn(bool value){
-  return value ? 1 : -1;
-}
+inline constexpr int bool_to_sgn(bool value) {return value ? 1 : -1;}
 
 template <Arithmetic T>
-constexpr bool sgn_to_bool(T value){
-  return value > 0 ? true : false;
-}
+inline constexpr bool sgn_to_bool(T value) {return value > 0 ? true : false;}
 
 template <Arithmetic T>
-constexpr int sgn(T value){ //use copysign
-  return (value == 0) ? 0 : ((value > 0) ? 1 : -1);
-}
+inline constexpr int sgn(T value) {return (value == 0) ? 0 : ((value > 0) ? 1 : -1);} //use copysign
 
 #define loop_to(from, to) for(auto loop_counter = from, loop_counter_b = to; loop_counter < to; loop_counter++, loop_counter_b--)
 #define loop(count) loop_to(static_cast<decltype(count)>(0), count)
@@ -21,15 +15,12 @@ constexpr int sgn(T value){ //use copysign
 #define waitUntil(condition) while(!(condition)) delay(10);
 #define repeatUntil(condition) while(delay(10),!(condition))
 
-/**
- * @brief checks whether a value is in range
- * 
- * @param value value to be checked
- * @param minimum range minimum value
- * @param maximum range maximum value
- * @return whether value is between minimum and maximum. will work even if maximum < minimum
- */
-template <typename T>
-constexpr bool in_range(T value, T minimum, T maximum){
+template <typename T1, typename T2, typename T3>
+inline constexpr bool in_range(T1 value, T2 minimum, T3 maximum){
+  return ((minimum < value && value < maximum) || (maximum < value && value < minimum));
+}
+
+template <typename T1, typename T2, typename T3>
+inline constexpr bool in_range_inclusive(T1 value, T2 minimum, T3 maximum){
   return ((minimum <= value && value <= maximum) || (maximum <= value && value <= minimum));
 }

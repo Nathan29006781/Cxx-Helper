@@ -5,8 +5,14 @@
 //func scale
 //maybe equation support here? if not, then math.hpp
 
-constexpr double weighted_avg(double first, double second, double first_scale){
+template<Arithmetic T1, Arithmetic T2, Arithmetic T3>
+constexpr auto weighted_avg(real first, real second, real first_scale){
   return first*first_scale + second * (1-first_scale);
+}
+
+template<Arithmetic T1, Arithmetic T2>
+constexpr auto closest_multiple(T1 arg, T2 multiple){
+  return multiple*std::round(arg/multiple);
 }
 
 //create arithmetic constraint
