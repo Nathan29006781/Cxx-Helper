@@ -27,7 +27,7 @@ class Timer: private Timer_base{
   public:
     Timer();
     explicit Timer(bool play);
-    explicit Timer(const char* name);
+    explicit Timer(string_literal name);
     explicit Timer(std::string name, bool play = true);
     
     void play();

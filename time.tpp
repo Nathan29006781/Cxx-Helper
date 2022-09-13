@@ -8,19 +8,19 @@ void delay(long long millis){Timer<>::delay(millis);};
 //Constructors
 template <Duration D>
 Timer<D>::Timer():
-Timer(true) {std::cout << "default" << std::endl;};
+Timer(true) {};
 
 template <Duration D>
 Timer<D>::Timer(bool play):
-Timer("timer") {std::cout << "bool" << std::endl;};
+Timer("timer") {};
 
 template <Duration D>
 Timer<D>::Timer(const char* name):
-Timer(std::string(name)) {std::cout << "char" << std::endl;};
+Timer(std::string(name)) {};
 
 template <Duration D>
 Timer<D>::Timer(std::string name, bool play):
-name(name), init_time(clock::now()), pause_time(clock::now()) {reset(play); std::cout << "str" << std::endl;};
+name(name), init_time(clock::now()), pause_time(clock::now()) {reset(play);};
 
 
 

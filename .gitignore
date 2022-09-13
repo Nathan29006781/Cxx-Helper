@@ -8,6 +8,7 @@
 *.tcl
 *.marks
 *.check_cache
+.DS_Store
 
 *.o
 *.exe

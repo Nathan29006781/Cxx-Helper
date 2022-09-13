@@ -23,6 +23,7 @@
 //make ifdefs for all modifying macros (PRINT_TYPE, NO_PRINTF...)
 
 //update naming standard from [member name, getter get_name()] to [member _name, getter name()]
+//move convert_all_args to respective files where the type comes from
 //timer printing
 //add typedefs to classes (value_type...)
 //change std::string in printing.hpp to string_view
@@ -38,9 +39,8 @@ int main(){
   // compose an NxM matrix from M Vector<N>'s
   // specify Vector<2>, Vector<3>, Vector<7>
 
-  Angle a = degrees(90);
-
-  OUTPUT(a);
+  auto angle = 30_deg;
+  std::cout << 1_rad - angle << std::endl;
 
   return 0;
 }
