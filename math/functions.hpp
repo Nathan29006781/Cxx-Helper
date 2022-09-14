@@ -1,9 +1,12 @@
-#pragma once
-#include "../header.hpp"
-#include "../util.hpp"
+#ifndef CXX_HELPER_MATH_FUNCTION_HPP_
+#define CXX_HELPER_MATH_FUNCTION_HPP_
+
+#include "../header_config.hpp"
 
 //func scale
 //maybe equation support here? if not, then math.hpp
+
+CXX_HELPER_BEGIN_NAMESPACE
 
 template<Arithmetic T1, Arithmetic T2, Arithmetic T3>
 constexpr auto weighted_avg(real first, real second, real first_scale){
@@ -48,3 +51,6 @@ struct BinArthmOp{
   T operator ()(){return result();}
   //check if value-convertible by looking at operands. convert if convertible
 };
+
+CXX_HELPER_END_NAMESPACE
+#endif //CXX_HELPER_MATH_FUNCTION_HPP_

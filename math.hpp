@@ -1,11 +1,14 @@
-#pragma once
-#include "constants.hpp"
-#include "consteval.hpp"
-#include "functions.hpp"
-#include "operators.hpp"
-#include "sequences.hpp"
+#include "math/constants.hpp"
+#include "math/consteval.hpp"
+#include "math/functions.hpp"
+#include "math/operators.hpp"
+#include "math/sequences.hpp"
 
-#include "geometry/geometry.hpp"
+#include "math/geometry/angles.hpp"
+#include "math/geometry/geometry.hpp"
+#include "math/geometry/position.hpp"
+#include "math/geometry/vector.hpp"
+
 
 //integrals
 //derivatives

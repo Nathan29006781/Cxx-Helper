@@ -1,5 +1,8 @@
 #include "printing.hpp"
 #include "math/geometry/geometry.hpp"
+#include <iostream>
+
+CXX_HELPER_BEGIN_NAMESPACE
 
 std::string convert_all_args(const std::string& fmt, const std::string& arg){
   if(fmt.back() == 'p') return convert_all_args(fmt, arg.data());
@@ -37,3 +40,5 @@ std::string get_term_colour(term_colours colour){
   }
   return "";
 }
+
+CXX_HELPER_END_NAMESPACE

@@ -1,6 +1,14 @@
-#pragma once
-#include "header.hpp"
+#ifndef CXX_HELPER_TIME_HPP_
+#define CXX_HELPER_TIME_HPP_
+
+#include "header_config.hpp"
 #include "types.hpp"
+#include <chrono>
+#include <string>
+
+template <typename D> concept Duration = std::chrono::__is_duration<D>::value;
+
+CXX_HELPER_BEGIN_NAMESPACE
 
 long long millis();
 long long micros();
@@ -22,7 +30,7 @@ class Timer: private Timer_base{
     typedef typename D::rep value_type;
 
     const std::string name;
-    timestamp init_time, pause_time; //init_time cannot be reliably used for the time of initialization
+    timestamp init_time, pause_time; //init_time will change so cannot be reliably used for the time of initialization
 
   public:
     Timer();
@@ -43,3 +51,6 @@ class Timer: private Timer_base{
     static value_type now();
     static void delay(value_type delay_time);
 };
+
+CXX_HELPER_END_NAMESPACE
+#endif //CXX_HELPER_TIME_HPP_

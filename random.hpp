@@ -1,5 +1,12 @@
-#pragma once
-#include "header.hpp"
+#ifndef CXX_HELPER_RANDOM_HPP_
+#define CXX_HELPER_RANDOM_HPP_
+
+#include "header_config.hpp"
+#include "types.hpp"
+#include <random>
+
+CXX_HELPER_BEGIN_NAMESPACE
+
 
 inline std::mt19937 random_engine() {
   std::random_device rd;
@@ -24,3 +31,6 @@ template <std::random_access_iterator Iterator>
 void random_shuffle(Iterator first, Iterator last){
   std::shuffle(first, last, random_engine());
 }
+
+CXX_HELPER_END_NAMESPACE
+#endif //CXX_HELPER_RANDOM_HPP_

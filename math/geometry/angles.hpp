@@ -1,8 +1,13 @@
-#pragma once
-#include "../../header.hpp"
+#ifndef CXX_HELPER_MATH_ANGLE_HPP_
+#define CXX_HELPER_MATH_ANGLE_HPP_
+
+#include "../../header_config.hpp"
+
+#include "../../util.hpp"
 #include "../constants.hpp"
 #include "../functions.hpp"
-#include "../../types.hpp"
+
+CXX_HELPER_BEGIN_NAMESPACE
 
 #define angle_switch(rad_, deg_, rot_) (_mode == angle_mode::RADIAN) ? rad_ : ((_mode == angle_mode::DEGREE) ? deg_ : rot_);
 
@@ -56,25 +61,25 @@ class Angle{
     bool is_full() const {return deg() == 360;};
 
   //Reference angle functions
-    inline constexpr Angle closest_equivalent(const Angle& reference) const {return *this + ::radians(closest_multiple((reference - *this).rad(), constants::tau<>));}
-    inline constexpr Angle complementary() const {return -(*this - ::degrees(90));} //Do not simplify. This accounts for angle_mode
-    inline constexpr Angle supplementary() const {return -(*this - ::degrees(180));}
-    inline constexpr Angle explementary() const {return -(*this - ::degrees(360));}
+    inline constexpr Angle closest_equivalent(const Angle& reference) const {return *this + NATHAN_M_PROJECT_NAME::radians(closest_multiple((reference - *this).rad(), constants::tau<>));}
+    inline constexpr Angle complementary() const {return -(*this - NATHAN_M_PROJECT_NAME::degrees(90));} //Do not simplify. This accounts for angle_mode
+    inline constexpr Angle supplementary() const {return -(*this - NATHAN_M_PROJECT_NAME::degrees(180));}
+    inline constexpr Angle explementary() const {return -(*this - NATHAN_M_PROJECT_NAME::degrees(360));}
 
   //Inverse Trigonometry
-    static inline Angle asin(real arg) {return ::radians(std::asin(arg));};
-    static inline Angle acos(real arg) {return ::radians(std::acos(arg));};
-    static inline Angle atan(real arg) {return ::radians(std::atan(arg));};
-    static inline Angle atan2(real y, real x) {return ::radians(std::atan2(y, x));};
-    static inline Angle asinh(real arg) {return ::radians(std::asinh(arg));};
-    static inline Angle acosh(real arg) {return ::radians(std::acosh(arg));};
-    static inline Angle atanh(real arg) {return ::radians(std::atanh(arg));};
-    template <std::floating_point R> static inline Angle arg(std::complex<R> complex) {return ::radians(std::arg(complex));};
+    static inline Angle asin(real arg) {return NATHAN_M_PROJECT_NAME::radians(std::asin(arg));};
+    static inline Angle acos(real arg) {return NATHAN_M_PROJECT_NAME::radians(std::acos(arg));};
+    static inline Angle atan(real arg) {return NATHAN_M_PROJECT_NAME::radians(std::atan(arg));};
+    static inline Angle atan2(real y, real x) {return NATHAN_M_PROJECT_NAME::radians(std::atan2(y, x));};
+    static inline Angle asinh(real arg) {return NATHAN_M_PROJECT_NAME::radians(std::asinh(arg));};
+    static inline Angle acosh(real arg) {return NATHAN_M_PROJECT_NAME::radians(std::acosh(arg));};
+    static inline Angle atanh(real arg) {return NATHAN_M_PROJECT_NAME::radians(std::atanh(arg));};
+    template <std::floating_point R> static inline Angle arg(std::complex<R> complex) {return NATHAN_M_PROJECT_NAME::radians(std::arg(complex));};
 
   //Math operators
     inline constexpr Angle operator+() const {return *this;}
-    inline constexpr Angle operator-() const {return angle_switch(::radians(-rad()), ::degrees(-deg()), ::rotations(-rot()));}
-    inline constexpr Angle operator+(const Angle& other) const {return angle_switch(::radians(rad()+other.rad()), ::degrees(deg()+other.deg()), ::rotations(rot()+other.rot()));}
+    inline constexpr Angle operator-() const {return angle_switch(NATHAN_M_PROJECT_NAME::radians(-rad()), NATHAN_M_PROJECT_NAME::degrees(-deg()), NATHAN_M_PROJECT_NAME::rotations(-rot()));}
+    inline constexpr Angle operator+(const Angle& other) const {return angle_switch(NATHAN_M_PROJECT_NAME::radians(rad()+other.rad()), NATHAN_M_PROJECT_NAME::degrees(deg()+other.deg()), NATHAN_M_PROJECT_NAME::rotations(rot()+other.rot()));}
     inline constexpr Angle operator-(const Angle& other) const {return *this + (-other);}
     inline constexpr Angle& operator+=(const Angle& other) {_angle += other.rad(); return *this;};
     inline constexpr Angle& operator-=(const Angle& other) {_angle -= other.rad(); return *this;};
@@ -111,9 +116,11 @@ inline constexpr real sinh(const Angle& angle) {return std::sinh(angle.rad());}
 inline constexpr real cosh(const Angle& angle) {return std::cosh(angle.rad());}
 inline constexpr real tanh(const Angle& angle) {return std::tanh(angle.rad());}
 
-
-
 template<typename charT, typename traits>
 std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const Angle& angle){
   return os << angle.str();
 }
+
+
+CXX_HELPER_END_NAMESPACE
+#endif //CXX_HELPER_MATH_ANGLE_HPP_

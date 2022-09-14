@@ -1,5 +1,13 @@
-#pragma once
+#ifndef CXX_HELPER_TIME_TPP_
+#define CXX_HELPER_TIME_TPP_
+
+//MOVE TO HPP
+
 #include "time.hpp"
+#include <thread>
+
+
+CXX_HELPER_BEGIN_NAMESPACE
 
 long long millis(){return Timer<std::chrono::milliseconds>::now();};
 long long micros(){return Timer<std::chrono::microseconds>::now();};
@@ -82,3 +90,7 @@ template <Duration D>
 void Timer<D>::delay(value_type delay_time){
   std::this_thread::sleep_for(D(delay_time));
 }
+
+
+CXX_HELPER_END_NAMESPACE
+#endif //CXX_HELPER_TIME_TPP_

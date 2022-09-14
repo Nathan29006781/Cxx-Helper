@@ -1,12 +1,22 @@
-#pragma once
-#include "header.hpp"
+#ifndef CXX_HELPER_PRINTING_HPP_
+#define CXX_HELPER_PRINTING_HPP_
+
+#include "header_config.hpp"
 #include "time.hpp"
 #include "timer.hpp"
-#include "types.hpp"
+#include <bitset>
+#include <string>
+
+//make time format part of the printf template
 
 #define STRINGIFY(...) #__VA_ARGS__
 #define OUTPUT(out...)  std::cout << '\'' << STRINGIFY(out) << "\' = " << (out) << '\n';
 //Use OUTPUT only for outputting one thing at a time (it is variadic to allow commas in input)
+#ifdef NO_PRINTF
+#define printf(...)
+#endif
+
+CXX_HELPER_BEGIN_NAMESPACE
 
 template <std::floating_point R> struct Position;
 class Vector;
@@ -348,3 +358,6 @@ void newline(int count = 1);
     printf("%s\n", str.c_str());
     return str;
   }
+
+CXX_HELPER_END_NAMESPACE
+#endif //CXX_HELPER_PRINTING_HPP_

@@ -1,8 +1,12 @@
-#pragma once
-#include "../header.hpp"
-#include "../types.hpp"
+#ifndef CXX_HELPER_MATH_CONSTANT_HPP_
+#define CXX_HELPER_MATH_CONSTANT_HPP_
 
-#define SIMPLE_CONSTANT_NAMES
+#include "../header_config.hpp"
+#include "../types.hpp"
+#include <numbers>
+#include <complex>
+
+CXX_HELPER_BEGIN_NAMESPACE
 
 namespace constants{
   template<std::floating_point T = real> constexpr T euler             = std::numbers::e_v<T>;
@@ -44,7 +48,7 @@ namespace constants{
   template<std::floating_point T = real> std::complex<T> imaginary = std::complex<T>(0, 1);
 
 
-  #ifdef SIMPLE_CONSTANT_NAMES
+  namespace simple{
     template<std::floating_point T = real> constexpr T phi = golden<T>;
     template<std::floating_point T = real> constexpr T z3 = apery<T>;
     template<std::floating_point T = real> constexpr T z2 = basel<T>;
@@ -59,5 +63,8 @@ namespace constants{
     template<std::floating_point T = real> constexpr T π = pi<T>;
     template<std::floating_point T = real> constexpr T ϖ = leminscate<T>;
     template<std::floating_point T = real> constexpr T Ω = omega<T>;
-  #endif
+  }
 }
+
+CXX_HELPER_END_NAMESPACE
+#endif //CXX_HELPER_MATH_CONSTANT_HPP_

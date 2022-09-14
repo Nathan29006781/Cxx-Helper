@@ -1,4 +1,9 @@
+#ifndef CXX_HELPER_MATH_CONSTEVAL_HPP_
+#define CXX_HELPER_MATH_CONSTEVAL_HPP_
 
+#include "../header_config.hpp"
+
+CXX_HELPER_BEGIN_NAMESPACE
 
 inline consteval long double sqrt_const(long double number)
 {
@@ -12,3 +17,6 @@ inline consteval long double sqrt_const(long double number)
 
   return guess;
 }
+
+CXX_HELPER_END_NAMESPACE
+#endif //CXX_HELPER_MATH_CONSTEVAL_HPP_
