@@ -1,5 +1,4 @@
 #pragma once
-
 #include "../header.hpp"
 #include "../types.hpp"
 #include "../util.hpp"

@@ -20,7 +20,7 @@ inline R random_real(R min = 0, R max = 1.0){
   return distrib(g);
 }
 
-template <class Iterator>
+template <std::random_access_iterator Iterator>
 void random_shuffle(Iterator first, Iterator last){
   std::shuffle(first, last, random_engine());
 }

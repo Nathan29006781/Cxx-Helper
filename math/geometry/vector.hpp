@@ -12,6 +12,8 @@ class Vector{
     constexpr explicit Vector(std::complex<real> point);
 
   public:
+    typedef real value_type;
+
     //Constructors
       constexpr Vector(real x = 0, real y = 0);
       //Polar Construction Helper defined outside class

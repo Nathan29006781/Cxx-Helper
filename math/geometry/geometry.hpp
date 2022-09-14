@@ -5,9 +5,7 @@
 //matrices
 
 template <Arithmetic... Ts>
-constexpr auto hypotenuse(Ts... values){
-  return sqrt(((values*values) + ...));
-}
+inline constexpr auto hypotenuse(Ts... values) {return sqrt(((values*values) + ...));}
 
 
 template <std::floating_point R> struct Position;
@@ -15,7 +13,7 @@ class Vector;
 
 #include "angles.hpp"
 #include "position.hpp"
-#include "../linear_algebra/vector.hpp"
+#include "vector.hpp"
 
 #include "position.tpp"
-#include "../linear_algebra/vector.tpp"
+#include "vector.tpp"

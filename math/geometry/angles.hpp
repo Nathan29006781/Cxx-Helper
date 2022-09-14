@@ -26,6 +26,9 @@ class Angle{
     constexpr Angle(real angle, angle_mode mode): _angle(angle), _mode(mode) {_angle *= angle_switch(1, constants::pi<>/180.0, constants::tau<>)};
 
   public:
+    typedef real value_type;
+
+  //Out-of-class constructors
     inline constexpr friend Angle radians(real angle);
     inline constexpr friend Angle degrees(real angle);
     inline constexpr friend Angle rotations(real angle);
@@ -37,21 +40,26 @@ class Angle{
     inline constexpr real rad() const {return radians();}
     inline constexpr real deg() const {return degrees();}
     inline constexpr real rot() const {return rotations();}
-
-
+ 
   //String getters
-    inline std::string rad_str() const {return std::to_string(rad()) + "rad";}
-    inline std::string deg_str() const {return std::to_string(deg()) + "deg";}
-    inline std::string rot_str() const {return std::to_string(rot()) + "rot";}
+    inline std::string rad_str() const {std::stringstream ss; ss << rad(); return ss.str() + "rad";}
+    inline std::string deg_str() const {std::stringstream ss; ss << deg(); return ss.str() + "deg";}
+    inline std::string rot_str() const {std::stringstream ss; ss << rot(); return ss.str() + "rot";}
     inline std::string str() const {return angle_switch(rad_str(), deg_str(), rot_str());}
 
-  //Data checkers
+  //Angle classifiers
     bool is_acute() const {return in_range(deg(), 0, 90);};
     bool is_obtuse() const {return in_range(deg(), 90, 180);};
     bool is_reflex() const {return in_range(deg(), 180, 360);};
     bool is_right() const {return deg() == 90;};
     bool is_straight() const {return deg() == 180;};
     bool is_full() const {return deg() == 360;};
+
+  //Reference angle functions
+    inline constexpr Angle closest_equivalent(const Angle& reference) const {return *this + ::radians(closest_multiple((reference - *this).rad(), constants::tau<>));}
+    inline constexpr Angle complementary() const {return -(*this - ::degrees(90));} //Do not simplify. This accounts for angle_mode
+    inline constexpr Angle supplementary() const {return -(*this - ::degrees(180));}
+    inline constexpr Angle explementary() const {return -(*this - ::degrees(360));}
 
   //Inverse Trigonometry
     static inline Angle asin(real arg) {return ::radians(std::asin(arg));};
@@ -62,9 +70,6 @@ class Angle{
     static inline Angle acosh(real arg) {return ::radians(std::acosh(arg));};
     static inline Angle atanh(real arg) {return ::radians(std::atanh(arg));};
     template <std::floating_point R> static inline Angle arg(std::complex<R> complex) {return ::radians(std::arg(complex));};
-
-  //Reference angle functions
-    inline constexpr Angle closest_equivalent(const Angle& reference) const {return *this + ::radians(closest_multiple((reference - *this).rad(), constants::tau<>));}
 
   //Math operators
     inline constexpr Angle operator+() const {return *this;}

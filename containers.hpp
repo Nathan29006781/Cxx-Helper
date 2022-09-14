@@ -6,6 +6,6 @@
 //runtime fixed size array
 
 template <typename T>
-constexpr bool contains(T& container, typename T::value_type item){
+inline constexpr bool contains(T& container, typename T::value_type item){
   return std::find(container.begin(), container.end(), item) != container.end();
 }

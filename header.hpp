@@ -20,5 +20,3 @@
 #ifdef NO_PRINTF
 #define printf(...)
 #endif
-
-extern void prog_begin();
