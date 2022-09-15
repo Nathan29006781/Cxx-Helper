@@ -2,10 +2,12 @@
 #define CXX_HELPER_ENUM_HPP_
 
 #include "header_config.hpp"
-
-template <typename E> concept Enum = std::is_enum_v<E> && requires { E::ENUM_TERMINATOR; };
+#include <concepts>
+#include <iostream>
 
 CXX_HELPER_BEGIN_NAMESPACE
+
+template <typename E> concept Enum = std::is_enum_v<E> && requires { E::ENUM_TERMINATOR; };
 
 template <Enum E>
 constexpr E next_enum_value(const E& enum_value){

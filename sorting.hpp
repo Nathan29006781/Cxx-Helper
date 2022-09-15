@@ -5,13 +5,20 @@
 #include "random.hpp"
 
 #define SORT_FUNC_DECLARE(name, algo)\
-template <class Iterator>\
+template <std::input_iterator Iterator>\
 void name##_sort_step(Iterator first, Iterator last){algo}\
 \
-template <class Iterator>\
+template <std::input_iterator Iterator>\
 void name##_sort(Iterator first, Iterator last){\
   while(!std::is_sorted(first, last)) name##_sort_step(first, last);\
-}
+}\
+\
+namespace ranges{\
+  template <Range R>\
+  void name##_sort(R& container){\
+    NATHAN_M_PROJECT_NAME::name##_sort(container.begin(), container.end());\
+  }\
+}\
 
 CXX_HELPER_BEGIN_NAMESPACE
 

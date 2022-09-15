@@ -4,10 +4,12 @@
 #define PRINT_TYPE -1
 
 #include <iostream>
+#include "math/sequences.hpp"
 
 //!remove all .cpp files
 
-//update naming standard from [member name, getter get_name()] to [member _name, getter name()]
+//move gcf/lcm from geometry
+//isprime()
 //move convert_all_args to respective files where the type comes from
 //timer printing
 
@@ -23,6 +25,11 @@ int main(){
   // compose an NxM matrix from M Vector<N>'s
   // specify Vector<2>, Vector<3>, Vector<7>
   //Don't compose position from Vector until vector is templated
+  using namespace NATHAN_M_PROJECT_NAME;
+
+  std::cout << sigmoid(2);
+
+
 
   return 0;
 }

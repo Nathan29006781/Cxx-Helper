@@ -4,6 +4,7 @@
 #include "../header_config.hpp"
 #include "../types.hpp"
 #include "constants.hpp"
+#include <cmath>
 
 CXX_HELPER_BEGIN_NAMESPACE
 
@@ -15,6 +16,13 @@ inline constexpr natural factorial(N n) {return std::round(std::tgamma(n+1));}
 
 template <Natural N>
 inline constexpr natural triangular(N n) {return (n*(n+1))/2;}
+
+
+template <Real R>
+inline constexpr real sigmoid(R r) {return 1/(1+std::exp(-r));}
+
+// template <Natural N>
+// inline constexpr natural zeta(N n) {return std::riemann_zeta(n);}
 
 CXX_HELPER_END_NAMESPACE
 #endif //CXX_HELPER_MATH_SEQUENCE_HPP_
