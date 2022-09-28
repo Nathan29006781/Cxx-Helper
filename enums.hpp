@@ -5,9 +5,9 @@
 #include <concepts>
 #include <iostream>
 
-CXX_HELPER_BEGIN_NAMESPACE
-
 template <typename E> concept Enum = std::is_enum_v<E> && requires { E::ENUM_TERMINATOR; };
+
+CXX_HELPER_BEGIN_NAMESPACE
 
 template <Enum E>
 constexpr E next_enum_value(const E& enum_value){

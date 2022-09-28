@@ -14,15 +14,15 @@ inline std::mt19937 random_engine() {
 }
 
 template <Integer I = integer>
-inline I random_int(I min = 0, I max = std::numeric_limits<I>::max()){
-  std::uniform_int_distribution<I> distrib(0, max - min);
+inline I random_int(I min = 0, I max = 1){
+  std::uniform_int_distribution<I> distrib(min, max);
   std::mt19937 g = random_engine();
   return distrib(g);
 }
 
 template <std::floating_point R = real>
-inline R random_real(R min = 0, R max = 1.0){
-  std::uniform_real_distribution<R> distrib(0, max - min);
+inline R random_real(R min = 0, R max = 1){
+  std::uniform_real_distribution<R> distrib(min, max);
   std::mt19937 g = random_engine();
   return distrib(g);
 }
@@ -30,6 +30,16 @@ inline R random_real(R min = 0, R max = 1.0){
 template <std::random_access_iterator Iterator>
 void random_shuffle(Iterator first, Iterator last){
   std::shuffle(first, last, random_engine());
+}
+
+template <std::forward_iterator Iterator, Integer I = typename Iterator::value_type>
+void random_populate(Iterator first, Iterator last, I min = 0, I max = 1){
+  std::generate(first, last, [=](){return random_int<I>(min, max);});
+}
+
+template <std::forward_iterator Iterator, std::floating_point R = typename Iterator::value_type>
+void random_populate(Iterator first, Iterator last, R min = 0, R max = 1){
+  std::generate(first, last, [=](){return random_real<R>(min, max);});
 }
 
 CXX_HELPER_END_NAMESPACE

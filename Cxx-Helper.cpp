@@ -4,12 +4,18 @@
 #define PRINT_TYPE -1
 
 #include <iostream>
-#include "math/sequences.hpp"
+#include "math.hpp"
+#include "printing.hpp"
+#include "queue.hpp"
 
 //!remove all .cpp files
 
+//!fix angle constructor so conversion only happens in radians()...
+//iterator pair type that holds a beginning and end iterator
+//Make angle enum represent conversion factor
 //move gcf/lcm from geometry
 //isprime()
+//remove .tpp and make it header only
 //move convert_all_args to respective files where the type comes from
 //timer printing
 
@@ -20,6 +26,7 @@
 
 //update duke of ed
 
+
 int main(){
   //generalize vector for n dimensions (instead make vector a special case of nx1 matrix)
   // compose an NxM matrix from M Vector<N>'s
@@ -27,9 +34,17 @@ int main(){
   //Don't compose position from Vector until vector is templated
   using namespace NATHAN_M_PROJECT_NAME;
 
-  std::cout << sigmoid(2);
 
-
+  // queue<int, 5> q("queue"); OUTPUT(q); OUTPUT(q.size());
+  // q.push(1); OUTPUT(q); OUTPUT(q.size());
+  // q.push(2); OUTPUT(q); OUTPUT(q.size());
+  // q.push(3); OUTPUT(q); OUTPUT(q.size());
+  // q.push(4); OUTPUT(q); OUTPUT(q.size());
+  // q.push(5); OUTPUT(q); OUTPUT(q.size());
+  // q.pop();   OUTPUT(q); OUTPUT(q.size());
+  // q.pop();   OUTPUT(q); OUTPUT(q.size());
+  // q.push(6); OUTPUT(q); OUTPUT(q.size());
+  // q.push(7); OUTPUT(q); OUTPUT(q.size());
 
   return 0;
 }

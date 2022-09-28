@@ -36,6 +36,7 @@ namespace constants{
   template<std::floating_point T = real> constexpr T sierpinski        = 2.58498175957925321706589358738317116;
   template<std::floating_point T = real> constexpr T omega             = 0.56714329040978387299996866221035554;
   template<std::floating_point T = real> constexpr T parabolic         = 2.29558714939263807403429804918949038;
+  template<std::floating_point T = real> constexpr T ramanujan_soldner = 0.37250741078136663446199186658011913;
 
 
   template<std::floating_point T = real> constexpr T napier = euler<T>;

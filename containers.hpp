@@ -6,7 +6,6 @@
 #include <algorithm>
 
 //negative indexing
-//Random access list (pointers to list stored in vector)
 //runtime fixed size array
 
 template <typename C> concept Range = requires (const C& container){
@@ -23,7 +22,6 @@ inline constexpr bool contains(I first, I last, int item){
 
 template<std::input_iterator I, typename charT, typename traits>
 constexpr std::basic_ostream<charT, traits>& iter_print(I first, I last, std::basic_ostream<charT, traits>& os = std::cout){
-  // instead use a stringstream to put the whole thing in, then remove the comma;
   os << '{';
   for (auto second = std::next(first); second != last; first++, second++) os << *first << ", ";
   return os << *first << '}';

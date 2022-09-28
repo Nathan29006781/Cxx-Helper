@@ -32,9 +32,7 @@ template <typename T> concept Natural = Whole<T>; //No reason to have a type tha
 template <typename T> concept Arithmetic = std::integral<T> || std::floating_point<T>;
 
 
-
-#define COMMON_REAL(types...) std::common_type_t<types, X>
-#define REAL_TEMPLATE(return_type, class_name, additional_template...) template <std::floating_point R> additional_template constexpr return_type class_name<R>::
+#define REAL_TEMPLATE(return_type, class_name, ...) template <std::floating_point R> __VA_ARGS__ constexpr return_type class_name<R>::
 #define REAL_TEMPLATE_OTHER(return_type, class_name) REAL_TEMPLATE(return_type, class_name, template <std::floating_point X>)
 
 // CXX_HELPER_END_NAMESPACE

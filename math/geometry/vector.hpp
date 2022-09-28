@@ -3,26 +3,29 @@
 
 #include "../../header_config.hpp"
 #include "../geometry/angles.hpp"
+#include "../../printing.hpp"
 
 CXX_HELPER_BEGIN_NAMESPACE
 
 template <std::floating_point real> struct Position;
 
 class Vector{
-  private:
-    std::complex<real> point;
-    constexpr explicit Vector(std::complex<real> point);
-
   public:
     typedef real value_type;
 
+  private:
+    std::complex<value_type> point;
+    constexpr explicit Vector(std::complex<value_type> point);
+
+  public:
+
     //Constructors
-      constexpr Vector(real x = 0, real y = 0);
+      constexpr Vector(value_type x = 0, value_type y = 0);
       //Polar Construction Helper defined outside class
 
     //Modifying Methods
-      constexpr Vector& set_cartesian(real x, real y);
-      constexpr Vector& set_polar(real magnitude, Angle angle);
+      constexpr Vector& set_cartesian(value_type x, value_type y);
+      constexpr Vector& set_polar(value_type magnitude, Angle angle);
       constexpr Vector& invert();
       constexpr Vector& rotate(Angle angle);
       constexpr Vector& flip_x();
@@ -32,26 +35,33 @@ class Vector{
       constexpr bool is_zero_vector() const;
       constexpr bool is_unit_vector() const;
       constexpr Vector normalize() const;
+
+    //Angle functions
       constexpr Angle angle(const Vector& other) const;
+      constexpr value_type scalar_project(const Vector& other) const;
+      constexpr Vector vector_project(const Vector& other) const;
+      constexpr value_type scalar_reject(const Vector& other) const;
+      constexpr Vector vector_reject(const Vector& other) const;
+
 
     //Getters
-      constexpr real x() const;
-      constexpr real y() const;
-      constexpr real magnitude() const;
+      constexpr value_type x() const;
+      constexpr value_type y() const;
+      constexpr value_type magnitude() const;
+      constexpr value_type square() const;
       constexpr Angle angle() const;
-      constexpr real square() const;
 
     //Setters
-      constexpr void x(real x);
-      constexpr void y(real y);
-      constexpr void magnitude(real magnitude);
+      constexpr void x(value_type x);
+      constexpr void y(value_type y);
+      constexpr void magnitude(value_type magnitude);
       constexpr void angle(Angle angle);
 
     //Scalar Operators
-      constexpr Vector& operator*=(real scalar);
-      constexpr Vector& operator/=(real scalar);
-      constexpr Vector operator*(real scalar) const;
-      constexpr Vector operator/(real scalar) const;
+      constexpr Vector& operator*=(value_type scalar);
+      constexpr Vector& operator/=(value_type scalar);
+      constexpr Vector operator*(value_type scalar) const;
+      constexpr Vector operator/(value_type scalar) const;
       //scalar * vector (implemented out of class)
 
     //Vector Operators
@@ -59,7 +69,7 @@ class Vector{
       constexpr Vector& operator-=(const Vector& other);
       constexpr Vector operator+(const Vector& other) const;
       constexpr Vector operator-(const Vector& other) const;
-      constexpr real operator*(const Vector& other) const; //Dot product
+      constexpr value_type operator*(const Vector& other) const; //Dot product
 
     //Boolean Operators
       constexpr bool operator==(const Vector& other) const;
@@ -78,29 +88,29 @@ inline std::string convert_all_args(const std::string& fmt, const Vector& arg){
   std::stringstream ss;
   ss << arg;
   // OUTPUT(ss.str());
-  return '(' + convert_all_args(fmt, arg.x()) + ", " + convert_all_args(fmt, arg.y()) + ")";
+  return "(" + convert_all_args(fmt, arg.x()) + ", " + convert_all_args(fmt, arg.y()) + ")";
 }
 
 
 
 //Constructors
-  constexpr  Vector::Vector(std::complex<real> point): point(point) {};
-  constexpr  Vector::Vector(real x, real y): Vector(std::complex<real>(x, y)) {};
+  constexpr  Vector::Vector(std::complex<value_type> point): point(point) {};
+  constexpr  Vector::Vector(value_type x, value_type y): Vector(std::complex<value_type>(x, y)) {};
 
 //Polar construction helper
-  constexpr Vector polar(real magnitude, Angle angle){
+  constexpr Vector polar(Vector::value_type magnitude, Angle angle){
     Vector vector;
     return vector.set_polar(magnitude, angle);
   }
 
 //Modifying Methods
-  constexpr Vector& Vector::set_cartesian(real x, real y){
+  constexpr Vector& Vector::set_cartesian(value_type x, value_type y){
     this->x(x);
     this->y(y);
     return *this;
   }
 
-  constexpr Vector& Vector::set_polar(real magnitude, Angle angle){
+  constexpr Vector& Vector::set_polar(value_type magnitude, Angle angle){
     point = std::polar(magnitude, angle.rad());
     return *this;
   }
@@ -115,41 +125,46 @@ inline std::string convert_all_args(const std::string& fmt, const Vector& arg){
   constexpr bool Vector::is_zero_vector() const {return square() == 0;}
   constexpr bool Vector::is_unit_vector() const {return square() == 1;}
   constexpr Vector Vector::normalize() const {return (*this) / magnitude();}
-  constexpr Angle Vector::angle(const Vector& other) const {return Angle::acos((*this * other) / std::sqrt(square() * other.square()));}
 
+//Angle methods
+  constexpr Angle Vector::angle(const Vector& other) const {return Angle::acos((*this * other) / std::sqrt(square() * other.square()));}
+  constexpr Vector::value_type Vector::scalar_project(const Vector& other) const {return vector_project(other).magnitude();}
+  constexpr Vector Vector::vector_project(const Vector& other) const {return other * (*this * other) / other.square();}
+  constexpr Vector::value_type Vector::scalar_reject(const Vector& other) const {return vector_reject(other).magnitude();}
+  constexpr Vector Vector::vector_reject(const Vector& other) const {return (*this) - vector_project(other);}
 
 //Getters
-  constexpr real Vector::x() const {return point.real();}
-  constexpr real Vector::y() const {return point.imag();}
-  constexpr real Vector::magnitude() const {return std::abs(point);}
-  constexpr real Vector::square() const {return std::norm(point);}
+  constexpr Vector::value_type Vector::x() const {return point.real();}
+  constexpr Vector::value_type Vector::y() const {return point.imag();}
+  constexpr Vector::value_type Vector::magnitude() const {return std::abs(point);}
+  constexpr Vector::value_type Vector::square() const {return std::norm(point);}
   constexpr Angle Vector::angle() const {return Angle::arg(point);}
 
 //Setters
-  constexpr void Vector::x(real x) {point.real(x);}
-  constexpr void Vector::y(real y) {point.imag(y);}
-  constexpr void Vector::magnitude(real magnitude) {set_polar(magnitude, angle());}
+  constexpr void Vector::x(value_type x) {point.real(x);}
+  constexpr void Vector::y(value_type y) {point.imag(y);}
+  constexpr void Vector::magnitude(value_type magnitude) {set_polar(magnitude, angle());}
   constexpr void Vector::angle(Angle angle) {set_polar(magnitude(), angle);}
 
 //Scalar Operators
-  constexpr Vector& Vector::operator*=(real scalar) {point *= scalar; return *this;}
-  constexpr Vector& Vector::operator/=(real scalar) {point /= scalar; return *this;}
-  constexpr Vector Vector::operator*(real rhs) const {return Vector(point * rhs);}
-  constexpr Vector Vector::operator/(real rhs) const {return Vector(point / rhs);}
+  constexpr Vector& Vector::operator*=(value_type scalar) {point *= scalar; return *this;}
+  constexpr Vector& Vector::operator/=(value_type scalar) {point /= scalar; return *this;}
+  constexpr Vector Vector::operator*(value_type rhs) const {return Vector(point * rhs);}
+  constexpr Vector Vector::operator/(value_type rhs) const {return Vector(point / rhs);}
 
   //scalar * vector (implemented out of class)
-  constexpr Vector operator*(real lhs, const Vector& rhs) {return rhs * lhs;}
+  constexpr Vector operator*(Vector::value_type lhs, const Vector& rhs) {return rhs * lhs;}
 
 //Vector Operators
   constexpr Vector& Vector::operator+=(const Vector& other) {point += other.point; return *this;}
   constexpr Vector& Vector::operator-=(const Vector& other) {point -= other.point; return *this;}
-  constexpr Vector Vector::operator+(const Vector& other) const {return Vector(point + std::complex<real>(other.point));}
+  constexpr Vector Vector::operator+(const Vector& other) const {return Vector(point + std::complex<value_type>(other.point));}
   constexpr Vector Vector::operator-(const Vector& other) const {return *this + (-other);}
-  constexpr real Vector::operator*(const Vector& other) const {return x()*other.x() + y()*other.y();}
+  constexpr Vector::value_type Vector::operator*(const Vector& other) const {return x()*other.x() + y()*other.y();}
   
 //Boolean Operators
-  constexpr bool Vector::operator==(const Vector& other) const {return point == std::complex<real>(other.point);}
-  constexpr bool Vector::operator!=(const Vector& other) const {return point != std::complex<real>(other.point);}
+  constexpr bool Vector::operator==(const Vector& other) const {return point == std::complex<value_type>(other.point);}
+  constexpr bool Vector::operator!=(const Vector& other) const {return point != std::complex<value_type>(other.point);}
 
 
 //Unary Operators
