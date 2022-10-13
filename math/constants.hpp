@@ -49,7 +49,7 @@ namespace constants{
   template<std::floating_point T = real> std::complex<T> imaginary = std::complex<T>(0, 1);
 
 
-  namespace simple{
+  inline namespace simple{
     template<std::floating_point T = real> constexpr T phi = golden<T>;
     template<std::floating_point T = real> constexpr T z3 = apery<T>;
     template<std::floating_point T = real> constexpr T z2 = basel<T>;

@@ -4,6 +4,7 @@
 #include "../header_config.hpp"
 #include "../types.hpp"
 #include "../util.hpp"
+#include <functional>
 
 CXX_HELPER_BEGIN_NAMESPACE
 

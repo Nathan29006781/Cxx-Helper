@@ -22,6 +22,18 @@ constexpr auto closest_multiple(T1 arg, T2 multiple){
   return multiple*std::round(arg/multiple);
 }
 
+template<Natural N>
+constexpr bool is_prime(N n){
+  if (n == 2 || n == 3) return true;
+  if (n <= 1 || n % 2 == 0 || n % 3 == 0) return false;
+
+  for (int i = 5; i * i <= n; i += 6){
+    if (n % i == 0 || n % (i + 2) == 0) return false;
+  }
+
+  return true;
+}
+
 //create arithmetic constraint
 // template <typename T>
 // struct BinArthmOp{

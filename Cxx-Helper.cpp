@@ -4,13 +4,20 @@
 #define PRINT_TYPE -1
 
 #include <iostream>
-#include "math.hpp"
 #include "printing.hpp"
-#include "queue.hpp"
+#include "math/functions.hpp"
+#include "util.hpp"
+#include "time.tpp"
 
+//make out-of-class versions of * and / scalar operators for angle class
+//Remove ; after inline function definitions
+//make vector class inline
+//Update vector class with constexpr and const for member
+
+
+//merge .tpp to .hpp
 //!remove all .cpp files
 
-//!fix angle constructor so conversion only happens in radians()...
 //iterator pair type that holds a beginning and end iterator
 //Make angle enum represent conversion factor
 //move gcf/lcm from geometry
@@ -26,6 +33,8 @@
 
 //update duke of ed
 
+#include <vector>
+#include "containers.hpp"
 
 int main(){
   //generalize vector for n dimensions (instead make vector a special case of nx1 matrix)
@@ -33,7 +42,6 @@ int main(){
   // specify Vector<2>, Vector<3>, Vector<7>
   //Don't compose position from Vector until vector is templated
   using namespace NATHAN_M_PROJECT_NAME;
-
 
   // queue<int, 5> q("queue"); OUTPUT(q); OUTPUT(q.size());
   // q.push(1); OUTPUT(q); OUTPUT(q.size());
@@ -45,6 +53,11 @@ int main(){
   // q.pop();   OUTPUT(q); OUTPUT(q.size());
   // q.push(6); OUTPUT(q); OUTPUT(q.size());
   // q.push(7); OUTPUT(q); OUTPUT(q.size());
+  std::vector<int> A;
+
+  many_print(std::cout, 1, 2);
+
+  // OUTPUT(A.begin());
 
   return 0;
 }

@@ -19,7 +19,6 @@ class Timer_base{
   protected:
     typedef std::chrono::steady_clock clock;
     typedef clock::time_point timestamp;
-    friend int main();
     static const timestamp prog_start;
 };
 
@@ -33,6 +32,17 @@ class Timer: private Timer_base{
     timestamp init_time, pause_time; //init_time will change so cannot be reliably used for the time of initialization
 
   public:
+    typedef std::chrono::nanoseconds nanoseconds;
+    typedef std::chrono::microseconds microseconds;
+    typedef std::chrono::milliseconds milliseconds;
+    typedef std::chrono::seconds seconds;
+    typedef std::chrono::minutes minutes;
+    typedef std::chrono::hours hours;
+    typedef std::chrono::days days;
+    typedef std::chrono::weeks weeks;
+    typedef std::chrono::years years;
+    typedef std::chrono::months months;
+
     Timer();
     explicit Timer(bool play);
     explicit Timer(string_literal name);
