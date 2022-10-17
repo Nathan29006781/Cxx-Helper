@@ -32,7 +32,7 @@ CXX_HELPER_BEGIN_NAMESPACE
   inline constexpr auto add(Ts... values) {return (0 + ... + values);}
 
   template <Arithmetic... Ts>
-  inline constexpr auto multiply(Ts... values) {return (0 * ... * values);}
+  inline constexpr auto multiply(Ts... values) {return (1 * ... * values);}
 
 CXX_HELPER_END_NAMESPACE
 #endif //CXX_HELPER_MATH_GEOMETRY_HPP_

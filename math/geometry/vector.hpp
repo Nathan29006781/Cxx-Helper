@@ -76,13 +76,13 @@ class Vector{
     //Vector Operators
       constexpr Vector& operator+=(const Vector& other) {point += other.point; return *this;}
       constexpr Vector& operator-=(const Vector& other) {point -= other.point; return *this;}
-      constexpr Vector operator+(const Vector& other) const {return Vector(point + std::complex<value_type>(other.point));}
+      constexpr Vector operator+(const Vector& other) const {return Vector(point + other.point);}
       constexpr Vector operator-(const Vector& other) const {return *this + (-other);}
       constexpr value_type operator*(const Vector& other) const {return x()*other.x() + y()*other.y();} //Dot product
 
     //Boolean Operators
-      constexpr bool operator==(const Vector& other) const {return point == std::complex<value_type>(other.point);}
-      constexpr bool operator!= (const Vector& other) const {return point != std::complex<value_type>(other.point);}
+      constexpr bool operator==(const Vector& other) const {return point == other.point;}
+      constexpr bool operator!= (const Vector& other) const {return point != other.point;}
 
     //Unary Operators
       constexpr Vector operator+() const {return *this;}
@@ -93,13 +93,6 @@ class Vector{
       std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const Vector& vector);
 };
 
-inline std::string convert_all_args(const std::string& fmt, const Vector& arg){
-  std::stringstream ss;
-  ss << arg;
-  // OUTPUT(ss.str());
-  return "(" + convert_all_args(fmt, arg.x()) + ", " + convert_all_args(fmt, arg.y()) + ")";
-}
-
 //scalar * vector (implemented out of class)
   constexpr Vector operator*(Vector::value_type lhs, const Vector& rhs) {return rhs * lhs;}
   
@@ -109,6 +102,12 @@ inline std::string convert_all_args(const std::string& fmt, const Vector& arg){
     return os << vector.point;
   }
 
+  inline std::string convert_all_args(const std::string& fmt, const Vector& arg){
+    std::stringstream ss;
+    ss << arg;
+    // OUTPUT(ss.str());
+    return "(" + convert_all_args(fmt, arg.x()) + ", " + convert_all_args(fmt, arg.y()) + ")";
+  }
 
 CXX_HELPER_END_NAMESPACE
 #endif //CXX_HELPER_MATH_VECTOR_HPP_

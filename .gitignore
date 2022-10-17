@@ -14,3 +14,7 @@
 *.exe
 
 build/
+
+Cxx-Helper
+
+Cxx-Helper.cpp

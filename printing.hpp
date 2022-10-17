@@ -7,10 +7,8 @@
 #include <bitset>
 #include <string>
 
-//make time format part of the printf template
-
 #define STRINGIFY(...) #__VA_ARGS__
-#define OUTPUT(...)  std::cout << '\'' << STRINGIFY(__VA_ARGS__) << "\' = " << (__VA_ARGS__) << '\n';
+#define OUTPUT(...)  std::cout __VA_OPT__(<< '\'' << STRINGIFY(__VA_ARGS__) << "\' = " << (__VA_ARGS__) )<< '\n';
 //Use OUTPUT only for outputting one thing at a time (it is variadic to allow commas in input)
 #ifdef NO_PRINTF
 #define printf(...)
