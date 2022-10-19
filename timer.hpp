@@ -16,8 +16,8 @@ class Timer_old{
   uint64_t time, last_play_time;
   bool paused; //state of timer
   
-  const std::string name;
-  const timing_units timing_unit;
+  std::string const name;
+  timing_units const timing_unit;
   uint64_t get_time_in_timing_unit(); //returns time in either millis micros
 
   static uint64_t convert_time(uint64_t time, timing_units from, timing_units to);

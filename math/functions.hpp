@@ -27,7 +27,7 @@ constexpr bool is_prime(N n){
   if (n == 2 || n == 3) return true;
   if (n <= 1 || n % 2 == 0 || n % 3 == 0) return false;
 
-  for (int i = 5; i * i <= n; i += 6){
+  for (int i{5}; i * i <= n; i += 6){
     if (n % i == 0 || n % (i + 2) == 0) return false;
   }
 
@@ -57,7 +57,7 @@ constexpr bool is_prime(N n){
 //     result = std::function([this](){return this->operation(this->first_arg(), this->second_arg());});
 //   }
 
-//   BinArthmOp(std::function<T(const T&, const T&)> operation, const T& first_arg, const T& second_arg):
+//   BinArthmOp(std::function<T(T const &, T const &)> operation, T const & first_arg, T const & second_arg):
 //   operation(operation), first_arg([&first_arg](){return first_arg;}), second_arg([&second_arg](){return second_arg;}){
 //     result = std::function([this](){return this->operation(this->first_arg(), this->second_arg());});
 //   }

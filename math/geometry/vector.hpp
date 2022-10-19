@@ -15,13 +15,13 @@ class Vector{
 
   private:
     std::complex<value_type> point;
-    constexpr explicit Vector(std::complex<value_type> point): point(point) {}
+    constexpr explicit Vector(std::complex<value_type> point): point{point} {}
 
   public:
 
     //Constructors
-      constexpr Vector(value_type x = 0, value_type y = 0): Vector(std::complex<value_type>(x, y)) {}
-      constexpr Vector make_polar(value_type magnitude, const Angle& angle) {return Vector(polar(magnitude, angle));}
+      constexpr Vector(value_type x = 0, value_type y = 0): Vector{std::complex<value_type>{x, y}} {}
+      constexpr Vector make_polar(value_type magnitude, Angle const & angle) {return Vector(polar(magnitude, angle));}
 
     //Modifying Methods
       constexpr Vector& set_cartesian(value_type x, value_type y){
@@ -30,13 +30,13 @@ class Vector{
         return *this;
       }
 
-      constexpr Vector& set_polar(value_type magnitude, const Angle& angle){
+      constexpr Vector& set_polar(value_type magnitude, Angle const & angle){
         point = std::polar(magnitude, angle.rad());
         return *this;
       }
 
       constexpr Vector& invert() {return set_cartesian(y(), x());}
-      constexpr Vector& rotate(const Angle& angle) {return set_polar(magnitude(), this->angle() + angle);}
+      constexpr Vector& rotate(Angle const & angle) {return set_polar(magnitude(), this->angle() + angle);}
       constexpr Vector& flip_x() {x(-x()); return *this;}
       constexpr Vector& flip_y() {y(-y()); return *this;}
     
@@ -45,12 +45,12 @@ class Vector{
       constexpr bool is_unit_vector() const {return square() == 1;}
       constexpr Vector normalize() const {return (*this) / magnitude();}
 
-    //const Angle& functions
-      constexpr Angle angle(const Vector& other) const {return Angle::acos((*this * other) / std::sqrt(square() * other.square()));}
-      constexpr value_type scalar_project(const Vector& other) const {return vector_project(other).magnitude();}
-      constexpr Vector vector_project(const Vector& other) const {return other * (*this * other) / other.square();}
-      constexpr value_type scalar_reject(const Vector& other) const {return vector_reject(other).magnitude();}
-      constexpr Vector vector_reject(const Vector& other) const {return (*this) - vector_project(other);}
+    //Angle const & functions
+      constexpr Angle angle(Vector const & other) const {return Angle::acos((*this * other) / std::sqrt(square() * other.square()));}
+      constexpr value_type scalar_project(Vector const & other) const {return vector_project(other).magnitude();}
+      constexpr Vector vector_project(Vector const & other) const {return other * (*this * other) / other.square();}
+      constexpr value_type scalar_reject(Vector const & other) const {return vector_reject(other).magnitude();}
+      constexpr Vector vector_reject(Vector const & other) const {return (*this) - vector_project(other);}
 
 
     //Getters
@@ -64,7 +64,7 @@ class Vector{
       constexpr void x(value_type x) {point.real(x);}
       constexpr void y(value_type y) {point.imag(y);}
       constexpr void magnitude(value_type magnitude) {set_polar(magnitude, angle());}
-      constexpr void angle(const Angle& angle) {set_polar(magnitude(), angle);}
+      constexpr void angle(Angle const & angle) {set_polar(magnitude(), angle);}
 
     //Scalar Operators
       constexpr Vector& operator*=(value_type scalar) {point *= scalar; return *this;}
@@ -74,15 +74,15 @@ class Vector{
       //scalar * vector (implemented out of class)
 
     //Vector Operators
-      constexpr Vector& operator+=(const Vector& other) {point += other.point; return *this;}
-      constexpr Vector& operator-=(const Vector& other) {point -= other.point; return *this;}
-      constexpr Vector operator+(const Vector& other) const {return Vector(point + other.point);}
-      constexpr Vector operator-(const Vector& other) const {return *this + (-other);}
-      constexpr value_type operator*(const Vector& other) const {return x()*other.x() + y()*other.y();} //Dot product
+      constexpr Vector& operator+=(Vector const & other) {point += other.point; return *this;}
+      constexpr Vector& operator-=(Vector const & other) {point -= other.point; return *this;}
+      constexpr Vector operator+(Vector const & other) const {return Vector(point + other.point);}
+      constexpr Vector operator-(Vector const & other) const {return *this + (-other);}
+      constexpr value_type operator*(Vector const & other) const {return x()*other.x() + y()*other.y();} //Dot product
 
     //Boolean Operators
-      constexpr bool operator==(const Vector& other) const {return point == other.point;}
-      constexpr bool operator!= (const Vector& other) const {return point != other.point;}
+      constexpr bool operator==(Vector const & other) const {return point == other.point;}
+      constexpr bool operator!= (Vector const & other) const {return point != other.point;}
 
     //Unary Operators
       constexpr Vector operator+() const {return *this;}
@@ -90,19 +90,19 @@ class Vector{
 
     //ostream operator
       template<typename charT, typename traits> friend
-      std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const Vector& vector);
+      std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, Vector const & vector);
 };
 
 //scalar * vector (implemented out of class)
-  constexpr Vector operator*(Vector::value_type lhs, const Vector& rhs) {return rhs * lhs;}
+  constexpr Vector operator*(Vector::value_type lhs, Vector const & rhs) {return rhs * lhs;}
   
 //Printing
   template<typename charT, typename traits>
-  std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const Vector& vector){
+  std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, Vector const & vector){
     return os << vector.point;
   }
 
-  inline std::string convert_all_args(const std::string& fmt, const Vector& arg){
+  inline std::string convert_all_args(std::string const & fmt, Vector const & arg){
     std::stringstream ss;
     ss << arg;
     // OUTPUT(ss.str());

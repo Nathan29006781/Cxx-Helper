@@ -29,7 +29,7 @@ class queue{
         iterator internal;
         
       public:
-        iter(iterator iterator): internal(iterator) {};
+        iter(iterator iterator): internal{iterator} {};
 
         static void advance(iter iterator, difference_type amount = 1){
           std::advance(iterator.internal, amount); //actual implementations
@@ -48,11 +48,11 @@ class queue{
           return next(*this, amount);
         };
 
-        // constexpr iterator& operator+=(const iterator& other) {return *this += other;}
+        // constexpr iterator& operator+=(iterator const & other) {return *this += other;}
         inline value_type& operator* () {return *internal;}
         inline iter& operator++ () {return *this = this->next();}
         inline iter operator++ (int){
-          iter old = *this;
+          iter old{*this};
           ++(*this);
           return old;
         }
@@ -75,7 +75,7 @@ class queue{
     // inline constexpr const_iterator back_iter() const;
 
   public:
-    queue(std::string name): _arr(), _front(_arr.begin()), _back(_arr.end()), _name(name){}
+    queue(std::string name): _arr{}, _front{_arr.begin()}, _back{_arr.end()}, _name{name}{}
 
     inline constexpr bool full() const;
     inline constexpr bool empty() const;
@@ -84,18 +84,18 @@ class queue{
     template <std::input_iterator I>
       requires std::convertible_to<typename I::value_type, value_type>
     constexpr void push(I first, I last);
-    constexpr void push(const T& val);
+    constexpr void push(T const & val);
     constexpr void pop();
 
-    inline constexpr const T& front() const;
-    inline constexpr const T& back() const;
+    inline constexpr T const & front() const;
+    inline constexpr T const & back() const;
 
     template<typename T_, std::size_t N_, typename charT, typename traits> friend
-    std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const queue<T_, N_>& queue);
+    std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, queue<T_, N_> const & queue);
 };
 
 template<typename T_, std::size_t N_, typename charT, typename traits>
-std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const queue<T_, N_>& queue){
+std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, queue<T_, N_> const & queue){
   return iter_print(queue._arr.cbegin(), queue._arr.cend(), os); //will need to be modified since it doesn't actually start at arr.begin
 }
 

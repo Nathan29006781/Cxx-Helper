@@ -10,20 +10,20 @@ template <typename E> concept Enum = std::is_enum_v<E> && requires { E::ENUM_TER
 CXX_HELPER_BEGIN_NAMESPACE
 
 template <Enum E>
-constexpr E next_enum_value(const E& enum_value){
+constexpr E next_enum_value(E const & enum_value){
   typedef std::underlying_type_t<E> Int;
 
-  Int value = static_cast<Int>(enum_value);
+  Int value{static_cast<Int>(enum_value)};
 
   if (value < static_cast<Int>(E::ENUM_TERMINATOR) - 1) return static_cast<E>(value+1);
   else return static_cast<E>(0);
 }
 
 template <Enum E>
-constexpr E previous_enum_value(const E& enum_value){
+constexpr E previous_enum_value(E const & enum_value){
   typedef std::underlying_type_t<E> Int;
 
-  Int value = static_cast<Int>(enum_value);
+  Int value{static_cast<Int>(enum_value)};
   
   if (value > 0) return static_cast<E>(value-1);
   else return static_cast<E>(static_cast<Int>(E::ENUM_TERMINATOR) - 1);
@@ -46,7 +46,7 @@ constexpr E& operator-- (E& enum_value){
 //Postfix increment operator
 template <Enum E>
 constexpr E operator++ (E& enum_value, int){
-  E old = enum_value;
+  E old{enum_value};
   ++enum_value;
   return old;
 }
@@ -54,13 +54,13 @@ constexpr E operator++ (E& enum_value, int){
 //Postfix decrement operator
 template <Enum E>
 constexpr E operator-- (E& enum_value, int){
-  E old = enum_value;
+  E old{enum_value};
   --enum_value;
   return old;
 }
 
 template<typename charT, typename traits, Enum E>
-std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const E& enum_value){
+std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, E const & enum_value){
   return os << static_cast<std::underlying_type_t<E>>(enum_value);
 }
 

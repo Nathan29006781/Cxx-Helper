@@ -2,6 +2,7 @@
 #define CXX_HELPER_SORTING_HPP_
 
 #include "header_config.hpp"
+#include "containers.hpp"
 #include "random.hpp"
 
 #define SORT_FUNC_DECLARE(name, algo)\
@@ -27,7 +28,7 @@ SORT_FUNC_DECLARE(bogo,
 )
 
 SORT_FUNC_DECLARE(bozo,
-  ptrdiff_t d = last - first - 1;
+  ptrdiff_t d{last - first - 1};
   std::swap(first[random_int<ptrdiff_t>(0, d)], first[random_int<ptrdiff_t>(0, d)]);
 )
 

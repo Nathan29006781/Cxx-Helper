@@ -16,14 +16,14 @@ inline std::mt19937 random_engine() {
 template <Integer I = integer>
 inline I random_int(I min = 0, I max = 1){
   std::uniform_int_distribution<I> distrib(min, max);
-  std::mt19937 g = random_engine();
+  std::mt19937 g{random_engine()};
   return distrib(g);
 }
 
 template <std::floating_point R = real>
 inline R random_real(R min = 0, R max = 1){
   std::uniform_real_distribution<R> distrib(min, max);
-  std::mt19937 g = random_engine();
+  std::mt19937 g{random_engine()};
   return distrib(g);
 }
 

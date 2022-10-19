@@ -18,7 +18,7 @@
 //vectors
 //integer exponentiation
 //common math sequences: triangular numbers, perfect squares, fibonnaci, matrices
-//Next base-k number (k=2: 101 -> 110) (k=3: 101 -> 102)
+//Next base-k number (k=2: 101 -> 110) {k=3: 101 -> 102}
 //Base converter
 
 /*equations:

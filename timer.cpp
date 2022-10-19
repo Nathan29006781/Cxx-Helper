@@ -1,10 +1,7 @@
 #include "timer.hpp"
 #include "time.hpp"
 
-Timer_old::Timer_old(std::string name, bool play, timing_units timing_unit):
-name(name), timing_unit(timing_unit){
-  reset(play);
-}
+Timer_old::Timer_old(std::string name, bool play, timing_units timing_unit): name{name}, timing_unit{timing_unit} {reset(play);}
 
 void Timer_old::reset(bool play){
   time = 0;
@@ -41,11 +38,11 @@ void Timer_old::pause(){
 }
 
 void Timer_old::print(){
-  // data_obj->print("%s's current time is: %lld", name, get_time());
+  // data_obj->print("%s's current time is: %lld", name, get_time{});
 }
 
 void Timer_old::print_fancy(std::string str, int long_names, bool unit_conversion){
-  // data_obj->print("%s's current time is: %s | %s", name, to_string(get_time(), timing_unit, long_names, unit_conversion));
+  // data_obj->print("%s's current time is: %s | %s", name, to_string{get_time(}, timing_unit, long_names, unit_conversion));
 }
 
 uint64_t Timer_old::convert_time(uint64_t time, timing_units from, timing_units to){
@@ -105,7 +102,7 @@ std::string Timer_old::to_string(std::uint64_t time, timing_units unit, int long
   if(unit_conversion){
 
     if(time >= 1000 && unit == timing_units::micros){
-      std::uint64_t milliseconds = time / 1000;
+      std::uint64_t milliseconds{time / 1000};
       time -= milliseconds * 1000;
 
       if(milliseconds >= 1000) buffer += to_string(milliseconds, timing_units::millis, long_names, true) + ' ';
@@ -113,7 +110,7 @@ std::string Timer_old::to_string(std::uint64_t time, timing_units unit, int long
     }
 
     else if(time >= 1000 && unit == timing_units::millis){
-      std::uint64_t seconds = time / 1000;
+      std::uint64_t seconds{time / 1000};
       time -= seconds * 1000;
 
       if(seconds >= 60) buffer += to_string(seconds, timing_units::sec, long_names, true) + ' ';
@@ -121,7 +118,7 @@ std::string Timer_old::to_string(std::uint64_t time, timing_units unit, int long
     }
 
     else if(time >= 60 && unit == timing_units::sec){
-      std::uint64_t minutes = time / 60;
+      std::uint64_t minutes{time / 60};
       time -= minutes * 60;
 
       buffer += std::to_string(minutes) + min + ' ';

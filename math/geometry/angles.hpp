@@ -32,11 +32,11 @@ class Angle{
     angle_mode _mode;
 
     //_c for conversion
-    static inline constexpr value_type rad_c = 1;
-    static inline constexpr value_type deg_c = constants::pi<value_type>/180.0; //converts degrees to radians
-    static inline constexpr value_type rot_c = constants::tau<value_type>; //converts rotations to radians
+    static inline constexpr value_type rad_c{1};
+    static inline constexpr value_type deg_c{constants::pi<value_type>/180.0}; //converts degrees to radians
+    static inline constexpr value_type rot_c{constants::tau<value_type>}; //converts rotations to radians
 
-    constexpr Angle(value_type angle, angle_mode mode): _angle(angle), _mode(mode) {_angle *= angle_switch(rad_c, deg_c, rot_c);}
+    constexpr Angle(value_type angle, angle_mode mode): _angle{angle}, _mode{mode} {_angle *= angle_switch(rad_c, deg_c, rot_c);}
 
   public:
 
@@ -68,7 +68,7 @@ class Angle{
     bool is_full() const {return deg() == 360;}
 
   //Reference angle functions
-    inline constexpr Angle closest_equivalent(const Angle& reference) const {return *this + NATHAN_M_PROJECT_NAME::radians(closest_multiple((reference - *this).rad(), constants::tau<>));}
+    inline constexpr Angle closest_equivalent(Angle const & reference) const {return *this + NATHAN_M_PROJECT_NAME::radians(closest_multiple((reference - *this).rad(), constants::tau<>));}
     inline constexpr Angle complementary() const {return -(*this - NATHAN_M_PROJECT_NAME::degrees(90));} //Do not simplify. This accounts for angle_mode
     inline constexpr Angle supplementary() const {return -(*this - NATHAN_M_PROJECT_NAME::degrees(180));}
     inline constexpr Angle explementary() const {return -(*this - NATHAN_M_PROJECT_NAME::degrees(360));}
@@ -88,25 +88,25 @@ class Angle{
   //Math operators
     inline constexpr Angle operator+() const {return *this;}
     inline constexpr Angle operator-() const {return angle_switch(NATHAN_M_PROJECT_NAME::radians(-rad()), NATHAN_M_PROJECT_NAME::degrees(-deg()), NATHAN_M_PROJECT_NAME::rotations(-rot()));}
-    inline constexpr Angle operator+(const Angle& other) const {return angle_switch(NATHAN_M_PROJECT_NAME::radians(rad()+other.rad()), NATHAN_M_PROJECT_NAME::degrees(deg()+other.deg()), NATHAN_M_PROJECT_NAME::rotations(rot()+other.rot()));}
-    inline constexpr Angle operator-(const Angle& other) const {return *this + (-other);}
-    inline constexpr Angle& operator+=(const Angle& other) {_angle += other.rad(); return *this;}
-    inline constexpr Angle& operator-=(const Angle& other) {_angle -= other.rad(); return *this;}
+    inline constexpr Angle operator+(Angle const & other) const {return angle_switch(NATHAN_M_PROJECT_NAME::radians(rad()+other.rad()), NATHAN_M_PROJECT_NAME::degrees(deg()+other.deg()), NATHAN_M_PROJECT_NAME::rotations(rot()+other.rot()));}
+    inline constexpr Angle operator-(Angle const & other) const {return *this + (-other);}
+    inline constexpr Angle& operator+=(Angle const & other) {_angle += other.rad(); return *this;}
+    inline constexpr Angle& operator-=(Angle const & other) {_angle -= other.rad(); return *this;}
 
   //Increment operators
     inline constexpr Angle& operator++() {_angle += Angle{1, _mode}.rad(); return *this;}
     inline constexpr Angle& operator--() {_angle -= Angle{1, _mode}.rad(); return *this;}
-    inline constexpr Angle operator++(int) {Angle old = *this; this->operator++(); return old;}
-    inline constexpr Angle operator--(int) {Angle old = *this; this->operator--(); return old;}
+    inline constexpr Angle operator++(int) {Angle old{*this}; this->operator++(); return old;}
+    inline constexpr Angle operator--(int) {Angle old{*this}; this->operator--(); return old;}
   
   //Scalar operators
     template <std::floating_point R>
-    inline constexpr std::complex<R> operator*(const std::complex<R>& complex) const {return rad() * complex;}
+    inline constexpr std::complex<R> operator*(std::complex<R> const & complex) const {return rad() * complex;}
     inline constexpr Angle operator*(value_type scalar) const {Angle a(*this); a._angle *= scalar; return a;}
 
   //Boolean operators
-    inline constexpr bool operator==(const Angle& other) const {return rad() == other.rad();}
-    inline constexpr bool operator!=(const Angle& other) const {return rad() != other.rad();}
+    inline constexpr bool operator==(Angle const & other) const {return rad() == other.rad();}
+    inline constexpr bool operator!=(Angle const & other) const {return rad() != other.rad();}
 };
 
 //Outside class
@@ -123,23 +123,23 @@ inline constexpr Angle operator ""_rot(real angle)  {return rotations(angle);}
 inline constexpr Angle operator ""_rot(whole angle) {return rotations(angle);}
 
 //Trigonometry/Exp
-inline constexpr Angle::value_type sin(const Angle& angle) {return std::sin(angle.rad());}
-inline constexpr Angle::value_type cos(const Angle& angle) {return std::cos(angle.rad());}
-inline constexpr Angle::value_type tan(const Angle& angle) {return std::tan(angle.rad());}
-inline constexpr Angle::value_type sinh(const Angle& angle) {return std::sinh(angle.rad());}
-inline constexpr Angle::value_type cosh(const Angle& angle) {return std::cosh(angle.rad());}
-inline constexpr Angle::value_type tanh(const Angle& angle) {return std::tanh(angle.rad());}
-inline constexpr Angle::value_type exp(const Angle& angle) {return std::exp(angle.rad());}
-inline constexpr std::complex<Angle::value_type> polar(Angle::value_type magnitude, const Angle& angle) {return std::polar(magnitude, angle.rad());}
-inline constexpr std::complex<Angle::value_type> cis(const Angle& angle) {return polar(1, angle);}
+inline constexpr Angle::value_type sin(Angle const & angle) {return std::sin(angle.rad());}
+inline constexpr Angle::value_type cos(Angle const & angle) {return std::cos(angle.rad());}
+inline constexpr Angle::value_type tan(Angle const & angle) {return std::tan(angle.rad());}
+inline constexpr Angle::value_type sinh(Angle const & angle) {return std::sinh(angle.rad());}
+inline constexpr Angle::value_type cosh(Angle const & angle) {return std::cosh(angle.rad());}
+inline constexpr Angle::value_type tanh(Angle const & angle) {return std::tanh(angle.rad());}
+inline constexpr Angle::value_type exp(Angle const & angle) {return std::exp(angle.rad());}
+inline constexpr std::complex<Angle::value_type> polar(Angle::value_type magnitude, Angle const & angle) {return std::polar(magnitude, angle.rad());}
+inline constexpr std::complex<Angle::value_type> cis(Angle const & angle) {return polar(1, angle);}
 
 //Scalar operators
 template <std::floating_point R>
-inline constexpr std::complex<R> operator*(const std::complex<R>& complex, const Angle& angle) {return angle * complex;}
-inline constexpr Angle operator*(Angle::value_type scalar, const Angle& angle) {return angle * scalar;}
+inline constexpr std::complex<R> operator*(std::complex<R> const & complex, Angle const & angle) {return angle * complex;}
+inline constexpr Angle operator*(Angle::value_type scalar, Angle const & angle) {return angle * scalar;}
 
 template<typename charT, typename traits>
-std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const Angle& angle){
+std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, Angle const & angle){
   return os << angle.str();
 }
 
