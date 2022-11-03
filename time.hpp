@@ -25,14 +25,14 @@ class Timer: private Timer_base{
     typedef typename D::rep value_type;
 
     std::string const name;
-    timestamp init_time, pause_time; //init_time will change so cannot be reliably used for the time of initialization
+    timestamp init_time{clock::now()}, pause_time; //init_time will change so cannot be reliably used for the time of initialization
 
   public:
     //Constructors
-      Timer(): Timer{true} {};
-      explicit Timer(bool play): Timer{"timer"} {};
-      explicit Timer(string_literal name): Timer{std::string{name}} {};
-      explicit Timer(std::string name, bool play = true): name{name}, init_time{clock::now()}, pause_time{clock::now()} {reset(play);};
+      Timer(): Timer{true} {}
+      explicit Timer(bool play): Timer{"timer"} {}
+      explicit Timer(string_literal name): Timer{std::string{name}} {}
+      explicit Timer(std::string name, bool play = true): name{name}, pause_time{play ? timestamp() : clock::now()} {}
     
     //Actions
       void pause() {pause_time = clock::now();}
@@ -43,8 +43,8 @@ class Timer: private Timer_base{
       }
 
       void reset(bool play = true){
-        if(play) this->play();
-        else pause();
+        init_time = clock::now();
+        pause_time = play ? timestamp() : clock::now();
       }
 
     //Const methods
@@ -61,7 +61,7 @@ class Timer: private Timer_base{
 
 //Printing
   template<typename charT, typename traits, Duration D>
-  std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, Timer<D> const & timer){
+  std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, Timer<D> const& timer){
     return os << timer.time();
   }
 

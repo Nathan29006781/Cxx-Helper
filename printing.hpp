@@ -5,8 +5,12 @@
 #include "colours.hpp"
 #include "time.hpp"
 #include "timer.hpp"
+#include "math/geometry/position.hpp"
 #include <bitset>
 #include <iostream>
+
+//allow bitset to be printed as number, hex
+//make convert_all_args for std::byte
 
 #define STRINGIFY(...) #__VA_ARGS__
 #define OUTPUT(...)  std::cout __VA_OPT__(<< '\'' << STRINGIFY(__VA_ARGS__) << "\' = " << (__VA_ARGS__) )<< '\n';
@@ -17,7 +21,21 @@
 
 CXX_HELPER_BEGIN_NAMESPACE
 
-template <std::floating_point R> struct Position;
+template<typename charT, typename traits>
+std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, std::byte const& byte){
+  auto flags = os.flags();
+  auto precision = os.precision();
+  auto fill = os.fill();
+
+  os << "0x" << std::uppercase << std::setfill('0') << std::hex << std::setw(2) << std::to_integer<int32_t>(byte);
+
+  os.flags(flags);
+  os.precision(precision);
+  os.fill(fill);
+
+  return os;
+}
+
 class Vector;
 
 /**
@@ -42,21 +60,21 @@ inline void newline(int count = 1){
 }
 
 //Convert Args
-  /*General case*/ template <typename T> std::string convert_all_args(std::string const & fmt, T const & arg); //Forces double / int overload instead
-  /*For arithmetic types*/ template <Arithmetic T> std::string convert_all_args(std::string const & fmt, T arg); //Not T const & because that duplicates against the non-arithmetic template overload
-  /*Vectors (C++)*/ template <typename _Tp> std::string convert_all_args(std::string const & fmt, std::vector<_Tp> const & arg);
-  /*Arrays (C++)*/ template <typename _Tp, std::size_t _Nm> std::string convert_all_args(std::string const & fmt, std::array<_Tp, _Nm> const & arg);
-  /*Arrays (C)*/ template <typename _Tp, std::size_t _Nm> std::string convert_all_args(std::string const & fmt, const _Tp (&arg) [_Nm]);
-  /*Initializer lists*/ template <typename _Tp> std::string convert_all_args(std::string const & fmt, std::initializer_list<_Tp> const & arg);
-  /*Bitsets*/ template <size_t _Nb> std::string convert_all_args(std::string const & fmt, std::bitset<_Nb> const & arg);
-  /*Tuples*/ template <typename... Args> std::string convert_all_args(std::string const & fmt, std::tuple<Args...> const & arg);
-  /*Strings*/ std::string convert_all_args(std::string const & fmt, std::string const & arg);
-  /*Positions*/ template <std::floating_point R> std::string convert_all_args(std::string const & fmt, Position<R> const & arg);
+  /*General case*/ template <typename T> std::string convert_all_args(std::string const& fmt, T const& arg); //Forces double / int overload instead
+  /*For arithmetic types*/ template <Arithmetic T> std::string convert_all_args(std::string const& fmt, T arg); //Not T const& because that duplicates against the non-arithmetic template overload
+  /*Vectors (C++)*/ template <typename _Tp> std::string convert_all_args(std::string const& fmt, std::vector<_Tp> const& arg);
+  /*Arrays (C++)*/ template <typename _Tp, std::size_t _Nm> std::string convert_all_args(std::string const& fmt, std::array<_Tp, _Nm> const& arg);
+  /*Arrays (C)*/ template <typename _Tp, std::size_t _Nm> std::string convert_all_args(std::string const& fmt, const _Tp (&arg) [_Nm]);
+  /*Initializer lists*/ template <typename _Tp> std::string convert_all_args(std::string const& fmt, std::initializer_list<_Tp> const& arg);
+  /*Bitsets*/ template <size_t _Nb> std::string convert_all_args(std::string const& fmt, std::bitset<_Nb> const& arg);
+  /*Tuples*/ template <typename... Args> std::string convert_all_args(std::string const& fmt, std::tuple<Args...> const& arg);
+  /*Strings*/ inline std::string convert_all_args(std::string const& fmt, std::string const& arg);
+  /*Positions*/ inline std::string convert_all_args(std::string const& fmt, Position const& arg);
 
 // Printing
 
   //Template Recursion Base case
-  inline std::string const & sprintf2(std::string const & fmt) {return fmt;}
+  inline std::string const& sprintf2(std::string const& fmt) {return fmt;}
 
   /**
   * @brief Formats a printf-style function call into an std::string with more safety.
@@ -68,7 +86,7 @@ inline void newline(int count = 1){
   */
   //No support for %n format
   template <typename Param, typename... Params>
-  std::string sprintf2(std::string fmt, Param const & arg, Params const &... args);
+  std::string sprintf2(std::string fmt, Param const& arg, Params const&... args);
 
   /**
   * @brief printf that handles strings and automatically newlines. Can print coloured and a timestamp
@@ -78,7 +96,7 @@ inline void newline(int count = 1){
   * @param args printf args
   */
   template <typename... Params>
-  std::string sprintf2_format(Colour const & colour, int time_type, std::string fmt, Params... args);
+  std::string sprintf2_format(term_color const& colour, int time_type, std::string fmt, Params... args);
 
   /**
   * @brief printf that handles strings and automatically newlines. Can print coloured and a timestamp
@@ -98,7 +116,7 @@ inline void newline(int count = 1){
   * @param args printf args
   */
   template <typename... Params>
-  std::string printf2(Colour const & colour, int time_type, char const * const fmt, Params... args);
+  std::string printf2(term_color const& colour, int time_type, string_literal fmt, Params... args);
 
   /**
   * @brief printf that handles all datatypes and automatically newlines. Can print coloured
@@ -108,7 +126,7 @@ inline void newline(int count = 1){
   * @param args printf args
   */
   template <typename... Params>
-  std::string printf2(Colour const & colour, std::string fmt, Params... args);
+  std::string printf2(term_color const& colour, std::string fmt, Params... args);
 
   /**
   * @brief printf that handles all datatypes and automatically newlines.
@@ -117,18 +135,18 @@ inline void newline(int count = 1){
   * @param args printf args
   */
   template <typename... Params>
-  std::string printf2(char const * const fmt, Params... args);
+  std::string printf2(string_literal fmt, Params... args);
 
 //Convert Args Definitions
   template <typename T>
-  std::string convert_all_args(std::string const & fmt, T const & arg){
+  std::string convert_all_args(std::string const& fmt, T const& arg){
     char buffer[n_printf_max];
     snprintf(buffer, n_printf_max, fmt.c_str(), arg);
     return buffer; //returns local buffer by copy to prevent memory leaks or dangling reference
   }
   template <Arithmetic T> //T is conceptually restricted to arithmetic types
-  std::string convert_all_args(std::string const & fmt, T arg){ //Not T const & because that duplicates against the non-arithmetic template overload
-    char const * const format{fmt.c_str()};
+  std::string convert_all_args(std::string const& fmt, T arg){ //Not T const& because that duplicates against the non-arithmetic template overload
+    string_literal format{fmt.c_str()};
     std::string const fmt_safe {"   " + fmt};
     char buffer[n_printf_max];
     char const end[3]{static_cast<char>(tolower(*(fmt.end() - 1))), static_cast<char>(*(fmt.end() - 2)), static_cast<char>(*(fmt.end() - 3))};
@@ -162,7 +180,7 @@ inline void newline(int count = 1){
     return buffer;
   }
   template <typename _Tp>
-  std::string convert_all_args(std::string const & fmt, std::vector<_Tp> const & arg){
+  std::string convert_all_args(std::string const& fmt, std::vector<_Tp> const& arg){
     if(fmt.back() == 'p') return convert_all_args(fmt, arg.data());
     std::string str;
     str += '{';
@@ -174,7 +192,7 @@ inline void newline(int count = 1){
     return str;
   }
   template <typename _Tp, std::size_t _Nm>
-  std::string convert_all_args(std::string const & fmt, std::array<_Tp, _Nm> const & arg){
+  std::string convert_all_args(std::string const& fmt, std::array<_Tp, _Nm> const& arg){
     if(fmt.back() == 'p') return convert_all_args(fmt, arg.data());
     else if(std::is_same<_Tp, char>::value && fmt.back() == 's') return convert_all_args(fmt, arg.data());
     std::string str;
@@ -187,7 +205,7 @@ inline void newline(int count = 1){
     return str;
   }
   template <typename _Tp, std::size_t _Nm>
-  std::string convert_all_args(std::string const & fmt, const _Tp (&arg) [_Nm]){
+  std::string convert_all_args(std::string const& fmt, const _Tp (&arg) [_Nm]){
     if(fmt.back() == 'p') return convert_all_args(fmt, const_cast<_Tp*>(arg));
     else if(std::is_same<_Tp, char>::value && fmt.back() == 's') return convert_all_args(fmt, const_cast<_Tp*>(arg));
     std::string str;
@@ -200,7 +218,7 @@ inline void newline(int count = 1){
     return str;
   }
   template <typename _Tp>
-  std::string convert_all_args(std::string const & fmt, std::initializer_list<_Tp> const & arg){
+  std::string convert_all_args(std::string const& fmt, std::initializer_list<_Tp> const& arg){
     std::string str;
     str += '{';
     for (typename std::initializer_list<_Tp>::const_iterator it{arg.begin()}; it != arg.end(); it++){
@@ -211,7 +229,7 @@ inline void newline(int count = 1){
     return str;
   }
   template <size_t _Nb>
-  std::string convert_all_args(std::string const & fmt, std::bitset<_Nb> const & arg){
+  std::string convert_all_args(std::string const& fmt, std::bitset<_Nb> const& arg){
     std::string str;
     str += '{';
     if(fmt.back() == 's') str += arg.to_string();
@@ -225,7 +243,7 @@ inline void newline(int count = 1){
     return str;
   }
   template <typename... Args>
-  std::string convert_all_args(std::string const & fmt, std::tuple<Args...> const & arg){
+  std::string convert_all_args(std::string const& fmt, std::tuple<Args...> const& arg){
     std::string str;
     str += '{';
     for(int i{0}; i < std::tuple_size<std::tuple<Args...>>(); i++){
@@ -234,11 +252,17 @@ inline void newline(int count = 1){
     str += '}';
     return str;
   }
-
+  std::string convert_all_args(std::string const& fmt, std::string const& arg){
+    if(fmt.back() == 'p') return convert_all_args(fmt, arg.data());
+    return arg;
+  }
+  std::string convert_all_args(std::string const& fmt, Position const& arg){
+    return '(' + convert_all_args(fmt, arg.x) + ", " + convert_all_args(fmt, arg.y) + ", " + convert_all_args(fmt, arg.angle) + ")";
+  }
 
 //Print Definitions
   template <typename Param, typename... Params>
-  std::string sprintf2(std::string fmt, Param const & arg, Params const &... args){
+  std::string sprintf2(std::string fmt, Param const& arg, Params const&... args){
     std::string::const_iterator first = fmt.begin(), second; //? Why is first being initialized? It's modified immediately after
 
     first = std::find(first, fmt.cend(), '%');
@@ -273,7 +297,7 @@ inline void newline(int count = 1){
     return start + converted + rest;
   }
   template <typename... Params>
-  std::string sprintf2_format(Colour const & colour, int time_type, std::string fmt, Params... args){
+  std::string sprintf2_format(term_color const& colour, int time_type, std::string fmt, Params... args){
     std::string str{sprintf2(fmt, args...)};
     std::string timestamp;
 
@@ -311,19 +335,19 @@ inline void newline(int count = 1){
     return whitespace + timestamp + str;
   }
   template <typename... Params>
-  std::string printf2(Colour const & colour, int time_type, char const * const fmt, Params... args){
+  std::string printf2(term_color const& colour, int time_type, string_literal fmt, Params... args){
     std::string str{sprintf2_format(colour, time_type, fmt, args...)};
     printf("%s\n", str.c_str());
     return str;
   }
   template <typename... Params>
-  std::string printf2(Colour const & colour, std::string fmt, Params... args){
+  std::string printf2(term_color const& colour, std::string fmt, Params... args){
     std::string str{sprintf2_format(colour, -1, fmt, args...)};
     printf("%s\n", str.c_str());
     return str;
   }
   template <typename... Params>
-  std::string printf2(char const * const fmt, Params... args){
+  std::string printf2(string_literal fmt, Params... args){
     std::string str{sprintf2(fmt, args...)};
     printf("%s\n", str.c_str());
     return str;

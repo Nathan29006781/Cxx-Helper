@@ -48,7 +48,7 @@ class queue{
           return next(*this, amount);
         };
 
-        // constexpr iterator& operator+=(iterator const & other) {return *this += other;}
+        // constexpr iterator& operator+=(iterator const& other) {return *this += other;}
         inline value_type& operator* () {return *internal;}
         inline iter& operator++ () {return *this = this->next();}
         inline iter operator++ (int){
@@ -81,21 +81,20 @@ class queue{
     inline constexpr bool empty() const;
     inline size_t size() const;
 
-    template <std::input_iterator I>
-      requires std::convertible_to<typename I::value_type, value_type>
+    template <std::input_iterator I> requires std::convertible_to<typename I::value_type, value_type>
     constexpr void push(I first, I last);
-    constexpr void push(T const & val);
+    constexpr void push(T const& val);
     constexpr void pop();
 
-    inline constexpr T const & front() const;
-    inline constexpr T const & back() const;
+    inline constexpr T const& front() const;
+    inline constexpr T const& back() const;
 
     template<typename T_, std::size_t N_, typename charT, typename traits> friend
-    std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, queue<T_, N_> const & queue);
+    std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, queue<T_, N_> const& queue);
 };
 
 template<typename T_, std::size_t N_, typename charT, typename traits>
-std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, queue<T_, N_> const & queue){
+std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, queue<T_, N_> const& queue){
   return iter_print(queue._arr.cbegin(), queue._arr.cend(), os); //will need to be modified since it doesn't actually start at arr.begin
 }
 

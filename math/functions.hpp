@@ -57,7 +57,7 @@ constexpr bool is_prime(N n){
 //     result = std::function([this](){return this->operation(this->first_arg(), this->second_arg());});
 //   }
 
-//   BinArthmOp(std::function<T(T const &, T const &)> operation, T const & first_arg, T const & second_arg):
+//   BinArthmOp(std::function<T(T const&, T const&)> operation, T const& first_arg, T const& second_arg):
 //   operation(operation), first_arg([&first_arg](){return first_arg;}), second_arg([&second_arg](){return second_arg;}){
 //     result = std::function([this](){return this->operation(this->first_arg(), this->second_arg());});
 //   }
