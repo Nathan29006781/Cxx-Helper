@@ -3,6 +3,7 @@
 
 #include "header_config.hpp"
 #include "math/geometry/angles.hpp"
+#include "math/geometry/geometry.hpp"
 #include "types.hpp"
 #include <iostream>
 #include <iomanip>
@@ -56,6 +57,7 @@ namespace term_colors{
   inline term_color white{"WHITE", "\033[37m", false};
 }
 
+//hsl and cmyk
 class Colour{
   public:
     typedef std::bitset<24> code_type; //try bitset<6>
@@ -84,26 +86,24 @@ class Colour{
     constexpr channel_type b() const {return to_channel(code       & channel_mask);}
     constexpr std::tuple<channel_type, channel_type, channel_type> rgb() const {return {r(), g(), b()};}
 
-    constexpr channel_type h() const {return channel_type();}
-    constexpr channel_type s() const {return channel_type();}
-    constexpr channel_type v() const {return channel_type();}
+    constexpr Angle h() const {return std::get<0>(hsv());}
+    constexpr channel_type s() const {return std::get<1>(hsv());}
+    constexpr channel_type v() const {return std::get<2>(hsv());}
     constexpr std::tuple<Angle, percentage, percentage> hsv() const {
       double r{this->r().to_ulong()/255.0};
       double g{this->g().to_ulong()/255.0};
       double b{this->b().to_ulong()/255.0};
 
-      double max{std::max(std::max(r, g), b)};
-      double min{std::min(std::min(r, g), b)};
+      double max{NATHAN_M_PROJECT_NAME::max(r, g, b)};
+      double min{NATHAN_M_PROJECT_NAME::min(r, g, b)};
       double diff{max - min};
 
       Angle h{0_deg};
       if(max == r) h = (60*(degrees(g-b)/diff + 6_deg)).mod();
-      if(max == g) h = (60*(degrees(b-r)/diff + 2_deg)).mod();
-      if(max == b) h = (60*(degrees(r-g)/diff + 4_deg)).mod();
+      else if(max == g) h = (60*(degrees(b-r)/diff + 2_deg)).mod();
+      else if(max == b) h = (60*(degrees(r-g)/diff + 4_deg)).mod();
 
-      percentage s = max ? diff/max : 0, v = max;
-
-      return {h, s, v};
+      return {h, percentage{max ? diff/max : 0}, percentage{max}};
     }
 
   //Setters
@@ -125,6 +125,9 @@ class Colour{
     template<typename charT, typename traits> friend
     std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, Colour const& colour);
 };
+
+// inline constexpr Colour hsv(Angle h, percentage s, percentage v) {return 0;}
+// inline constexpr Colour hsl(Angle h, percentage s, percentage l) {return 0;}
 
 template<typename charT, typename traits>
 std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, Colour const& colour){

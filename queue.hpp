@@ -49,9 +49,9 @@ class queue{
         };
 
         // constexpr iterator& operator+=(iterator const& other) {return *this += other;}
-        inline value_type& operator* () {return *internal;}
-        inline iter& operator++ () {return *this = this->next();}
-        inline iter operator++ (int){
+        value_type& operator* () {return *internal;}
+        iter& operator++ () {return *this = this->next();}
+        iter operator++ (int){
           iter old{*this};
           ++(*this);
           return old;
@@ -69,25 +69,25 @@ class queue{
 
     // constexpr void back_increment(difference_type amount = 1);
     // constexpr void front_increment();
-    // inline constexpr iterator& front_iter();
-    // inline constexpr iterator& back_iter();
-    // inline constexpr const_iterator front_iter() const;
-    // inline constexpr const_iterator back_iter() const;
+    // constexpr iterator& front_iter();
+    // constexpr iterator& back_iter();
+    // constexpr const_iterator front_iter() const;
+    // constexpr const_iterator back_iter() const;
 
   public:
     queue(std::string name): _arr{}, _front{_arr.begin()}, _back{_arr.end()}, _name{name}{}
 
-    inline constexpr bool full() const;
-    inline constexpr bool empty() const;
-    inline size_t size() const;
+    constexpr bool full() const;
+    constexpr bool empty() const;
+    size_t size() const;
 
     template <std::input_iterator I> requires std::convertible_to<typename I::value_type, value_type>
     constexpr void push(I first, I last);
     constexpr void push(T const& val);
     constexpr void pop();
 
-    inline constexpr T const& front() const;
-    inline constexpr T const& back() const;
+    constexpr T const& front() const;
+    constexpr T const& back() const;
 
     template<typename T_, std::size_t N_, typename charT, typename traits> friend
     std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, queue<T_, N_> const& queue);

@@ -79,21 +79,21 @@ constexpr std::basic_ostream<charT, traits>& many_print(std::basic_ostream<charT
 }
 
 template <typename... Ts>
-constexpr std::ostream& many_print(Ts... args){
-  return many_print(std::cout, args...);
-}
+constexpr std::ostream& many_print(Ts... args) {return many_print(std::cout, args...);}
 
 
 template <std::input_iterator I>
-inline constexpr bool contains(I first, I last, int item){
-  return std::find(first, last, item) != last;
-}
+inline constexpr bool contains(I first, I last, int item) {return std::find(first, last, item) != last;}
 
 namespace ranges{
   template <Range R>
-  inline constexpr bool contains(R const& container, typename R::value_type item){
-    return NATHAN_M_PROJECT_NAME::contains(container.cbegin(), container.cend(), item);
-  }
+  inline constexpr bool contains(R const& container, typename R::value_type item) {return NATHAN_M_PROJECT_NAME::contains(container.cbegin(), container.cend(), item);}
+
+  template <Range R>
+  inline constexpr bool max(R const& container) {return std::max_element(container.cbegin(), container.cend());}
+
+  template <Range R>
+  inline constexpr bool min(R const& container) {return std::min_element(container.cbegin(), container.cend());}
 }
 
 CXX_HELPER_END_NAMESPACE
