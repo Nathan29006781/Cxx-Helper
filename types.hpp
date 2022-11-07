@@ -28,7 +28,7 @@ typedef double percentage; //replace with custom type only up to 100
 template <typename T> concept Real = std::convertible_to<T, real>;
 template <typename T> concept Rational = std::convertible_to<T, rational>;
 template <typename T> concept Integer = std::convertible_to<T, integer> && std::integral<T>;
-template <typename T> concept Whole = std::convertible_to<T, whole> && std::signed_integral<T>;
+template <typename T> concept Whole = std::convertible_to<T, whole> && std::unsigned_integral<T>;
 template <typename T> concept Natural = Whole<T>; //No reason to have a type that excludes 0
 template <typename T> concept Arithmetic = std::integral<T> || std::floating_point<T>;
 

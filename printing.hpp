@@ -12,12 +12,12 @@
 // //allow bitset to be printed as number, hex
 // //make convert_all_args for std::byte
 
-// #define STRINGIFY(...) #__VA_ARGS__
-// #define OUTPUT(...)  std::cout __VA_OPT__(<< " \'" << STRINGIFY(__VA_ARGS__) << "\' = " << (__VA_ARGS__) )<< '\n';
-// //Use OUTPUT only for outputting one thing at a time (it is variadic to allow commas in input)
-// #ifdef NO_PRINTF
-// #define printf(...)
-// #endif
+#define STRINGIFY(...) #__VA_ARGS__
+#define OUTPUT(...)  std::cout __VA_OPT__(<< " \'" << STRINGIFY(__VA_ARGS__) << "\' = " << (__VA_ARGS__) )<< '\n';
+//Use OUTPUT only for outputting one thing at a time (it is variadic to allow commas in input)
+#ifdef NO_PRINTF
+#define printf(...)
+#endif
 
 // CXX_HELPER_BEGIN_NAMESPACE
 

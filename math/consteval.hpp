@@ -2,12 +2,13 @@
 #define CXX_HELPER_MATH_CONSTEVAL_HPP_
 
 #include "../header_config.hpp"
+#include <cmath>
 
 CXX_HELPER_BEGIN_NAMESPACE
 
 namespace compile_time{
 
-  inline consteval long double sqrt(const long double number)
+  inline consteval long double sqrt(long double const number)
   {
     long double guess{number/2.0};
     long double prev_guess{number};

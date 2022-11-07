@@ -9,17 +9,17 @@
 CXX_HELPER_BEGIN_NAMESPACE
 
 template <Natural N>
-inline constexpr natural fibonacci(N n) {return std::round((pow(constants::golden<>, n) - pow(1-constants::golden<>, n)) / (2*constants::golden<>-1));}
+inline constexpr natural fibonacci(N const& n) {return std::round((pow(constants::golden<>, n) - pow(1-constants::golden<>, n)) / (2*constants::golden<>-1));}
 
 template <Natural N>
-inline constexpr natural factorial(N n) {return std::round(std::tgamma(n+1));}
+inline constexpr natural factorial(N const& n) {return std::round(std::tgamma(n+1));}
 
 template <Natural N>
-inline constexpr natural triangular(N n) {return (n*(n+1))/2;}
+inline constexpr natural triangular(N const& n) {return (n*(n+1))/2;}
 
 
 template <Real R>
-inline constexpr real sigmoid(R r) {return 1/(1+std::exp(-r));}
+inline constexpr real sigmoid(R const& r) {return 1/(1+std::exp(-r));}
 
 // template <Natural N>
 // inline constexpr natural zeta(N n) {return std::riemann_zeta(n);}

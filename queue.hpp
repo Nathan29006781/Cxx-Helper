@@ -11,91 +11,88 @@ CXX_HELPER_BEGIN_NAMESPACE
 template <typename T,  std::size_t N>
 class queue{
   public:
-    typedef T value_type;
-    typedef std::size_t size_type;
-    typedef std::ptrdiff_t difference_type;
-    typedef typename std::array<T, N> array;
+    using value_type = T;
+    using array      = std::array<T, N>;
 
-  private:
-    class iter{
+    array arr;
+
+    class iterator{
       public:
-        typedef typename array::const_iterator const_iterator;
-        typedef typename array::iterator iterator;
-        typedef typename array::difference_type difference_type;
-        typedef typename array::value_type value_type;
+        using difference_type   = std::ptrdiff_t;
+        using iterator_category = std::random_access_iterator_tag;
+        using value_type        = value_type;
+        using pointer           = value_type*;
+        using reference         = value_type&;
 
-
-      private:
-        iterator internal;
-        
       public:
-        iter(iterator iterator): internal{iterator} {};
+        pointer internal;
+        pointer begin, end;
+        int cycle;
 
-        static void advance(iter iterator, difference_type amount = 1){
-          std::advance(iterator.internal, amount); //actual implementations
+        constexpr difference_type size() const {return end - begin;}
+        constexpr bool same_container(iterator const& rhs) const {return begin == rhs.begin && end == rhs.end;}
+
+      public:
+        constexpr iterator(pointer ptr, pointer begin, pointer end): internal{ptr}, begin{begin}, end{end}, cycle{0} {};
+        constexpr iterator() {};
+
+        constexpr reference operator*() const {return *internal;}
+        constexpr pointer operator->() {return internal;}
+
+        //Operators
+        constexpr iterator& operator+=(difference_type n) {
+          cycle += floor(n / static_cast<double>(size()));
+          n %= size();
+          if(n < 0) n += size();
+          if(n > end-internal) {internal -= size(); cycle++;}
+          internal += n;
+          return *this;
         }
+        constexpr iterator& operator-=(difference_type n) {return *this += -n;}
+        constexpr iterator operator+(difference_type n) const {iterator temp{*this}; return temp += n;}
+        friend constexpr iterator operator+(difference_type n, iterator const& rhs) {return rhs+n;}
+        constexpr iterator operator-(difference_type n) const {iterator temp{*this}; return temp -= n;}
+        constexpr iterator& operator++() {return *this += 1;}
+        constexpr iterator& operator--() {return *this += -1;}
+        constexpr iterator operator++(int) {iterator temp{*this}; ++(*this); return temp;}
+        constexpr iterator operator--(int) {iterator temp{*this}; --(*this); return temp;}
+        constexpr reference operator[](difference_type n) const {return *(*this + n);}
+        friend constexpr difference_type operator-(iterator const& lhs, iterator const& rhs) {return lhs.same_container(rhs) * lhs.internal-rhs.internal+(lhs.cycle-rhs.cycle)*lhs.size();}
 
-        static iter next(iter iterator, difference_type amount = 1){
-          advance(iterator, amount);
-          return iterator;
-        }
-
-        void advance(difference_type amount = 1){
-          advance(*this, amount);
-        }
-
-        iter next (difference_type amount = 1) const {
-          return next(*this, amount);
-        };
-
-        // constexpr iterator& operator+=(iterator const& other) {return *this += other;}
-        value_type& operator* () {return *internal;}
-        iter& operator++ () {return *this = this->next();}
-        iter operator++ (int){
-          iter old{*this};
-          ++(*this);
-          return old;
+        friend constexpr bool operator==(iterator const& lhs, iterator const& rhs) {return lhs.same_container(rhs) && lhs.cycle == rhs.cycle && lhs.internal == rhs.internal;}
+        constexpr std::partial_ordering operator<=>(iterator const& rhs) const{
+          if(!same_container(rhs)) return std::partial_ordering::unordered;
+          else if(cycle <=> rhs.cycle != 0) return cycle <=> rhs.cycle;
+          else return internal <=> rhs.internal;
         }
     };
 
+    iterator front, back;
+    std::string name;
 
+    queue(std::string name): arr{}, front{arr.begin(), arr.begin(), arr.end()}, back{arr.end(), arr.begin(), arr.end()}, name{name} {}
 
-    // typedef typename array::const_iterator const_iterator;
-    // typedef typename array::iterator iterator;
+    constexpr iterator begin() const {return front;}
+    constexpr iterator end()   const {return back;}
 
-    array _arr;
-    iter _front, _back;
-    std::string _name;
+    constexpr void push_back (T const& value){*(++back) = value;}
 
-    // constexpr void back_increment(difference_type amount = 1);
-    // constexpr void front_increment();
-    // constexpr iterator& front_iter();
-    // constexpr iterator& back_iter();
-    // constexpr const_iterator front_iter() const;
-    // constexpr const_iterator back_iter() const;
-
-  public:
-    queue(std::string name): _arr{}, _front{_arr.begin()}, _back{_arr.end()}, _name{name}{}
-
-    constexpr bool full() const;
-    constexpr bool empty() const;
-    size_t size() const;
-
-    template <std::input_iterator I> requires std::convertible_to<typename I::value_type, value_type>
-    constexpr void push(I first, I last);
-    constexpr void push(T const& val);
-    constexpr void pop();
-
-    constexpr T const& front() const;
-    constexpr T const& back() const;
-
-    template<typename T_, std::size_t N_, typename charT, typename traits> friend
-    std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, queue<T_, N_> const& queue);
+    // constexpr bool full() const;
+    // constexpr bool empty() const;
+    // size_t size() const;
+    // template <std::input_iterator I> requires std::convertible_to<typename I::value_type, value_type>
+    // constexpr void push(I first, I last);
+    // constexpr void push(T const& val);
+    // constexpr void pop();
+    // constexpr T const& front() const;
+    // constexpr T const& back() const;
+    // template<typename T_, std::size_t N_, typename charT, typename traits> friend
+    // std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, queue<T_, N_> const& queue);
 };
 
 template<typename T_, std::size_t N_, typename charT, typename traits>
 std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, queue<T_, N_> const& queue){
-  return iter_print(queue._arr.cbegin(), queue._arr.cend(), os); //will need to be modified since it doesn't actually start at arr.begin
+  return iter_print(queue.begin(), queue.end(), os); //will need to be modified since it doesn't actually start at arr.begin
 }
 
 CXX_HELPER_END_NAMESPACE
