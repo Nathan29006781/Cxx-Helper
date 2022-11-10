@@ -22,7 +22,7 @@ typedef real rational;
 typedef long long integer;
 typedef unsigned long long whole;
 typedef whole natural;
-typedef char const * const string_literal;
+typedef char const * string_literal;
 typedef double percentage; //replace with custom type only up to 100
 
 template <typename T> concept Real = std::convertible_to<T, real>;

@@ -3,7 +3,9 @@
 
 #include "header_config.hpp"
 #include "colours.hpp"
+#include "types.hpp"
 #include <iostream>
+#include <iterator>
 #include <algorithm>
 #include <map>
 
@@ -12,16 +14,27 @@
 //negative indexing
 //runtime fixed size array
 
-template <typename C> concept Range = requires (C  const& container){
+CXX_HELPER_BEGIN_NAMESPACE
+
+template <typename C> concept range_helper = requires (C  const& container){
   {std::ranges::begin(container)};
   {std::ranges::end(container)};
 };
 
-CXX_HELPER_BEGIN_NAMESPACE
+template <typename C> concept Range = std::is_array_v<C> || std::same_as<std::remove_cv_t<C>, string_literal> || range_helper<C>;
+
+template <Range C> auto begin (C const& container) {return std::begin(container);}
+template <Range C> auto end (C const& container) {return std::end(container);}
+string_literal begin (string_literal str) {return str;}
+string_literal end (string_literal str) {return str + strlen(str);}
 
 //Forward declare prints
+  template<std::random_access_iterator I, typename charT, typename traits>
+  constexpr std::basic_ostream<charT, traits>& iter_print(I first, I last, std::basic_ostream<charT, traits>& os = std::cout);
+
   template<std::input_iterator I, typename charT, typename traits>
   constexpr std::basic_ostream<charT, traits>& iter_print(I first, I last, std::basic_ostream<charT, traits>& os = std::cout);
+
 
   template <typename... Ts, typename charT, typename traits>
   constexpr std::basic_ostream<charT, traits>& many_print(std::basic_ostream<charT, traits>& os, Ts... args);
@@ -54,15 +67,28 @@ inline constexpr std::basic_ostream<charT, traits>& operator<<(std::basic_ostrea
 
 template<std::input_iterator I, typename charT, typename traits>
 constexpr std::basic_ostream<charT, traits>& iter_print(I first, I last, std::basic_ostream<charT, traits>& os){
-  using namespace std;
   std::string const& col_code{term_color::get_next()};
   os << col_code << '{' << term_colors::none();
+  if(first == last) return os << col_code << '}' << term_colors::none();
+
 
   if(std::next(first) != last){
    for (auto second{std::next(first)}; second != last; first++, second++) os << *first << ", ";
   }
 
   return os << *first << col_code << '}' << term_colors::none();
+}
+
+template<std::random_access_iterator I, typename charT, typename traits>
+constexpr std::basic_ostream<charT, traits>& iter_print(I first, I last, std::basic_ostream<charT, traits>& os){
+  std::string const& col_code{term_color::get_next()};
+  os << col_code << '{' << term_colors::none();
+  if(first == last) return os << col_code << '}' << term_colors::none();
+  
+
+  std::advance(last, -1);
+  std::copy(first, last, std::ostream_iterator<typename std::iterator_traits<I>::value_type>(os, ", "));
+  return os << *last << col_code << '}' << term_colors::none();
 }
 
 //Variadic Template Printing
@@ -80,6 +106,15 @@ constexpr std::basic_ostream<charT, traits>& many_print(std::basic_ostream<charT
 
 template <typename... Ts>
 constexpr std::ostream& many_print(Ts... args) {return many_print(std::cout, args...);}
+
+template<typename charT, typename traits>
+std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, std::partial_ordering order){
+  if(order == std::partial_ordering::unordered) return os << "unordered";
+  if(order == std::partial_ordering::less) return os << "less";
+  if(order == std::partial_ordering::greater) return os << "greater";
+  if(order == std::partial_ordering::equivalent) return os << "equivalent";
+  else return os << "Error Value";
+}
 
 
 template <std::input_iterator I>
