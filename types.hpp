@@ -17,13 +17,13 @@ CXX_HELPER_BEGIN_NAMESPACE
 //bignum
 //special enums
 
-typedef long double real;
-typedef real rational;
-typedef long long integer;
-typedef unsigned long long whole;
-typedef whole natural;
-typedef char const * string_literal;
-typedef double percentage; //replace with custom type only up to 100
+using real = long double;
+using rational = real;
+using integer = long long;
+using whole = unsigned long long ;
+using natural = whole;
+using string_literal = char const *;
+using percentage = double; //replace with custom type only up to 100
 
 template <typename T> concept Real = std::convertible_to<T, real>;
 template <typename T> concept Rational = std::convertible_to<T, rational>;

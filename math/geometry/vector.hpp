@@ -11,7 +11,7 @@ class Position;
 
 class Vector{
   public:
-    typedef real value_type;
+    using value_type = real;
 
   private:
     std::complex<value_type> point;

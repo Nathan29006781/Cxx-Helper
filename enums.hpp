@@ -11,7 +11,7 @@ CXX_HELPER_BEGIN_NAMESPACE
 
 template <Enum E>
 constexpr E next_enum_value(E const& enum_value){
-  typedef std::underlying_type_t<E> Int;
+  using Int = std::underlying_type_t<E>;
 
   Int value{static_cast<Int>(enum_value)};
 
@@ -21,7 +21,7 @@ constexpr E next_enum_value(E const& enum_value){
 
 template <Enum E>
 constexpr E previous_enum_value(E const& enum_value){
-  typedef std::underlying_type_t<E> Int;
+  using Int = std::underlying_type_t<E>;
 
   Int value{static_cast<Int>(enum_value)};
   

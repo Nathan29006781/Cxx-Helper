@@ -3,6 +3,7 @@
 
 #include "header_config.hpp"
 #include "colours.hpp"
+#include "iterator_pair.hpp"
 #include "types.hpp"
 #include <iostream>
 #include <iterator>
@@ -15,18 +16,6 @@
 //runtime fixed size array
 
 CXX_HELPER_BEGIN_NAMESPACE
-
-template <typename C> concept range_helper = requires (C  const& container){
-  {std::ranges::begin(container)};
-  {std::ranges::end(container)};
-};
-
-template <typename C> concept Range = std::is_array_v<C> || std::same_as<std::remove_cv_t<C>, string_literal> || range_helper<C>;
-
-template <Range C> auto begin (C const& container) {return std::begin(container);}
-template <Range C> auto end (C const& container) {return std::end(container);}
-string_literal begin (string_literal str) {return str;}
-string_literal end (string_literal str) {return str + strlen(str);}
 
 //Forward declare prints
   template<std::random_access_iterator I, typename charT, typename traits>
@@ -41,28 +30,41 @@ string_literal end (string_literal str) {return str + strlen(str);}
 
 //Container printing
 template<Range C, typename charT, typename traits>
-inline constexpr std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, C const& container){
-  return NATHAN_M_PROJECT_NAME::iter_print(container.cbegin(), container.cend(), os);
-}
-
-// Iterator printing
-template<std::forward_iterator I, typename charT, typename traits>
-inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, I const iterator){
-  return os << static_cast<void*>(&*iterator);
+constexpr std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, C const& container){
+  return NATHAN_M_PROJECT_NAME::iter_print(std::cbegin(container), std::cend(container), os);
 }
 
 //Pair printing
 template <typename T1, typename T2, typename charT, typename traits>
-inline constexpr std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, std::pair<T1, T2> const& pair){
+constexpr std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, std::pair<T1, T2> const& pair){
   return many_print(os, pair.first, pair.second);
 }
 
 //Tuple Printing
 template <typename... Ts, typename charT, typename traits>
-inline constexpr std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, std::tuple<Ts...> const& tuple){
+constexpr std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, std::tuple<Ts...> const& tuple){
   return std::apply([&os](auto &&... args) -> std::basic_ostream<charT, traits>&{
     return many_print(os, args...);
   }, tuple);
+}
+
+// Iterator printing
+template<std::forward_iterator I, typename charT, typename traits>
+std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, I const iterator){
+  return os << static_cast<void const*>(&*iterator);
+}
+
+// Iterator Pair printing
+template<std::input_or_output_iterator I, typename charT, typename traits>
+std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, iterator_pair<I> ip){
+  return os << std::make_pair(ip.begin(), ip.end());
+}
+
+
+//Print by iterator
+template<std::input_or_output_iterator I, typename charT, typename traits>
+constexpr std::basic_ostream<charT, traits>& iter_print(iterator_pair<I> ip, std::basic_ostream<charT, traits>& os = std::cout){
+  return iter_print(ip.begin(), ip.end(), os);
 }
 
 template<std::input_iterator I, typename charT, typename traits>
@@ -116,19 +118,36 @@ std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>&
   else return os << "Error Value";
 }
 
-
-template <std::input_iterator I>
-inline constexpr bool contains(I first, I last, int item) {return std::find(first, last, item) != last;}
-
 namespace ranges{
-  template <Range R>
-  inline constexpr bool contains(R const& container, typename R::value_type item) {return NATHAN_M_PROJECT_NAME::contains(container.cbegin(), container.cend(), item);}
+  template <Range C>
+  constexpr bool contains(C const& container, typename C::value_type const& item){
+    return NATHAN_M_PROJECT_NAME::contains(iterator_pair(container), item);
+  }
 
-  template <Range R>
-  inline constexpr bool max(R const& container) {return std::max_element(container.cbegin(), container.cend());}
+  template <Range C>
+  constexpr auto max(C const& container){
+    return NATHAN_M_PROJECT_NAME::max(iterator_pair(container));
+  }
 
-  template <Range R>
-  inline constexpr bool min(R const& container) {return std::min_element(container.cbegin(), container.cend());}
+  template <Range C>
+  constexpr auto min(C const& container){
+    return NATHAN_M_PROJECT_NAME::min(iterator_pair(container));
+  }
+
+  template <Range C1, Range C2>
+  constexpr auto copy(C1 const& container1, C2& container2){
+    return NATHAN_M_PROJECT_NAME::copy(iterator_pair(container1), iterator_pair(container2));
+  }
+
+  template <Range C>
+  constexpr auto split(C const& container, typename C::difference_type offset){
+    return NATHAN_M_PROJECT_NAME::split(iterator_pair(container), offset);
+  }
+
+  template <Range C>
+  constexpr auto split(C const& container, typename C::const_iterator middle){
+    return NATHAN_M_PROJECT_NAME::split(iterator_pair(container), middle);
+  }
 }
 
 CXX_HELPER_END_NAMESPACE

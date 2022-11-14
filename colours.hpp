@@ -60,8 +60,8 @@ namespace term_colors{
 //hsl and cmyk
 class Colour{
   public:
-    typedef std::bitset<24> code_type; //try bitset<6>
-    typedef std::bitset<8> channel_type; //try bitset<6>
+    using code_type = std::bitset<24>; //try bitset<6>
+    using channel_type = std::bitset<8>; //try bitset<6>
 
     code_type code;
 

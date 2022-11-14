@@ -25,7 +25,7 @@ inline constexpr Angle rotations(real angle);
 
 class Angle{
   public:
-    typedef real value_type;
+    using value_type = real;
 
   private:
     value_type _angle;

@@ -19,9 +19,6 @@ class queue{
     using reference       = value_type&;
     using const_reference = value_type const&;
 
-
-    array arr;
-
     class iterator{
       public:
         using difference_type   = std::ptrdiff_t;
@@ -39,7 +36,7 @@ class queue{
 
       public:
         constexpr iterator(pointer ptr, pointer begin, pointer end): internal{ptr}, begin{begin}, end{end}, cycle{0} {};
-        constexpr iterator() {};
+        constexpr iterator(std::nullptr_t = nullptr): iterator{nullptr, nullptr, nullptr} {};
 
         constexpr iterator& operator+=(difference_type n) {
           cycle += floor(n / static_cast<double>(N));
@@ -60,13 +57,16 @@ class queue{
         constexpr reference operator[](difference_type n) const {return *(*this + n);}
         constexpr reference operator*() const {return *internal;}
         constexpr pointer operator->() {return internal;}
-        friend constexpr difference_type operator-(iterator const& lhs, iterator const& rhs) {return lhs.same_container(rhs) ? (lhs.internal-rhs.internal+(lhs.cycle-rhs.cycle)*(lhs.end-lhs.begin)) : std::numeric_limits<difference_type>::max();}
+        friend constexpr difference_type operator-(iterator const& lhs, iterator const& rhs) {return lhs.same_container(rhs) ? lhs.internal-rhs.internal+(lhs.cycle-rhs.cycle)*(lhs.end-lhs.begin) : std::numeric_limits<difference_type>::max();}
 
         //== checks for equality on the same cycle. <=> only checks pointer equality
-        friend constexpr bool operator==(iterator const& lhs, iterator const& rhs) {return lhs <=> rhs == 0 && lhs.cycle == rhs.cycle;}
+        friend constexpr bool operator==(iterator const& lhs, iterator const& rhs) {return lhs.internal == rhs.internal && lhs.cycle == rhs.cycle;}
         constexpr std::partial_ordering operator<=>(iterator const& rhs) const{
-          if(!same_container(rhs)) return std::partial_ordering::unordered;
-          return internal <=> rhs.internal;
+          if(same_container(rhs)){
+            if (cycle == rhs.cycle) return internal <=> rhs.internal;
+            else return cycle <=> rhs.cycle;
+          }
+          else return std::partial_ordering::unordered;
         }
     };
 
@@ -74,11 +74,20 @@ class queue{
     using reverse_iterator       = std::reverse_iterator<iterator>;
     using reverse_const_iterator = std::reverse_iterator<const_iterator>;
 
+
+    array arr;
     //front_iter points to element about to be popped, back_iter points to location where element will be inserted
     iterator front_iter, back_iter;
 
-    queue(): arr{}, front_iter{arr.begin(), arr.begin(), arr.end()}, back_iter{front_iter} {}
-    queue(std::initializer_list<value_type> il): queue() {insert(il);}
+    constexpr queue(): arr{} {clear();}
+    constexpr queue(std::initializer_list<value_type> il): queue() {insert(il);}
+
+    constexpr std::pair<iterator_pair<pointer>, iterator_pair<pointer>> contiguous_iterator_pair(){ //Wraparound : Whole range
+      return
+      end().cycle == begin().cycle ?
+      std::make_pair(iterator_pair(begin().internal, end().internal), iterator_pair<pointer>()) :
+      std::make_pair(iterator_pair(begin().internal, arr.end()), iterator_pair(arr.begin(), end().internal));
+    }
 
     //Methods
     constexpr const_iterator begin() const {return front_iter;}
@@ -86,12 +95,14 @@ class queue{
     constexpr const_iterator cbegin() const {return front_iter;}
     constexpr const_iterator cend() const {return back_iter;}
     size_t size() const {return back_iter-front_iter;}
-    constexpr size_type capacity () const {return N;}
-    constexpr size_type space_left () const {return capacity()-size();}
+    constexpr size_type capacity() const {return N;}
+    constexpr size_type space_left() const {return capacity()-size();}
     constexpr bool full() const {return size() == capacity();}
     constexpr bool empty() const {return size() == 0;}
     constexpr const_reference front() const {return *front_iter;}
     constexpr const_reference back() const {return *(back_iter-1);}
+    constexpr iterator construct_iterator(pointer pointer) {return {pointer, arr.begin(), arr.end()};}
+
 
     //Non-const Methods
     constexpr iterator begin() {return front_iter;}
@@ -100,16 +111,35 @@ class queue{
     constexpr reference back() {return *(back_iter-1);}
 
     //Insert Modifiers
-    constexpr void push_back (const_reference value){if(!full()) *back_iter++ = value; else ERROR("Queue full, cannot push");}
-    template<std::input_iterator I> constexpr iterator insert (I first, I last) {if(std::distance(first, last) <= space_left()) back_iter = std::copy(first, last, end()); else ERROR("Not enough space to insert into queue"); return end();}
-    template<Range C> constexpr iterator insert (C const& container) {return insert(NATHAN_M_PROJECT_NAME::begin(container), NATHAN_M_PROJECT_NAME::end(container));}
-    constexpr iterator insert (const_reference value){push_back(value); return end();}
-    constexpr iterator insert (size_type count, const_pointer pointer) {return insert(pointer, pointer+count);}
+    constexpr void push_back(const_reference value){if(!full()) *back_iter++ = value; else ERROR("Queue full, cannot push");}
+    constexpr iterator insert(const_reference value){push_back(value); return end();}
+    template <std::input_iterator I> constexpr iterator insert(I first, I last) {
+      auto cp = contiguous_iterator_pair();
+      auto size = std::distance(first, last);
+
+      if(size < std::distance(cp.first.begin(), cp.first.end())){ // single write to cp.first
+
+      }
+      else{ //needs to splice input range and map remaining part into cp.second
+
+      }
+
+      if(std::distance(first, last) <= space_left()){
+        back_iter = construct_iterator(NATHAN_M_PROJECT_NAME::copy(first, last, cp.first.begin(), cp.first.end()));
+        // back_iter = construct_iterator(NATHAN_M_PROJECT_NAME::copy(first, last, cp.second.begin(), cp.second.end()));
+      }
+      else ERROR("Not enough space to insert into queue");
+      return end();
+    }
+    template<std::input_iterator I> constexpr iterator insert(iterator_pair<I> iter_pair) {return insert(iter_pair.begin(), iter_pair.end());}
+    constexpr iterator insert(const_pointer pointer, size_type count) {return insert(pointer, pointer+count);}
+    constexpr iterator insert(string_literal str) requires std::same_as<std::remove_cv_t<T>, char> {return insert(iterator_pair(str));}
 
     //Remove Modifiers
-    constexpr void pop () {if(!empty()) *front_iter++ = value_type{}; else ERROR("Queue empty, cannot pop");}
-    constexpr iterator erase (const_iterator first, const_iterator last) {return back_iter = std::copy(last, end(), first);}
-    constexpr iterator erase (const_iterator pos) {return erase(pos, pos+1);}
+    constexpr void pop() {if(!empty()) *front_iter++ = value_type{}; else ERROR("Queue empty, cannot pop");}
+    constexpr void clear() {front_iter = back_iter = construct_iterator(arr.begin());}
+    constexpr iterator erase(const_iterator first, const_iterator last) {return back_iter = std::copy(last, end(), first);}
+    constexpr iterator erase(const_iterator pos) {return erase(pos, pos+1);}
 
 };
 

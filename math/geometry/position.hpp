@@ -10,7 +10,7 @@ CXX_HELPER_BEGIN_NAMESPACE
 class Vector;
 class Position{
   public:
-    typedef real value_type;
+    using value_type = real;
     value_type x, y, angle;
 
   //Constructors

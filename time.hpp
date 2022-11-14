@@ -13,8 +13,8 @@ CXX_HELPER_BEGIN_NAMESPACE
 
 class Timer_base{
   protected:
-    typedef std::chrono::steady_clock clock;
-    typedef clock::time_point timestamp;
+    using clock = std::chrono::steady_clock;
+    using timestamp = clock::time_point;
     static timestamp const prog_start;
 };
 
@@ -22,7 +22,7 @@ class Timer_base{
 template <Duration D = std::chrono::milliseconds>
 class Timer: private Timer_base{
   private:
-    typedef typename D::rep value_type;
+    using value_type = typename D::rep;
 
     std::string const name;
     timestamp init_time{clock::now()}, pause_time; //init_time will change so cannot be reliably used for the time of initialization
