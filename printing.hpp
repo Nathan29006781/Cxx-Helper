@@ -13,7 +13,7 @@
 // //make convert_all_args for std::byte
 
 #define STRINGIFY(...) #__VA_ARGS__
-#define OUTPUT(...)  std::cout __VA_OPT__(<< " \'" << STRINGIFY(__VA_ARGS__) << "\' = \'" << (__VA_ARGS__) << '\'' )<< '\n';
+#define OUTPUT(...)  std::cout __VA_OPT__(<< '\'' << STRINGIFY(__VA_ARGS__) << "\' = \'" << (__VA_ARGS__) << '\'' )<< '\n';
 //Use OUTPUT only for outputting one thing at a time (it is variadic to allow commas in input)
 #ifdef NO_PRINTF
 #define printf(...)

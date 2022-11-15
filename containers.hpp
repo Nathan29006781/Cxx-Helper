@@ -18,10 +18,10 @@
 CXX_HELPER_BEGIN_NAMESPACE
 
 //Forward declare prints
-  template<std::random_access_iterator I, typename charT, typename traits>
+  template<std::random_access_iterator I, typename charT = char, typename traits = std::char_traits<char>>
   constexpr std::basic_ostream<charT, traits>& iter_print(I first, I last, std::basic_ostream<charT, traits>& os = std::cout);
 
-  template<std::input_iterator I, typename charT, typename traits>
+  template<std::input_iterator I, typename charT = char, typename traits = std::char_traits<char>>
   constexpr std::basic_ostream<charT, traits>& iter_print(I first, I last, std::basic_ostream<charT, traits>& os = std::cout);
 
 
@@ -62,7 +62,7 @@ std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>&
 
 
 //Print by iterator
-template<std::input_or_output_iterator I, typename charT, typename traits>
+template<std::input_or_output_iterator I, typename charT = char, typename traits = std::char_traits<char>>
 constexpr std::basic_ostream<charT, traits>& iter_print(iterator_pair<I> ip, std::basic_ostream<charT, traits>& os = std::cout){
   return iter_print(ip.begin(), ip.end(), os);
 }
@@ -120,7 +120,7 @@ std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>&
 
 namespace ranges{
   template <Range C>
-  constexpr bool contains(C const& container, typename C::value_type const& item){
+  constexpr auto contains(C const& container, typename C::value_type const& item){
     return NATHAN_M_PROJECT_NAME::contains(iterator_pair(container), item);
   }
 
@@ -140,13 +140,18 @@ namespace ranges{
   }
 
   template <Range C>
-  constexpr auto split(C const& container, typename C::difference_type offset){
-    return NATHAN_M_PROJECT_NAME::split(iterator_pair(container), offset);
+  constexpr auto in_range(C const& container, typename C::const_iterator middle){
+    return NATHAN_M_PROJECT_NAME::in_range(iterator_pair(container), middle);
   }
 
   template <Range C>
   constexpr auto split(C const& container, typename C::const_iterator middle){
     return NATHAN_M_PROJECT_NAME::split(iterator_pair(container), middle);
+  }
+
+  template <Range C>
+  constexpr auto split(C const& container, typename C::difference_type offset){
+    return NATHAN_M_PROJECT_NAME::split(iterator_pair(container), offset);
   }
 }
 

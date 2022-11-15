@@ -22,12 +22,12 @@ inline constexpr int sgn(T value) {return __sign(value);}
 
 template <typename T1, typename T2, typename T3>
 inline constexpr bool in_range(T1 value, T2 minimum, T3 maximum){
-  return ((minimum < value && value < maximum) || (maximum < value && value < minimum));
+  return (minimum < value && value < maximum) || (maximum < value && value < minimum);
 }
 
 template <typename T1, typename T2, typename T3>
 inline constexpr bool in_range_inclusive(T1 value, T2 minimum, T3 maximum){
-  return ((minimum <= value && value <= maximum) || (maximum <= value && value <= minimum));
+  return (minimum <= value && value <= maximum) || (maximum <= value && value <= minimum);
 }
 
 CXX_HELPER_END_NAMESPACE
