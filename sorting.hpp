@@ -28,7 +28,7 @@ namespace ranges{\
 CXX_HELPER_BEGIN_NAMESPACE
 
 SORT_FUNC_DECLARE(bogo,
-  random_shuffle(first, last);
+  random::shuffle(first, last);
 )
 
 SORT_FUNC_DECLARE(bozo,
