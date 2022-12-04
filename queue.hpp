@@ -75,10 +75,10 @@ class queue{
     };
 
 
-  private:
+  // private:
     //front_iter points to element about to be popped, back_iter points to location where element will be inserted
-    iterator front_iter, back_iter;
     array arr;
+    iterator front_iter, back_iter;
 
     constexpr std::pair<iterator_pair<pointer>, iterator_pair<pointer>> empty_contiguous_iterators(){ //Returns two ranges corresponding to unfilled part of queue
       if(full()) return {};
@@ -97,7 +97,7 @@ class queue{
   public:
 
   //Constructors
-    constexpr queue(): arr{} {clear();}
+    constexpr queue(): arr{}, front_iter{construct_iterator(arr.begin())}, back_iter{front_iter} {}
     constexpr queue(std::initializer_list<value_type> il): queue() {insert(iterator_pair(il));}
 
     //Getters
@@ -137,7 +137,7 @@ class queue{
     //Insert Modifiers
     constexpr void push(const_reference value){if(!full()) *back_iter++ = value;}
     constexpr iterator insert(const_reference value){push(value); return end();}
-    template<std::input_iterator I> constexpr iterator insert(iterator_pair<I> ip){
+    template <std::input_iterator I> constexpr iterator insert(iterator_pair<I> ip){
       auto out = empty_contiguous_iterators();
       auto in = split(ip, out.first.size());
       back_iter += copy(in.first,  out.first );
@@ -147,13 +147,12 @@ class queue{
     template <std::input_iterator I> constexpr iterator insert(I first, I last) {return insert(iterator_pair(first, last));}
     constexpr iterator insert(const_pointer pointer, size_type count) {return insert(pointer, pointer+count);}
     constexpr iterator insert(string_literal str) requires std::same_as<T, char> {return insert(iterator_pair(str));}
-    constexpr void swap(queue<T, N>& other){auto old_size = size(); arr.swap(other.arr); back_iter = begin() + other.size(); other.back_iter = other.begin() + old_size;}
+    constexpr void swap(queue<T, N>& other) {auto old_size = size(); arr.swap(other.arr); back_iter = begin() + other.size(); other.back_iter = other.begin() + old_size;}
 
     //Remove Modifiers
-    constexpr void pop() {if(!empty()) *front_iter++ = value_type{};}
-    constexpr void clear() {front_iter = back_iter = construct_iterator(arr.begin());}
-    constexpr iterator erase(const_iterator first, const_iterator last) {return back_iter = std::copy(last, end(), first);}
-    constexpr iterator erase(const_iterator pos) {return erase(pos, pos+1);}
+    constexpr void pop() {if(!empty()) front_iter++;}
+    constexpr void clear() {front_iter = end();}
+    constexpr iterator erase(iterator pos) {return front_iter = pos;}
     template <output_iterator<iterator> O> constexpr O output(iterator_pair<O> ip){
       auto in = full_contiguous_iterators();
       auto out = split(ip, in.first.size());
@@ -179,14 +178,7 @@ class queue{
 };
 
 template <typename T,  std::size_t N>
-std::ostream& operator<<(std::ostream& os, NATHAN_M_PROJECT_NAME::queue<T, N>& queue){
-  queue.output(os);
-  return os;
-}
-
-template <typename T,  std::size_t N>
 constexpr void swap(NATHAN_M_PROJECT_NAME::queue<T, N>& lhs, NATHAN_M_PROJECT_NAME::queue<T, N>& rhs) {lhs.swap(rhs);}
-
 
 CXX_HELPER_END_NAMESPACE
 
