@@ -4,11 +4,6 @@
 #include "header_config.hpp"
 #include "colours.hpp"
 #include "iterator_pair.hpp"
-#include "types.hpp"
-#include <iostream>
-#include <iterator>
-#include <algorithm>
-#include <map>
 
 //get nth element
 //operations to container

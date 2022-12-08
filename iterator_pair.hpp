@@ -2,7 +2,10 @@
 #define CXX_HELPER_ITERATOR_PAIR_HPP_
 
 #include "header_config.hpp"
-#include "containers.hpp"
+#include "types.hpp"
+#include <algorithm>
+#include <concepts>
+#include <iterator>
 
 CXX_HELPER_BEGIN_NAMESPACE
 
@@ -116,5 +119,4 @@ constexpr auto split(iterator_pair<I> ip, typename std::iterator_traits<I>::diff
 
 
 CXX_HELPER_END_NAMESPACE
-
 #endif //CXX_HELPER_ITERATOR_PAIR_HPP_

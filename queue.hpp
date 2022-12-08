@@ -2,8 +2,11 @@
 #define CXX_HELPER_QUEUE_HPP_
 
 #include "header_config.hpp"
-#include "containers.hpp"
+#include "iterator.hpp"
+#include "iterator_pair.hpp"
 #include <array>
+#include <cmath>
+#include <iostream>
 #include <string>
 
 CXX_HELPER_BEGIN_NAMESPACE
@@ -12,70 +15,88 @@ CXX_HELPER_BEGIN_NAMESPACE
 template <typename T,  std::size_t N> requires std::same_as<std::remove_cvref_t<T>, T>
 class queue{
   public:
-    class iterator;
-    using const_iterator = iterator;
+    class const_iterator;
     using size_type              = std::size_t;
     using array                  = std::array<T, N>;
     using difference_type        = std::ptrdiff_t;
-    using value_type             = T;
-    using pointer                = value_type*;
-    using reference              = value_type&;
-    using const_value_type       = value_type const;
-    using const_pointer          = const_value_type*;
-    using const_reference        = const_value_type&;
-    using reverse_iterator       = std::reverse_iterator<iterator>;
-    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-    class iterator{
-      friend queue<T, N>;
-      public:
-        using difference_type   = difference_type;
-        using iterator_category = std::random_access_iterator_tag;
-        using value_type        = value_type;
-        using pointer           = pointer;
-        using reference         = reference;
+    class iterator: public iterator_base<iterator, std::random_access_iterator_tag, T> {
+      private:
+        using base = iterator_base<iterator, std::random_access_iterator_tag, T>;
+        friend class const_iterator;
 
       public:
-        pointer internal;
+        using pointer = typename base::pointer;
+        
+        constexpr iterator(pointer ptr, pointer begin, pointer end): begin{begin}, end{end}, cycle{0} {base::internal = ptr;}
+        constexpr iterator(std::nullptr_t = nullptr): iterator{nullptr, nullptr, nullptr} {}
+
+        constexpr iterator& operator+=(difference_type n){
+          if (!valid_container()) return *this;
+
+          cycle += std::floor(n / static_cast<double>(N));
+          n %= static_cast<std::ptrdiff_t>(N);
+
+          if(n < 0) {n += N;}
+          if(n >= end-base::internal) {base::internal -= N; cycle++;}
+          base::internal += n;
+          return *this;
+        }
+
+      // private:
         pointer begin, end;
         int cycle;
 
-        constexpr bool same_container(iterator const& rhs) const {return begin == rhs.begin && end == rhs.end;}
-      public:
-        constexpr iterator(pointer ptr, pointer begin, pointer end): internal{ptr}, begin{begin}, end{end}, cycle{0} {};
-        constexpr iterator(std::nullptr_t = nullptr): iterator{nullptr, nullptr, nullptr} {};
-
-        constexpr iterator& operator+=(difference_type n) {
-          cycle += floor(n / static_cast<double>(N));
-          n %= static_cast<std::ptrdiff_t>(N);
-          if(n < 0) {n += N;}
-          if(n >= end-internal) {internal -= N; cycle++;}
-          internal += n;
-          return *this;
-        }
-        constexpr iterator& operator-=(difference_type n) {return *this += -n;}
-        constexpr iterator operator+(difference_type n) const {iterator temp{*this}; return temp += n;}
-        friend constexpr iterator operator+(difference_type n, iterator const& rhs) {return rhs+n;}
-        constexpr iterator operator-(difference_type n) const {return *this + -n;}
-        constexpr iterator& operator++() {return *this += 1;}
-        constexpr iterator& operator--() {return *this += -1;}
-        constexpr iterator operator++(int) {iterator temp{*this}; ++(*this); return temp;}
-        constexpr iterator operator--(int) {iterator temp{*this}; --(*this); return temp;}
-        constexpr reference operator[](difference_type n) const {return *(*this + n);} //? Needed?
-        constexpr reference operator*() const {return *internal;}
-        constexpr pointer operator->() {return internal;}
-        friend constexpr difference_type operator-(iterator const& lhs, iterator const& rhs) {return lhs.same_container(rhs) ? lhs.internal-rhs.internal+(lhs.cycle-rhs.cycle)*(lhs.end-lhs.begin) : std::numeric_limits<difference_type>::max();}
-
-        //== checks for equality on the same cycle. <=> only checks pointer equality
-        friend constexpr bool operator==(iterator const& lhs, iterator const& rhs) {return lhs.internal == rhs.internal && lhs.cycle == rhs.cycle;}
-        constexpr std::partial_ordering operator<=>(iterator const& rhs) const{
-          if(same_container(rhs)) return cycle == rhs.cycle ? internal <=> rhs.internal : cycle <=> rhs.cycle;
-          else return std::partial_ordering::unordered;
-        }
+        constexpr bool valid_container() const {return begin && end;}
     };
 
+    class const_iterator: public iterator_base<const_iterator, std::random_access_iterator_tag, T const> {
+      private:
+        using base = iterator_base<const_iterator, std::random_access_iterator_tag, T const>;
 
-  // private:
+      public:
+        using pointer = typename base::pointer;
+
+        constexpr const_iterator(pointer ptr, pointer begin, pointer end): const_iterator{{ptr, begin, end}} {}
+        constexpr const_iterator(iterator iterator = {}): begin{iterator.begin}, end{iterator.end}, cycle{iterator.cycle} {base::internal = iterator.internal;}
+
+        friend constexpr difference_type operator-(const_iterator const& lhs, const_iterator const& rhs) {return lhs.same_container(rhs) ? lhs.internal-rhs.internal+(lhs.cycle-rhs.cycle)*(lhs.end-lhs.begin) : std::numeric_limits<difference_type>::max();}
+        constexpr const_iterator& operator+=(difference_type n){
+          if (!valid_container()) return *this;
+
+          cycle += std::floor(n / static_cast<double>(N));
+          n %= static_cast<std::ptrdiff_t>(N);
+
+          if(n < 0) {n += N;}
+          if(n >= end-base::internal) {base::internal -= N; cycle++;}
+          base::internal += n;
+          return *this;
+        }
+
+        friend constexpr bool operator==(const_iterator const& lhs, const_iterator const& rhs) {return lhs.internal == rhs.internal && lhs.cycle == rhs.cycle;}
+        constexpr std::partial_ordering operator<=>(const_iterator const& rhs) const{
+          if(same_container(rhs)) return cycle == rhs.cycle ? base::internal <=> rhs.internal : cycle <=> rhs.cycle;
+          else return std::partial_ordering::unordered;
+        }
+
+      private:
+        pointer begin, end;
+        int cycle;
+
+        constexpr bool valid_container() const {return begin && end;}
+        constexpr bool same_container(const_iterator const& rhs) const {return this->valid_container() && rhs.valid_container() && begin == rhs.begin && end == rhs.end;}
+    };
+
+    using value_type             = typename iterator::value_type;
+    using pointer                = typename iterator::pointer;
+    using reference              = typename iterator::reference;
+    using const_value_type       = typename const_iterator::value_type;
+    using const_pointer          = typename const_iterator::pointer;
+    using const_reference        = typename const_iterator::reference;
+    using reverse_iterator       = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
+  private:
     //front_iter points to element about to be popped, back_iter points to location where element will be inserted
     array arr;
     iterator front_iter, back_iter;
@@ -92,7 +113,7 @@ class queue{
     }
 
     constexpr const_iterator construct_iterator(pointer pointer) const {return {pointer, arr.begin(), arr.end()};}
-    constexpr iterator       construct_iterator(pointer pointer)       {return {pointer, arr.begin(), arr.end()};}
+    constexpr       iterator construct_iterator(pointer pointer)       {return {pointer, arr.begin(), arr.end()};}
 
   public:
 
@@ -101,10 +122,10 @@ class queue{
     constexpr queue(std::initializer_list<value_type> il): queue() {insert(iterator_pair(il));}
 
     //Getters
-    constexpr size_type size() const {return end()-begin();}
-    constexpr size_type capacity() const {return N;}
+    constexpr size_type size()       const {return end()-begin();}
+    constexpr size_type capacity()   const {return N;}
     constexpr size_type space_left() const {return std::max(static_cast<size_type>(0), capacity()-size());}
-    constexpr bool full() const {return size() == capacity();}
+    constexpr bool full()  const {return size() == capacity();}
     constexpr bool empty() const {return size() == 0;}
 
     //Const Methods
@@ -120,7 +141,7 @@ class queue{
     constexpr const_reference        back()    const {return *(end()-1);}
     constexpr const_pointer          data()    const {return arr.data();}
     constexpr const_reference        at        (difference_type n) const {if(n < size()) return (*this)[n]; else throw std::out_of_range("queue");}
-    constexpr const_reference        operator[](difference_type n) const {return *(begin() + n);}
+    constexpr const_reference        operator[](difference_type n) const {return begin()[n];}
 
     //Non-Const Methods
     constexpr iterator          begin()  {return front_iter;}
@@ -131,7 +152,7 @@ class queue{
     constexpr reference         back()   {return *(end()-1);}
     constexpr pointer           data()   {return arr.data();}
     constexpr reference         at        (difference_type n) {if(n < size()) return (*this)[n]; else throw std::out_of_range("queue");}
-    constexpr reference         operator[](difference_type n) {return *(begin() + n);}
+    constexpr reference         operator[](difference_type n) {return begin()[n];}
     
     
     //Insert Modifiers
@@ -146,7 +167,6 @@ class queue{
     }
     template <std::input_iterator I> constexpr iterator insert(I first, I last) {return insert(iterator_pair(first, last));}
     constexpr iterator insert(const_pointer pointer, size_type count) {return insert(pointer, pointer+count);}
-    constexpr iterator insert(string_literal str) requires std::same_as<T, char> {return insert(iterator_pair(str));}
     constexpr void swap(queue<T, N>& other) {auto old_size = size(); arr.swap(other.arr); back_iter = begin() + other.size(); other.back_iter = other.begin() + old_size;}
 
     //Remove Modifiers
