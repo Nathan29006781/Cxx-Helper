@@ -28,7 +28,7 @@ class queue{
       public:
         using pointer = typename base::pointer;
         
-        constexpr iterator(pointer ptr, pointer begin, pointer end): begin{begin}, end{end}, cycle{0} {base::internal = ptr;}
+        constexpr iterator(pointer ptr, pointer begin, pointer end): base{ptr}, begin{begin}, end{end}, cycle{0} {}
         constexpr iterator(std::nullptr_t = nullptr): iterator{nullptr, nullptr, nullptr} {}
 
         constexpr iterator& operator+=(difference_type n){
@@ -58,7 +58,7 @@ class queue{
         using pointer = typename base::pointer;
 
         constexpr const_iterator(pointer ptr, pointer begin, pointer end): const_iterator{{ptr, begin, end}} {}
-        constexpr const_iterator(iterator iterator = {}): begin{iterator.begin}, end{iterator.end}, cycle{iterator.cycle} {base::internal = iterator.internal;}
+        constexpr const_iterator(iterator iterator = {}): base{iterator.internal}, begin{iterator.begin}, end{iterator.end}, cycle{iterator.cycle} {}
 
         friend constexpr difference_type operator-(const_iterator const& lhs, const_iterator const& rhs) {return lhs.same_container(rhs) ? lhs.internal-rhs.internal+(lhs.cycle-rhs.cycle)*(lhs.end-lhs.begin) : std::numeric_limits<difference_type>::max();}
         constexpr const_iterator& operator+=(difference_type n){
@@ -189,10 +189,11 @@ class queue{
       clear();
       return out;
     }
-    constexpr void output(std::ostream& out) requires std::same_as<T, char> {
+    template<typename charT, typename traits>
+    constexpr void output(std::basic_ostream<charT, traits>& os) requires std::same_as<T, char> {
       auto in = full_contiguous_iterators();
-      out.write(in.first .begin(), in.first .size());
-      out.write(in.second.begin(), in.second.size());
+      os.write(in.first .begin(), in.first .size());
+      os.write(in.second.begin(), in.second.size());
       clear();
     }
 };
