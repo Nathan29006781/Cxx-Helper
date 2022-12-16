@@ -31,7 +31,7 @@ class iterator_base{
     // Arithmetic
     constexpr iterator_derived operator-(difference_type n) const requires std::derived_from<iter_category, std::random_access_iterator_tag> {return std::prev(derived_ref(), n);}
     constexpr iterator_derived operator+(difference_type n) const requires std::derived_from<iter_category, std::random_access_iterator_tag> {return std::next(derived_ref(), n);}
-    friend constexpr iterator_derived operator+(difference_type n, iterator_derived const& rhs) requires std::derived_from<iter_category, std::random_access_iterator_tag> {return rhs+n;}
+    friend constexpr iterator_derived operator+(difference_type n, iterator_derived const & rhs) requires std::derived_from<iter_category, std::random_access_iterator_tag> {return rhs+n;}
     
     //Increment/Decrement
     constexpr iterator_derived& operator++()                                                                               {std::advance(internal,  1); return derived_ref();}
@@ -45,9 +45,9 @@ class iterator_base{
     constexpr reference operator[](difference_type n) const requires std::derived_from<iter_category, std::random_access_iterator_tag> {return *(*this + n);}
 
     //Comparison (friends for symmetry)
-    friend constexpr bool                 operator== (iterator_derived const& lhs, iterator_derived const& rhs) requires std::derived_from<iter_category, std::forward_iterator_tag>       {return lhs.internal ==  rhs.internal;}
-    friend constexpr std::strong_ordering operator<=>(iterator_derived const& lhs, iterator_derived const& rhs) requires std::derived_from<iter_category, std::random_access_iterator_tag> {return lhs.internal <=> rhs.internal;};
-    friend constexpr difference_type      operator - (iterator_derived const& lhs, iterator_derived const& rhs) requires std::derived_from<iter_category, std::random_access_iterator_tag> {return lhs.internal  -  rhs.internal;}
+    friend constexpr bool                 operator== (iterator_derived const & lhs, iterator_derived const & rhs) requires std::derived_from<iter_category, std::forward_iterator_tag>       {return lhs.internal ==  rhs.internal;}
+    friend constexpr std::strong_ordering operator<=>(iterator_derived const & lhs, iterator_derived const & rhs) requires std::derived_from<iter_category, std::random_access_iterator_tag> {return lhs.internal <=> rhs.internal;};
+    friend constexpr difference_type      operator - (iterator_derived const & lhs, iterator_derived const & rhs) requires std::derived_from<iter_category, std::random_access_iterator_tag> {return lhs.internal  -  rhs.internal;}
 
   private:
     pointer internal;

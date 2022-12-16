@@ -22,12 +22,12 @@ class term_color{
     static int index;
   public:
     //Constructors
-      term_color (term_color const&) = delete;
+      term_color (term_color const &) = delete;
       term_color(std::string id, std::string seq, bool used = true): id{id}, seq{seq}, used{used} {col_list.push_back(this);}
     
     //Getters
-      std::string const& name() const {return id;}
-      std::string const& operator()() const {return seq;}
+      std::string const & name() const {return id;}
+      std::string const & operator()() const {return seq;}
     
     //Static method
       static std::string const get_next(){ //change back to reference
@@ -72,8 +72,8 @@ class Colour{
     code_type channel_mask {0x0000FF};
 
   //Static Helpers
-    static constexpr channel_type to_channel(code_type const& code){return code.to_ulong();}
-    static constexpr code_type to_code(channel_type const& code, int position = 0){return code.to_ulong() << 8*position;}
+    static constexpr channel_type to_channel(code_type const & code){return code.to_ulong();}
+    static constexpr code_type to_code(channel_type const & code, int position = 0){return code.to_ulong() << 8*position;}
   
   public:
   //Constructors
@@ -111,26 +111,26 @@ class Colour{
     void g(channel_type g) {code = to_code(g, 1) | (code & ~green);}
     void b(channel_type b) {code = to_code(b, 0) | (code & ~blue );}
     void rgb(channel_type r, channel_type g, channel_type b) {this->r(r); this->g(g); this->b(b);}
-    void rgb(std::tuple<channel_type, channel_type, channel_type> rgb) {std::apply([this](channel_type const& r, channel_type const& g, channel_type const& b){this->rgb(r, g, b);}, rgb);}
+    void rgb(std::tuple<channel_type, channel_type, channel_type> rgb) {std::apply([this](channel_type const & r, channel_type const & g, channel_type const & b){this->rgb(r, g, b);}, rgb);}
 
   //Methods
     Colour& invert() {code = ~code & white; return *this;}
     Colour& darken(percentage percent = percentage{100}) {auto mod = (100-percent)/100.0; r(mod*r().to_ulong()); g(mod*g().to_ulong()); b(mod*b().to_ulong()); return *this;}
 
   //Static Equivalent Methods
-    static Colour invert(Colour const& colour) {Colour col(colour); return col.invert();}
-    static Colour darken(Colour const& colour, percentage percent = percentage{100}) {Colour col(colour); return col.darken(percent);}
+    static Colour invert(Colour const & colour) {Colour col(colour); return col.invert();}
+    static Colour darken(Colour const & colour, percentage percent = percentage{100}) {Colour col(colour); return col.darken(percent);}
 
   
     template<typename charT, typename traits> friend
-    std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, Colour const& colour);
+    std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, Colour const & colour);
 };
 
 // inline constexpr Colour hsv(Angle h, percentage s, percentage v) {return 0;}
 // inline constexpr Colour hsl(Angle h, percentage s, percentage l) {return 0;}
 
 template<typename charT, typename traits>
-std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, Colour const& colour){
+std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, Colour const & colour){
   auto flags = os.flags();
   auto precision = os.precision();
   auto fill = os.fill();

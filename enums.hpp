@@ -10,7 +10,7 @@ template <typename E> concept Enum = std::is_enum_v<E> && requires { E::ENUM_TER
 CXX_HELPER_BEGIN_NAMESPACE
 
 template <Enum E>
-constexpr E next_enum_value(E const& enum_value){
+constexpr E next_enum_value(E const & enum_value){
   using Int = std::underlying_type_t<E>;
 
   Int value{static_cast<Int>(enum_value)};
@@ -20,7 +20,7 @@ constexpr E next_enum_value(E const& enum_value){
 }
 
 template <Enum E>
-constexpr E previous_enum_value(E const& enum_value){
+constexpr E previous_enum_value(E const & enum_value){
   using Int = std::underlying_type_t<E>;
 
   Int value{static_cast<Int>(enum_value)};
@@ -60,7 +60,7 @@ constexpr E operator-- (E& enum_value, int){
 }
 
 template<typename charT, typename traits, Enum E>
-std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, E const& enum_value){
+std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, E const & enum_value){
   return os << static_cast<std::underlying_type_t<E>>(enum_value);
 }
 

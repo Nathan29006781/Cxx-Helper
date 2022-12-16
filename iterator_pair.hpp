@@ -9,7 +9,7 @@
 
 CXX_HELPER_BEGIN_NAMESPACE
 
-template <typename C> concept Range = requires (C  const& container){
+template <typename C> concept Range = requires (C  const & container){
   {std::ranges::begin(container)};
   {std::ranges::end(container)};
 };
@@ -27,7 +27,7 @@ struct iterator_pair{
                         constexpr iterator_pair(I first, std::size_t size):           iterator_pair(first, first+size) {}
                         constexpr iterator_pair(string_literal& str):                 iterator_pair(str, strlen(str)+1) {}
   template <Range    C> constexpr iterator_pair(C&  container):                       iterator_pair(std::begin(container), std::end(container)) {}
-  template <typename T> constexpr iterator_pair(std::initializer_list<T> const&  il): iterator_pair(il.begin(), il.end()) {}
+  template <typename T> constexpr iterator_pair(std::initializer_list<T> const &  il): iterator_pair(il.begin(), il.end()) {}
 
   constexpr I begin()   const {return front;}
   constexpr I end()     const {return back;}
@@ -37,7 +37,7 @@ struct iterator_pair{
 //Deduction Guides
                       iterator_pair(string_literal str)                  -> iterator_pair<string_literal>;
 template <Range    C> iterator_pair(C&  container)                       -> iterator_pair<decltype(std::begin(container))>;
-template <typename T> iterator_pair(std::initializer_list<T> const&  il) -> iterator_pair<decltype(il.begin())>;
+template <typename T> iterator_pair(std::initializer_list<T> const &  il) -> iterator_pair<decltype(il.begin())>;
 
 
 
@@ -97,7 +97,7 @@ constexpr auto copy(iterator_pair<I> const in, iterator_pair<O> out){
 }
 
 template <std::input_iterator I>
-constexpr auto contains(iterator_pair<I> ip, typename iterator_pair<I>::value_type const& item){
+constexpr auto contains(iterator_pair<I> ip, typename iterator_pair<I>::value_type const & item){
   return std::find(ip.begin(), ip.end(), item) != ip.end();
 }
 

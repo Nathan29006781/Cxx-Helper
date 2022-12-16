@@ -25,19 +25,19 @@ CXX_HELPER_BEGIN_NAMESPACE
 
 //Container printing
 template<Range C, typename charT, typename traits>
-constexpr std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, C const& container){
+constexpr std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, C const & container){
   return NATHAN_M_PROJECT_NAME::iter_print(std::cbegin(container), std::cend(container), os);
 }
 
 //Pair printing
 template <typename T1, typename T2, typename charT, typename traits>
-constexpr std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, std::pair<T1, T2> const& pair){
+constexpr std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, std::pair<T1, T2> const & pair){
   return many_print(os, pair.first, pair.second);
 }
 
 //Tuple Printing
 template <typename... Ts, typename charT, typename traits>
-constexpr std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, std::tuple<Ts...> const& tuple){
+constexpr std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, std::tuple<Ts...> const & tuple){
   return std::apply([&os](auto &&... args) -> std::basic_ostream<charT, traits>&{
     return many_print(os, args...);
   }, tuple);
@@ -64,7 +64,7 @@ constexpr std::basic_ostream<charT, traits>& iter_print(iterator_pair<I> ip, std
 
 template<std::input_iterator I, typename charT, typename traits>
 constexpr std::basic_ostream<charT, traits>& iter_print(I first, I last, std::basic_ostream<charT, traits>& os){
-  std::string const& col_code{term_color::get_next()};
+  std::string const & col_code{term_color::get_next()};
   os << col_code << '{' << term_colors::none();
   if(first == last) return os << col_code << '}' << term_colors::none();
 
@@ -78,7 +78,7 @@ constexpr std::basic_ostream<charT, traits>& iter_print(I first, I last, std::ba
 
 template<std::random_access_iterator I, typename charT, typename traits>
 constexpr std::basic_ostream<charT, traits>& iter_print(I first, I last, std::basic_ostream<charT, traits>& os){
-  std::string const& col_code{term_color::get_next()};
+  std::string const & col_code{term_color::get_next()};
   os << col_code << '{' << term_colors::none();
   if(first == last) return os << col_code << '}' << term_colors::none();
   
@@ -92,7 +92,7 @@ constexpr std::basic_ostream<charT, traits>& iter_print(I first, I last, std::ba
 template <typename... Ts, typename charT, typename traits>
 constexpr std::basic_ostream<charT, traits>& many_print(std::basic_ostream<charT, traits>& os, Ts... args){
   std::size_t count{0};
-  std::string const& col_code{term_color::get_next()};
+  std::string const & col_code{term_color::get_next()};
 
   os << col_code << '{' << term_colors::none();
 
@@ -115,37 +115,37 @@ std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>&
 
 namespace ranges{
   template <Range C>
-  constexpr auto contains(C const& container, typename C::value_type const& item){
+  constexpr auto contains(C const & container, typename C::value_type const & item){
     return NATHAN_M_PROJECT_NAME::contains(iterator_pair(container), item);
   }
 
   template <Range C>
-  constexpr auto max(C const& container){
+  constexpr auto max(C const & container){
     return NATHAN_M_PROJECT_NAME::max(iterator_pair(container));
   }
 
   template <Range C>
-  constexpr auto min(C const& container){
+  constexpr auto min(C const & container){
     return NATHAN_M_PROJECT_NAME::min(iterator_pair(container));
   }
 
   template <Range C1, Range C2>
-  constexpr auto copy(C1 const& container1, C2& container2){
+  constexpr auto copy(C1 const & container1, C2& container2){
     return NATHAN_M_PROJECT_NAME::copy(iterator_pair(container1), iterator_pair(container2));
   }
 
   template <Range C>
-  constexpr auto in_range(C const& container, typename C::const_iterator middle){
+  constexpr auto in_range(C const & container, typename C::const_iterator middle){
     return NATHAN_M_PROJECT_NAME::in_range(iterator_pair(container), middle);
   }
 
   template <Range C>
-  constexpr auto split(C const& container, typename C::const_iterator middle){
+  constexpr auto split(C const & container, typename C::const_iterator middle){
     return NATHAN_M_PROJECT_NAME::split(iterator_pair(container), middle);
   }
 
   template <Range C>
-  constexpr auto split(C const& container, typename C::difference_type offset){
+  constexpr auto split(C const & container, typename C::difference_type offset){
     return NATHAN_M_PROJECT_NAME::split(iterator_pair(container), offset);
   }
 }

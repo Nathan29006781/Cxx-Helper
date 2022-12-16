@@ -61,7 +61,7 @@ class Timer: private Timer_base{
 
 //Printing
   template<typename charT, typename traits, Duration D>
-  std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, Timer<D> const& timer){
+  std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, Timer<D> const & timer){
     return os << timer.time();
   }
 

@@ -60,7 +60,7 @@ class queue{
         constexpr const_iterator(pointer ptr, pointer begin, pointer end): const_iterator{{ptr, begin, end}} {}
         constexpr const_iterator(iterator iterator = {}): base{iterator.internal}, begin{iterator.begin}, end{iterator.end}, cycle{iterator.cycle} {}
 
-        friend constexpr difference_type operator-(const_iterator const& lhs, const_iterator const& rhs) {return lhs.same_container(rhs) ? lhs.internal-rhs.internal+(lhs.cycle-rhs.cycle)*(lhs.end-lhs.begin) : std::numeric_limits<difference_type>::max();}
+        friend constexpr difference_type operator-(const_iterator const & lhs, const_iterator const & rhs) {return lhs.same_container(rhs) ? lhs.internal-rhs.internal+(lhs.cycle-rhs.cycle)*(lhs.end-lhs.begin) : std::numeric_limits<difference_type>::max();}
         constexpr const_iterator& operator+=(difference_type n){
           if (!valid_container()) return *this;
 
@@ -73,8 +73,8 @@ class queue{
           return *this;
         }
 
-        friend constexpr bool operator==(const_iterator const& lhs, const_iterator const& rhs) {return lhs.internal == rhs.internal && lhs.cycle == rhs.cycle;}
-        constexpr std::partial_ordering operator<=>(const_iterator const& rhs) const{
+        friend constexpr bool operator==(const_iterator const & lhs, const_iterator const & rhs) {return lhs.internal == rhs.internal && lhs.cycle == rhs.cycle;}
+        constexpr std::partial_ordering operator<=>(const_iterator const & rhs) const{
           if(same_container(rhs)) return cycle == rhs.cycle ? base::internal <=> rhs.internal : cycle <=> rhs.cycle;
           else return std::partial_ordering::unordered;
         }
@@ -84,7 +84,7 @@ class queue{
         int cycle;
 
         constexpr bool valid_container() const {return begin && end;}
-        constexpr bool same_container(const_iterator const& rhs) const {return this->valid_container() && rhs.valid_container() && begin == rhs.begin && end == rhs.end;}
+        constexpr bool same_container(const_iterator const & rhs) const {return this->valid_container() && rhs.valid_container() && begin == rhs.begin && end == rhs.end;}
     };
 
     using value_type             = typename iterator::value_type;

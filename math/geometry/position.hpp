@@ -27,14 +27,14 @@ class Position{
     }
 
   //Operators
-    friend constexpr Position operator* (Position const& position, value_type scalar) {return {position.x*scalar, position.y*scalar, position.angle*scalar};}
-    friend constexpr Position operator* (value_type scalar, Position const& position) {return position*scalar;}
-    friend constexpr Position operator/ (Position const& position, value_type scalar) {return position * (1 / scalar);}
-    friend constexpr Position operator/ (value_type scalar, Position const& position) {return {position.x / scalar, position.y / scalar, position.angle / scalar};}
-    constexpr bool operator== (Position const& p2) const {return (x == p2.x) && (y == p2.y) && (angle == p2.angle);}
-    constexpr bool operator!= (Position const& p2) const {return !(*this == p2);}
-    constexpr Position operator+ (Position const& p2) const {return {x + p2.x, y + p2.y, angle + p2.angle};}
-    constexpr Position operator- (Position const& p2) const {return {x - p2.x, y - p2.y, angle - p2.angle};}
+    friend constexpr Position operator* (Position const & position, value_type scalar) {return {position.x*scalar, position.y*scalar, position.angle*scalar};}
+    friend constexpr Position operator* (value_type scalar, Position const & position) {return position*scalar;}
+    friend constexpr Position operator/ (Position const & position, value_type scalar) {return position * (1 / scalar);}
+    friend constexpr Position operator/ (value_type scalar, Position const & position) {return {position.x / scalar, position.y / scalar, position.angle / scalar};}
+    constexpr bool operator== (Position const & p2) const {return (x == p2.x) && (y == p2.y) && (angle == p2.angle);}
+    constexpr bool operator!= (Position const & p2) const {return !(*this == p2);}
+    constexpr Position operator+ (Position const & p2) const {return {x + p2.x, y + p2.y, angle + p2.angle};}
+    constexpr Position operator- (Position const & p2) const {return {x - p2.x, y - p2.y, angle - p2.angle};}
     constexpr Position& operator*= (value_type scalar) {return *this = *this * scalar;}
     constexpr Position& operator/= (value_type scalar) {return *this = *this / scalar;}
 };
