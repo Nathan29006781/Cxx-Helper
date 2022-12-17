@@ -17,6 +17,12 @@ inline constexpr natural factorial(N const & n) {return std::round(std::tgamma(n
 template <Natural N>
 inline constexpr natural triangular(N const & n) {return (n*(n+1))/2;}
 
+template <Natural N>
+inline constexpr natural permute(N const & n, N const & r) {return r > n ? 0 : factorial(n)/factorial(n-r);}
+
+template <Natural N>
+inline constexpr natural choose(N const & n, N const & r) {return r > n ? 0 : permute(n, r)/factorial(r);}
+
 
 template <Real R>
 inline constexpr real sigmoid(R const & r) {return 1/(1+std::exp(-r));}
