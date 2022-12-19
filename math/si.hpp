@@ -1,9 +1,12 @@
 #ifndef CXX_HELPER_SI_HPP_
 #define CXX_HELPER_SI_HPP_
 
-#include "header_config.hpp"
+#include "../header_config.hpp"
+#include "../types.hpp"
 #include <ratio>
 #include <sstream>
+
+CXX_HELPER_BEGIN_NAMESPACE
 
 using base = std::ratio<1>;
 
@@ -46,7 +49,7 @@ class unprefixed_unit{
   public:
     constexpr unprefixed_unit(real value = 0): raw_value{value} {}
 
-    real get_raw_value() const {return raw_value;}
+    constexpr real get_raw_value() const {return raw_value;}
 
     constexpr unprefixed_unit& operator+=(unprefixed_unit const & rhs) {raw_value += rhs.get_raw_value(); return *this;}
     constexpr unprefixed_unit operator+(unprefixed_unit const & rhs) {auto u{*this}; return u += rhs;}
@@ -60,7 +63,7 @@ class unprefixed_unit{
 };
 
 
-template <int m, int s, int kg, int A, int K, int mol, int cd, class multiplier>
+template <int m = 0, int s = 0, int kg = 0, int A = 0, int K = 0, int mol = 0, int cd = 0, class multiplier = base>
 class si_unit{
   private:
     using unit = unprefixed_unit<m, s, kg, A, K, mol, cd>;
@@ -83,12 +86,12 @@ class si_unit{
       other.get_value().get_raw_value()
     } {}
 
-    static auto get_num() {return multiplier::num;}
-    static auto get_den() {return multiplier::den;}
-    static auto get_suffix() {return unit_str;}
-    static auto get_full_suffix() {return full_unit_str;}
+    static constexpr auto get_num() {return multiplier::num;}
+    static constexpr auto get_den() {return multiplier::den;}
+    static constexpr auto get_suffix() {return unit_str;}
+    static constexpr auto get_full_suffix() {return full_unit_str;}
 
-    unit const & get_value() const {return value;}
+    constexpr unit const & get_value() const {return value;}
     std::string str() const {std::stringstream ss; ss << get_value().get_raw_value() << get_suffix(); return ss.str();}
     std::string full_str() const {std::stringstream ss; ss << get_value().get_value() << get_full_suffix(); return ss.str();}
 
@@ -141,30 +144,30 @@ class si_unit{
     constexpr si_unit& operator-=(other_unit<other_multiplier> const & rhs) {value -= si_unit(rhs).get_value(); return *this;}
 
     template <typename other_multiplier>
-    constexpr si_unit operator+(other_unit<other_multiplier> const & rhs) {auto u{*this}; return u += rhs;}
+    constexpr si_unit operator+(other_unit<other_multiplier> const & rhs) const {auto u{*this}; return u += rhs;}
 
     template <typename other_multiplier>
-    constexpr si_unit operator-(other_unit<other_multiplier> const & rhs) {auto u{*this}; return u -= rhs;}
+    constexpr si_unit operator-(other_unit<other_multiplier> const & rhs) const {auto u{*this}; return u -= rhs;}
 
     template <int m2, int s2, int kg2, int A2, int K2, int mol2, int cd2, class multiplier2>
-    constexpr auto operator*(si_unit<m2, s2, kg2, A2, K2, mol2, cd2, multiplier2> const & rhs){
+    constexpr auto operator*(si_unit<m2, s2, kg2, A2, K2, mol2, cd2, multiplier2> const & rhs) const {
       using new_unit = si_unit<m+m2, s+s2, kg+kg2, A+A2, K+K2, mol+mol2, cd+cd2, std::ratio_multiply<multiplier, multiplier2>>;
 
-      if(new_unit::get_suffix() == "") new_unit{get_suffix() + '*' + rhs.get_suffix(), get_full_suffix() + '*' + rhs.get_full_suffix()};
+      // if(new_unit::get_suffix() == "") new_unit{get_suffix() + '*' + rhs.get_suffix(), get_full_suffix() + '*' + rhs.get_full_suffix()};
       return new_unit{get_value().get_raw_value()*rhs.get_value().get_raw_value()};
     }
 
     template <int m2, int s2, int kg2, int A2, int K2, int mol2, int cd2, class multiplier2>
-    constexpr auto operator/(si_unit<m2, s2, kg2, A2, K2, mol2, cd2, multiplier2> const & arg){
+    constexpr auto operator/(si_unit<m2, s2, kg2, A2, K2, mol2, cd2, multiplier2> const & arg) const {
       using new_unit = si_unit<m-m2, s-s2, kg-kg2, A-A2, K-K2, mol-mol2, cd-cd2, std::ratio_divide<multiplier, multiplier2>>;
       si_unit<m , s , kg , A , K , mol , cd , base> lhs{*this};
       si_unit<m2, s2, kg2, A2, K2, mol2, cd2, base> rhs{arg };
 
-      if(new_unit::get_suffix() == "")
-        new_unit{
-          new_unit::prefix() + lhs.get_suffix() + '/' + rhs.get_suffix(),
-          new_unit::full_prefix() + lhs.get_full_suffix() + '/' + rhs.get_full_suffix()
-        };
+      // if(new_unit::get_suffix() == "")
+      //   new_unit{
+      //     new_unit::prefix() + lhs.get_suffix() + '/' + rhs.get_suffix(),
+      //     new_unit::full_prefix() + lhs.get_full_suffix() + '/' + rhs.get_full_suffix()
+      //   };
       
       return new_unit{si_unit<m-m2, s-s2, kg-kg2, A-A2, K-K2, mol-mol2, cd-cd2, base>{lhs.get_value().get_raw_value() / rhs.get_value().get_raw_value()}};
     }
@@ -197,7 +200,7 @@ scale_unit(siemen , S  , -2,  3, -1,  2,  0,  0,  0, base);
 scale_unit(farad  , F  , -2,  4, -1,  2,  0,  0,  0, base);
 scale_unit(tesla  , T  ,  0, -2,  1, -1,  0,  0,  0, base);
 scale_unit(henry  , H  ,  2, -2,  1, -2,  0,  0,  0, base);
-scale_unit(lux    , lx , -2,  0,  0,  0,  0,  0,  1, base);
+scale_unit(lumen  , lm ,  0,  0,  0,  0,  0,  0,  1, base);
 scale_unit(sievert, Sv ,  2, -2,  0,  0,  0,  0,  0, base);
 scale_unit(katal  , kat,  0, -1,  0,  0,  0,  1,  0, base);
 scale_unit(litre  , L  ,  3,  0,  0,  0,  0,  0,  0, std::milli);
@@ -237,7 +240,5 @@ std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>&
 
 #undef scale_unit_helper
 #undef scale_unit
-
-CXX_HELPER_BEGIN_NAMESPACE
 CXX_HELPER_END_NAMESPACE
 #endif //CXX_HELPER_SI_HPP_

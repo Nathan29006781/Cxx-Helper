@@ -18,6 +18,9 @@ class Timer_base{
     static timestamp const prog_start;
 };
 
+Timer_base::timestamp const Timer_base::prog_start{std::chrono::steady_clock::now()};
+
+
 
 template <Duration D = std::chrono::milliseconds>
 class Timer: private Timer_base{
