@@ -19,8 +19,8 @@ CXX_HELPER_BEGIN_NAMESPACE
 
 using real = long double;
 using rational = real;
-using integer = long long;
-using whole = unsigned long long ;
+using integer = intmax_t;
+using whole = uintmax_t;
 using natural = whole;
 using string_literal = char const *;
 using percentage = double; //replace with custom type only up to 100
