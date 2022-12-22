@@ -19,8 +19,7 @@ void name##_sort(Iterator first, Iterator last){\
 }\
 \
 namespace ranges{\
-  template <Range R>\
-  void name##_sort(R& container){\
+  void name##_sort(Range auto& container){\
     NATHAN_M_PROJECT_NAME::name##_sort(container.begin(), container.end());\
   }\
 }\

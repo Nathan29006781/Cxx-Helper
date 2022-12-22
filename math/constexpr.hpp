@@ -1,5 +1,5 @@
-#ifndef CXX_HELPER_MATH_CONSTEVAL_HPP_
-#define CXX_HELPER_MATH_CONSTEVAL_HPP_
+#ifndef CXX_HELPER_MATH_CONSTEXPR_HPP_
+#define CXX_HELPER_MATH_CONSTEXPR_HPP_
 
 #include "../header_config.hpp"
 #include "../types.hpp"
@@ -74,7 +74,7 @@ namespace compile_time{
     return result + ln_x_helper(x);
   }
 
-  constexpr real pow(real b, real e){return exp(e*ln(b));}
+  constexpr real pow(real base, real exponent){return exp(exponent*ln(base));}
 
   constexpr real sinh(real x) {return (exp(x)-exp(-x))/2;}
   constexpr real cosh(real x) {return (exp(x)+exp(-x))/2;}
@@ -92,4 +92,4 @@ namespace compile_time{
 }
 
 CXX_HELPER_END_NAMESPACE
-#endif //CXX_HELPER_MATH_CONSTEVAL_HPP_
+#endif //CXX_HELPER_MATH_CONSTEXPR_HPP_

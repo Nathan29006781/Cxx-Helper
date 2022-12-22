@@ -1,6 +1,7 @@
 #include "math/constants.hpp"
 #include "math/constexpr.hpp"
 #include "math/functions.hpp"
+#include "math/generic.hpp"
 #include "math/operators.hpp"
 #include "math/si.hpp"
 #include "math/sequences.hpp"

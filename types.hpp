@@ -17,6 +17,19 @@ CXX_HELPER_BEGIN_NAMESPACE
 //bignum
 //special enums
 
+
+template <typename   T, template <typename...> typename C> struct type_instance_impl : public std::false_type {};
+template <typename...T, template <typename...> typename C> struct type_instance_impl<C<T...>, C> : public std::true_type {};
+template <typename   T, template <typename...> typename C> concept instance_of_type = type_instance_impl<std::decay_t<T>, C>::value;
+
+template <typename   T, template <auto    ...> typename C> struct non_type_instance_impl : public std::false_type {};
+template <auto    ...T, template <auto    ...> typename C> struct non_type_instance_impl<C<T...>, C> : public std::true_type {};
+template <typename   T, template <auto    ...> typename C> concept instance_of_non_type = non_type_instance_impl<std::decay_t<T>, C>::value;
+
+template <typename   T, typename C> concept instance_of = std::same_as<std::decay_t<T>, C>;
+
+
+
 using real = long double;
 using rational = real;
 using integer = intmax_t;

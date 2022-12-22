@@ -58,23 +58,23 @@ namespace constants{
   constexpr auto sierpinski       {K};
 
   namespace physics{
-    constexpr auto c   {si_unit<1, -1>{299792458}};
-    constexpr auto me  {si_unit<0, 0, 1>{9.109383701528e-31}};
-    constexpr auto ΔvCs{si_unit<0, -1>{9192631770}};
-    constexpr auto e   {si_unit<0, 1, 0, 1>{1.602176634e-19}};
-    constexpr auto h   {si_unit<2, -1, 1>{6.62607015e-34}};
-    constexpr auto G   {si_unit<3, -2, 1>{6.6743015e-11}};
-    constexpr auto NA  {si_unit<0, 0, 0, 0, 0, -1>{6.02214076e23}};
-    constexpr auto μ0  {si_unit<1, -2, 1, -2>{1.2566370621219e-6}};
-    constexpr auto kB  {si_unit<2, -2, 1, 0, -1>{1.380649e-23}};
-    constexpr auto kcd {si_unit<-2, 3, -1, 0, 0, 0, 1>{683}};
+    constexpr auto c   {Unit<Velocity>{299792458}};
+    constexpr auto me  {Unit<Mass>{9.109383701528e-31}};
+    constexpr auto ΔvCs{Unit<Frequency>{9192631770}};
+    constexpr auto e   {Unit<Charge>{1.602176634e-19}};
+    constexpr auto h   {Unit<decltype(Energy{}*Time{})>{6.62607015e-34}};
+    constexpr auto G   {Unit<Gravitational_Coupling>{6.6743015e-11}};
+    constexpr auto NA  {Unit<Inverse_Amount>{6.02214076e23}};
+    constexpr auto μ0  {Unit<Permeability>{2e-7*τ}};
+    constexpr auto kB  {Unit<Heat_Capacity>{1.380649e-23}};
+    constexpr auto kcd {Unit<Dimension<-2, 3, -1, 0, 0, 0, 1>>{683}};
     constexpr auto F   {NA*e};
     constexpr auto R   {NA*kB};
     constexpr auto ħ   {h/τ};
     constexpr auto Z0  {μ0*c};
     constexpr auto ε0  {1/(Z0*c)};
-    constexpr auto ke  {Z0*c/(2*τ)};
-    constexpr auto α   {e*e*μ0*c/(2*h)};
+    constexpr auto ke  {μ0*c*c/(2*τ)};
+    constexpr auto α   {e*e*Z0/(2*h)};
   
     constexpr auto light_speed{physics::c};
     constexpr auto electron_mass{physics::me};

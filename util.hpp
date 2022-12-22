@@ -13,20 +13,12 @@
 CXX_HELPER_BEGIN_NAMESPACE
 
 inline constexpr int bool_to_sgn(bool value) {return value ? 1 : -1;}
-
-template <Arithmetic T>
-inline constexpr bool sgn_to_bool(T value) {return value > 0;}
-
-template <Arithmetic T>
-inline constexpr int sgn(T value) {return __sign(value);}
-
-template <typename T1, typename T2, typename T3>
-inline constexpr bool in_range(T1 value, T2 minimum, T3 maximum){
+inline constexpr bool sgn_to_bool(Arithmetic auto value) {return value > 0;}
+inline constexpr int sgn(Arithmetic auto value) {return __sign(value);}
+inline constexpr bool in_range(Arithmetic auto value, Arithmetic auto minimum, Arithmetic auto maximum){
   return (minimum < value && value < maximum) || (maximum < value && value < minimum);
 }
-
-template <typename T1, typename T2, typename T3>
-inline constexpr bool in_range_inclusive(T1 value, T2 minimum, T3 maximum){
+inline constexpr bool in_range_inclusive(Arithmetic auto value, Arithmetic auto minimum, Arithmetic auto maximum){
   return (minimum <= value && value <= maximum) || (maximum <= value && value <= minimum);
 }
 

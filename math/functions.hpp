@@ -12,78 +12,58 @@
 
 CXX_HELPER_BEGIN_NAMESPACE
 
-template <typename... T>
-inline constexpr auto inv_size(T const &... values) {return 1.0/sizeof...(values);}
+inline constexpr auto inv_size(Arithmetic auto... values) {return 1.0/sizeof...(values);}
 
 
 
 //Template Recursion Base Cases
-  template <Arithmetic T1, Arithmetic T2>
-  inline constexpr auto lcm(T1 const & value1, T2 const & value2) {return std::lcm(value1, value2);}
+  inline constexpr auto lcm(Arithmetic auto value1, Arithmetic auto value2) {return std::lcm(value1, value2);}
 
-  template <Arithmetic T1, Arithmetic T2>
-  inline constexpr auto gcd(T1 const & value1, T2 const & value2) {return std::gcd(value1, value2);}
+  inline constexpr auto gcd(Arithmetic auto value1, Arithmetic auto value2) {return std::gcd(value1, value2);}
 
-  template <Arithmetic T1, Arithmetic T2>
-  inline constexpr auto max(T1 const & value1, T2 const & value2) {return std::max(value1, value2);}
+  inline constexpr auto max(Arithmetic auto value1, Arithmetic auto value2) {return std::max(value1, value2);}
 
-  template <Arithmetic T1, Arithmetic T2>
-  inline constexpr auto min(T1 const & value1, T2 const & value2) {return std::min(value1, value2);}
+  inline constexpr auto min(Arithmetic auto value1, Arithmetic auto value2) {return std::min(value1, value2);}
 
 //Template Recursion
-  template <Arithmetic T, Arithmetic... Ts>
-  inline constexpr auto lcm(T const & value, Ts const &... values) {return lcm(value, lcm(values...));}
+  inline constexpr auto lcm(Arithmetic auto value, Arithmetic auto... values) {return lcm(value, lcm(values...));}
 
-  template <Arithmetic T, Arithmetic... Ts>
-  inline constexpr auto gcd(T const & value, Ts const &... values) {return gcd(value, gcd(values...));}
+  inline constexpr auto gcd(Arithmetic auto value, Arithmetic auto... values) {return gcd(value, gcd(values...));}
 
-  template <Arithmetic T, Arithmetic... Ts>
-  inline constexpr auto max(T const & value, Ts const &... values) {return max(value, max(values...));}
+  inline constexpr auto max(Arithmetic auto value, Arithmetic auto... values) {return max(value, max(values...));}
 
-  template <Arithmetic T, Arithmetic... Ts>
-  inline constexpr auto min(T const & value, Ts const &... values) {return min(value, min(values...));}
+  inline constexpr auto min(Arithmetic auto value, Arithmetic auto... values) {return min(value, min(values...));}
 
 
 //Fold Operations
-  template <Arithmetic... Ts>
-  inline constexpr auto add(Ts const &... values) {return (values + ...);}
+  inline constexpr auto add(Arithmetic auto... values) {return (values + ...);}
 
-  template <Arithmetic... Ts>
-  inline constexpr auto multiply(Ts const &... values) {return (values * ...);}
+  inline constexpr auto multiply(Arithmetic auto... values) {return (values * ...);}
 
-  template <Arithmetic... Ts>
-  inline constexpr auto hypotenuse(Ts const &... values) {return std::sqrt(add((values*values)...));}
+  inline constexpr auto hypotenuse(Arithmetic auto... values) {return std::sqrt(add((values*values)...));}
 
   namespace mean{
-    template <Arithmetic... Ts>
-    inline constexpr auto arithmetic(Ts const &... values) {return inv_size(values...)*add(values...);}
+    inline constexpr auto arithmetic(Arithmetic auto... values) {return inv_size(values...)*add(values...);}
 
-    template <Arithmetic... Ts> //positive arithmetic
-    inline constexpr auto geometric(Ts const &... values) {return std::pow(multiply(values...), inv_size(values...));}
+    inline constexpr auto geometric(Arithmetic auto... values) {return std::pow(multiply(values...), inv_size(values...));}
 
-    template <Arithmetic... Ts>
-    inline constexpr auto harmonic(Ts const &... values) {return 1.0/(arithmetic((1.0/values)...));}
+    inline constexpr auto harmonic(Arithmetic auto... values) {return 1.0/(arithmetic((1.0/values)...));}
 
-    template <Arithmetic... Ts>
-    inline constexpr auto root_square(Ts const &... values) {return std::sqrt(inv_size(values...))*hypotenuse(values...);}
+    inline constexpr auto root_square(Arithmetic auto... values) {return std::sqrt(inv_size(values...))*hypotenuse(values...);}
 
-    template <Arithmetic... Ts>
-    inline constexpr auto quadratic(Ts const &... values) {return root_square(values...);}
+    inline constexpr auto quadratic(Arithmetic auto... values) {return root_square(values...);}
   }
 
 
-template<Arithmetic T1, Arithmetic T2, Arithmetic T3>
-constexpr auto weighted_avg(T1 const & first, T2 const & second, T3 const & first_scale){
+constexpr auto weighted_avg(Arithmetic auto first, Arithmetic auto second, Arithmetic auto first_scale){
   return first*first_scale + second * (1-first_scale);
 }
 
-template<Arithmetic T1, Arithmetic T2>
-constexpr auto closest_multiple(T1 const & arg, T2 const & multiple){
+constexpr auto closest_multiple(Arithmetic auto arg, Arithmetic auto multiple){
   return multiple*std::round(arg/multiple);
 }
 
-template<Natural N>
-constexpr bool is_prime(N const & n){
+constexpr bool is_prime(Natural auto n){
   if (n == 2 || n == 3) return true;
   if (n <= 1 || n % 2 == 0 || n % 3 == 0) return false;
 
@@ -117,7 +97,7 @@ constexpr bool is_prime(N const & n){
 //     result = std::function([this](){return this->operation(this->first_arg(), this->second_arg());});
 //   }
 
-//   BinArthmOp(std::function<T(T const &, T const &)> operation, T const & first_arg, T const & second_arg):
+//   BinArthmOp(std::function<T(Arithmetic auto, Arithmetic auto)> operation, Arithmetic auto first_arg, Arithmetic auto second_arg):
 //   operation(operation), first_arg([&first_arg](){return first_arg;}), second_arg([&second_arg](){return second_arg;}){
 //     result = std::function([this](){return this->operation(this->first_arg(), this->second_arg());});
 //   }

@@ -19,7 +19,7 @@ class term_color{
     std::string const id, seq;
     bool const used;
     static std::vector<term_color*> col_list;
-    static int index{-1};
+    inline static int index{-1};
   public:
     //Constructors
       term_color (term_color const &) = delete;

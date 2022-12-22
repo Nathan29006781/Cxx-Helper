@@ -33,8 +33,8 @@ class Angle{
 
     //_c for conversion
     static constexpr value_type rad_c{1};
-    static constexpr value_type deg_c{constants::pi<value_type>/180.0}; //converts degrees to radians
-    static constexpr value_type rot_c{constants::tau<value_type>}; //converts rotations to radians
+    static constexpr value_type deg_c{constants::π/180.0}; //converts degrees to radians
+    static constexpr value_type rot_c{constants::τ}; //converts rotations to radians
 
     constexpr Angle(value_type angle, angle_mode mode): _angle{angle}, _mode{mode} {_angle *= angle_switch(rad_c, deg_c, rot_c);}
 
@@ -68,7 +68,7 @@ class Angle{
     bool is_full() const {return deg() == 360;}
 
   //Reference angle functions
-    constexpr Angle closest_equivalent(Angle const & reference) const {return *this + NATHAN_M_PROJECT_NAME::radians(closest_multiple((reference - *this).rad(), constants::tau<>));}
+    constexpr Angle closest_equivalent(Angle const & reference) const {return *this + NATHAN_M_PROJECT_NAME::radians(closest_multiple((reference - *this).rad(), constants::τ));}
     constexpr Angle complementary() const {return -(*this - NATHAN_M_PROJECT_NAME::degrees(90));} //Do not simplify. This accounts for angle_mode
     constexpr Angle supplementary() const {return -(*this - NATHAN_M_PROJECT_NAME::degrees(180));}
     constexpr Angle explementary() const {return -(*this - NATHAN_M_PROJECT_NAME::degrees(360));}
@@ -120,11 +120,11 @@ inline constexpr Angle rotations(real angle) {return Angle{angle, angle_mode::RO
 
 
 inline constexpr Angle operator ""_rad(real angle)  {return radians(angle);}
-inline constexpr Angle operator ""_rad(whole angle) {return radians(angle);}
+inline constexpr Angle operator ""_rad(unsigned long long angle) {return radians(angle);}
 inline constexpr Angle operator ""_deg(real angle)  {return degrees(angle);}
-inline constexpr Angle operator ""_deg(whole angle) {return degrees(angle);}
+inline constexpr Angle operator ""_deg(unsigned long long angle) {return degrees(angle);}
 inline constexpr Angle operator ""_rot(real angle)  {return rotations(angle);}
-inline constexpr Angle operator ""_rot(whole angle) {return rotations(angle);}
+inline constexpr Angle operator ""_rot(unsigned long long angle) {return rotations(angle);}
 
 //Trigonometry/Exp
 inline constexpr Angle::value_type sin (Angle const & angle) {return std::sin (angle.rad());}
